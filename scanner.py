@@ -27,8 +27,17 @@ INTO = 8    # "=>"
 EOF = 9     # input has been exhausted
 EOL = 10    # end of current line ("\r\n" or "\n")
 
+
+def print_characters_until_eol(string):
+  index = 0
+  while index < len(string) and string[index] != '\n':
+    print(string[index])
+    index += 1
+
 def direct_code_scanner(string):
     print("scanner.py: " + string)
+
+    shit(string)
 
     index = 0
     c = string[index]
@@ -47,3 +56,42 @@ def direct_code_scanner(string):
                 return "COMMENT"
             else:
                 return "ERROR"
+
+
+def comment(string):
+    i = 0
+    c = string[i]
+    if (c == '/'):
+        # next char
+        i += 1
+        c = string[i]
+
+        if (c == '/'):
+            # next char
+            i += 1
+            c = string[i]
+
+            # read rest of comment
+            while (i < len(string) and c != '\n' and c != '\r\n'):
+                print(c)
+                # get next character
+                i += 1
+                c = string[i]
+            # print(c)
+            if (c == '\n' or c == '\r\n'):
+                return "COMMENT"
+        else:
+            return "NOT A COMMENT"
+    else:
+        return "NOT A COMMENT"
+
+
+def shit(string):
+    print("in shit")
+    i = 0
+    c = string[i]
+    while (i < len(string) and c != '\n' and c != '\r\n'):
+        print(c)
+        # get next character
+        i += 1
+        c = string[i]

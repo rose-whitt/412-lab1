@@ -11,10 +11,14 @@ import scanner
 # def scanner(string):
 #     print("string" + string)
 
+COMMENT = "// ILOC Front End \n"
 def main():
     print("in lab1.py")
     # scanner("i need to work faster")
-    print(scanner.direct_code_scanner("// ILOC Front End \n"))
+    print(scanner.direct_code_scanner(COMMENT))
+    scanner.print_characters_until_eol("i love bela nelson!")
+
+    print(scanner.comment(COMMENT))
 
 # def my_function():
 #   print("Hello from a function")
