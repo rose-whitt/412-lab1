@@ -1,6 +1,7 @@
 #!/usr/bin/python -u
 
 import scanner
+import sys
 # def main():
 #   print("Hello!")
 
@@ -13,28 +14,62 @@ import scanner
 
 COMMENT = "// ILOC Front End \n"
 def main():
-    print("in lab1.py")
-    # scanner("i need to work faster")
-    print(scanner.direct_code_scanner(COMMENT))
-    scanner.print_characters_until_eol("i love bela nelson!")
 
-    print(scanner.comment(COMMENT))
+  command_line_args()
 
-# def my_function():
-#   print("Hello from a function")
-
-# my_function()
+  print(scanner.main_scanner("store"))
+  print(scanner.main_scanner("sub"))
+  # print(scanner.main_scanner("su")) # currently index out of range
+  print(scanner.main_scanner("add"))
+  print(scanner.main_scanner("adfhkljsdf"))
+  print(scanner.main_scanner("out"))
 
 
-# def my_function():
-#   print("Hello, world!")
-
-# def main():
-#     print("in lab1.py")
-#     my_function()
-#     # scanner("i need to work faster")
 
 
+  # print("arguments: ")
+  # print(sys.argv)
+
+  # print("---")
+
+  # print("in lab1.py")
+  # print("---")
+
+  # # scanner("i need to work faster")
+  # print(scanner.direct_code_scanner(COMMENT))
+  # print("---")
+  # scanner.print_characters_until_eol("i love bela nelson!")
+
+  # print("---")
+
+
+  # print(scanner.comment(COMMENT))
+
+
+def command_line_args():
+  args = sys.argv # lab1.py will always be first
+  print(args)
+  for i in range(len(args)):
+    print(args[i])
+  
+  if (len(args) >= 2):
+    if (args[1] == '-h'):
+      print("-h flag indicated. this will produce valid command line args")
+    elif (args[1] == '-r'):
+      if (len(args) >= 3):
+        print("-r flag indicated with name" + args[2] +"  this will read file and report ucceses")
+      else:
+        print("-r error, no name speciifed")
+    elif (args[1] == '-p'):
+      if (len(args) >= 3):
+        print("-p flag indicated with name" + args[2] +"  this will read file and print IR")
+      else:
+        print("-p error, no name speciifed")
+    elif (args[1] == '-s'):
+      if (len(args) >= 3):
+        print("-s flag indicated with name" + args[2] + "  this will read file and print tokens")
+      else:
+        print("-s error, no name speciifed")
 
 if __name__ == "__main__":
   main()
