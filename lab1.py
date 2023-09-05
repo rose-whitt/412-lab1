@@ -2,27 +2,60 @@
 
 import scanner
 import sys
-# def main():
-#   print("Hello!")
 
-# Step 1) start off drawing out the big DFA
-# Step 2) scanner is basically just a bunch of if else if statements with try catch blocks
-# Step 3) pass the scanner simple strings
+# INITIALIZE DOUBLE BUFFER
+BUF_SIZE = 2048
+input = 0
+Fence = 0
 
-# def scanner(string):
-#     print("string" + string)
+# Create a buffer of size n
+Buffer = [0] *  BUF_SIZE
+
+# Fill the buffer with zeros
+
 
 COMMENT = "// ILOC Front End \n"
+
 def main():
+  reset_buffer()
 
-  command_line_args()
+  # call scan function  
+  #   make scanner object by calling class and then my start scanning func in scanner.py
+  #   while not the end of the license
+  #     the if statements
+  # command_line_args()
 
-  print(scanner.main_scanner("store"))
-  print(scanner.main_scanner("sub"))
-  # print(scanner.main_scanner("su")) # currently index out of range
-  print(scanner.main_scanner("add"))
-  print(scanner.main_scanner("adfhkljsdf"))
-  print(scanner.main_scanner("out"))
+  tempArgs = sys.argv # lab1.py will always be first
+  __file__ = tempArgs[1]
+  # Reading a file
+  f = open(__file__, 'r')
+    
+  #read()
+  # text = f.read(10)
+  i = 1
+
+  myline = f.readline() #returns empty string when at end of file
+  while myline:
+    print(str(i) + ": " + myline)
+    print(scanner.main_scanner(myline))
+    i = 0
+    while (i < len(myline)):
+      add_char_to_buf(myline[i])
+
+    myline = f.readline()
+    i+=1
+    
+  print(str(Buffer)[1:-1])
+
+  f.close()
+
+
+  # print(scanner.main_scanner("store"))
+  # print(scanner.main_scanner("sub"))
+  # # print(scanner.main_scanner("su")) # currently index out of range
+  # print(scanner.main_scanner("add"))
+  # print(scanner.main_scanner("adfhkljsdf"))
+  # print(scanner.main_scanner("out"))
 
 
 
@@ -44,6 +77,50 @@ def main():
 
 
   # print(scanner.comment(COMMENT))
+
+def add_char_to_buf(c):
+  Buffer[input] = c
+  input = (input + 1) % (2 * BUF_SIZE)
+
+def rollback():
+  if (input == Fence):
+    raise RuntimeError("Rollback error!")
+  input = (input - 1) % (2 * BUF_SIZE)
+
+def get_next_char():
+  """Gets the character at the specified input index.
+
+  Args:
+    buffer: The buffer.
+    input: The input index.
+    n: The size of the buffer.
+
+  Returns:
+    The character at the specified input index.
+  """
+
+  char = Buffer[input]
+  input = (input + 1) % (2 * BUF_SIZE)
+
+  if input % BUF_SIZE == 0:
+    reset_buffer()
+    Fence = (input + BUF_SIZE) % (2 * BUF_SIZE)
+
+  return char
+
+def reset_buffer():
+  """Fills the buffer with zeros.
+
+  Args:
+    buffer: The buffer.
+    input: The starting index of the buffer to fill.
+    n: The size of the buffer.
+  """
+  print("reset buf")
+  for i in range(input, input + BUF_SIZE):
+    Buffer[i] = 0
+
+
 
 
 def command_line_args():

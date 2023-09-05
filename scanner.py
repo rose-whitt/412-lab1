@@ -15,6 +15,15 @@
 # For lab1, merge the big transition diagram with the ones for constants, registers, and comments.
 # Then implement it with one of the schemes in 2.5
 
+
+class Scanner:
+
+    def __init__(self, file_name):
+        self.BUF_SIZE = 0
+
+        init all variables like buffer and shit
+
+
 MEMOP = 0   # load, store
 LOADI = 1   # loadI
 ARITHOP = 2 # add, sub, mult, lshift, rshift
