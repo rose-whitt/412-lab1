@@ -17,7 +17,7 @@
 
 
 # ILOC categories. Use integer macros to index it.
-CATEGORIES = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO", "EOF", "EOL"]
+CATEGORIES = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO", "ENDFILE", "NEWLINE"]
 
 # category integer macros
 MEMOP = 0   # load, store
@@ -60,48 +60,28 @@ class Scanner:
         post = '" >'
         return pre + cat + mid + lex + post
 
-    # returns when it finds a token, return token
-    def start_scan(self):
-        """ Returns when it finds a word.
-        Returns token < ENDFILE, "" >
-        """
-
-
-        # in while loop, have it start on the current line num (?)
-        # myline = self.input_file.readline() #returns empty string when at end of file
-        # # read line by line into buffer
-        # while myline:
-        #     print(str(self.line_num) + ': < line, "' + myline + '" >')
-        #     myline = self.input_file.readline()
-
-        #     # TODO: add characters to buffer: check size, refill if full, add otherwise
-        #     self.line_num+=1
-
-        #this is like the shit in main_scanner
-        ret_token = '< ENDFILE, "" >'
-        # line_num += 1
-        return ret_token
+    
 
     def main_scanner(self, string):
         i = 0
-        c = string[i]
+        c = string
         # store (MEMOP) or sub (ARITHOP)
         if (c == 's'):
             # next char
             i += 1
-            c = string[i]
+            c = self.get_next_char
             if (c == 't'):    # store (MEMOP)
                 # next char
                 i += 1
-                c = string[i]
+                c = self.get_next_char
                 if (c == 'o'):
                     # next char
                     i += 1
-                    c = string[i]
+                    c = self.get_next_char
                     if (c == 'r'):
                         # next char
                         i += 1
-                        c = string[i]
+                        c = self.get_next_char
                         if (c == 'e'):
                             return "store - MEMOP"
                         else:
@@ -113,7 +93,7 @@ class Scanner:
             elif (c == 'u'):    # sub (ARITHOP)
                 # next char
                 i += 1
-                c = string[i]
+                c = self.get_next_char
                 if (c == 'b'):
                     return "sub - ARITHOP"
                 else:
@@ -123,19 +103,19 @@ class Scanner:
         elif (c == 'l'):
             # next char
             i += 1
-            c = string[i]
+            c = self.get_next_char
             if (c == 'o'):
                 # next char
                 i += 1
-                c = string[i]
+                c = self.get_next_char
                 if (c == 'a'):
                     # next char
                     i += 1
-                    c = string[i]
+                    c = self.get_next_char
                     if (c == 'd'):
                         # next char
                         i += 1
-                        c = string[i]
+                        c = self.get_next_char
                         if (c == 'I'): # loadI (LOADI)
                             return "loadI - LOADI"
                         elif (c == '\n' or c == '\r\n' or c == ' '):    # load (MEMOP)
@@ -152,7 +132,7 @@ class Scanner:
         elif (c == 'r'):    # rshift (ARITHOP) or register
             # next char
             i += 1
-            c = string[i]
+            c = self.get_next_char
             if (c >= '0' and c <= '9'):
                 print("possible register")
                 return
@@ -181,19 +161,19 @@ class Scanner:
             print("possible comment")
             # next char
             i += 1
-            c = string[i]
+            c = self.get_next_char
 
             if (c == '/'):
                 # next char
                 i += 1
-                c = string[i]
+                c = self.get_next_char
 
                 # read rest of comment
                 while (i < len(string) and c != '\n' and c != '\r\n'):
                     print(c)
                     # get next character
                     i += 1
-                    c = string[i]
+                    c = self.get_next_char
                 # print(c)
                 if (c == '\n' or c == '\r\n'):
                     return "COMMENT"
@@ -216,22 +196,7 @@ class Scanner:
         if (self.point == self.fence):
             raise RuntimeError("Rollback error!")
         self.point = (self.point - 1) % (2 * self.BUF_SIZE)
-    
-    
 
-    def reset_buffer(self):
-        """Fills the buffer with zeros.
-
-        Args:
-            buffer: The buffer.
-            point: The starting index of the buffer to fill.
-            n: The size of the buffer.
-        """
-        print("reset buf")
-        for i in range(self.point, self.point + self.BUF_SIZE):
-            self.buffer[i] = 0
-        return
-    
     def get_next_char(self):
         """Gets the character at the specified index from the buffer.
 
@@ -245,10 +210,12 @@ class Scanner:
         """
 
         char = self.buffer[self.point]
+        # moves pointer up
         self.point = (self.point + 1) % (2 * self.BUF_SIZE)
 
         if (self.point % self.BUF_SIZE == 0):
-            reset_buffer(self)
+            for i in range(self.point, self.point + self.BUF_SIZE):
+                self.buffer[i] = 0
             self.fence = (self.point + self.BUF_SIZE) % (2 * self.BUF_SIZE)
 
         return char
@@ -320,3 +287,42 @@ class Scanner:
             i += 1
             c = string[i]
     
+    # returns when it finds a token, return token
+    def start_scan(self):
+        """ Get a line. Returns when it finds a word.
+        Returns token < ENDFILE, "" >
+        """
+        # c = get_next_char(self)
+
+        c = self.get_next_char()
+
+        while c:
+            print(self.main_scanner(c))
+            c = self.get_next_char()
+
+        # # get next character
+        # char = self.buffer[self.point]
+        # # moves pointer up
+        # self.point = (self.point + 1) % (2 * self.BUF_SIZE)
+
+        # if (self.point % self.BUF_SIZE == 0):
+        #     for i in range(self.point, self.point + self.BUF_SIZE):
+        #         self.buffer[i] = 0
+        #     self.fence = (self.point + self.BUF_SIZE) % (2 * self.BUF_SIZE)
+
+        
+
+        # in while loop, have it start on the current line num (?)
+        # myline = self.input_file.readline() #returns empty string when at end of file
+        # # read line by line into buffer
+        # while myline:
+        #     print(str(self.line_num) + ': < line, "' + myline + '" >')
+        #     myline = self.input_file.readline()
+
+        #     # TODO: add characters to buffer: check size, refill if full, add otherwise
+        #     self.line_num+=1
+
+        #this is like the shit in main_scanner
+        ret_token = '< ENDFILE, "" >'
+        # line_num += 1
+        return ret_token

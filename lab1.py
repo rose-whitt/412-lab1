@@ -16,9 +16,12 @@ def scan_func(input_file):
 
   # tokens should be a string like < cat, "lex" >
   pre = "< "
-  mid = '", "'
+  mid = ', "'
   post = '" >'
   EOF_TOKEN = pre + scan.CATEGORIES[9] + mid + "" + post  # < ENDFILE, "" >
+  
+  token = ""
+  
   # While not the end of file token; EOF = empty string
   while (token != EOF_TOKEN):
     # call start_scan, which returns token
@@ -28,13 +31,23 @@ def scan_func(input_file):
         print(str(scan.line_num) + ': < line, "' + myline + '" >')
         myline = scan.input_file.readline()
 
+        # add to buffer for scanner to read in start_scan()
+        if (scan.point + len(myline) < scan.BUF_SIZE):  # buffer has room
+          scan.buffer[scan.point: scan.point + len(myline)]  = myline
+        else: # buffer is full, empty it and add line
+          scan.buffer = [0] * scan.BUF_SIZE
+          scan.point = 0
+          scan.buffer[scan.point: scan.point + len(myline)]  = myline
+          
+
         # TODO: add characters to buffer: check size, refill if full, add otherwise
         token = scan.start_scan()  # NOTE: i think i dont need to specify line num bc its rlly emptying the buffer
         scan.line_num+=1
 
+    print("eof token: " + EOF_TOKEN)
     # print token
     print(str(scan.line_num) + ": " + token)
-    break
+    # break
     # dont need to remove from buffer here bc buffer leaves chars until clearing necessary (full)
   return token
   
