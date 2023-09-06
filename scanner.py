@@ -16,19 +16,15 @@
 # Then implement it with one of the schemes in 2.5
 
 
-class Scanner:
+# ILOC categories. Use integer macros to index it.
+CATEGORIES = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO", "EOF", "EOL"]
 
-    def __init__(self, file_name):
-        self.BUF_SIZE = 0
-
-        init all variables like buffer and shit
-
-
+# category integer macros
 MEMOP = 0   # load, store
 LOADI = 1   # loadI
 ARITHOP = 2 # add, sub, mult, lshift, rshift
-OUTPUT = 3  # output
-NOP = 4     # nop
+OUTPUT = 3  # output, prints MEM(x) to stdout
+NOP = 4     # nop, idle for one second
 CONSTANT = 5    # a non-negative integer
 REGISTER = 6    # 'r' followed by a constant
 COMMA = 7   # ','
@@ -36,16 +32,95 @@ INTO = 8    # "=>"
 EOF = 9     # input has been exhausted
 EOL = 10    # end of current line ("\r\n" or "\n")
 
+# Double Buffer
+BUF_SIZE = 0
+point = 0
+fence = 0
+buffer = []
 
-def main_scanner(string):
-    i = 0
-    c = string[i]
-    # store (MEMOP) or sub (ARITHOP)
-    if (c == 's'):
-        # next char
-        i += 1
+line_num = 1
+
+class Scanner:
+
+    def __init__(self, input_file):
+        # init all variables like buffer and shit
+        self.input_file = input_file
+        self.BUF_SIZE = 0
+        self.point = 0
+        self.fence = 0
+        self.buffer = [0] * self.BUF_SIZE
+        self.line_num = 1
+        self.CATEGORIES = CATEGORIES
+
+        
+    def tokenize_func(cat, lex):
+        """tokens should be a string like < cat, "lex" >"""
+        pre = "< "
+        mid = '", "'
+        post = '" >'
+        return pre + cat + mid + lex + post
+
+    # returns when it finds a token, return token
+    def start_scan(self):
+        """ Returns when it finds a word.
+        Returns token < ENDFILE, "" >
+        """
+
+
+        # in while loop, have it start on the current line num (?)
+        # myline = self.input_file.readline() #returns empty string when at end of file
+        # # read line by line into buffer
+        # while myline:
+        #     print(str(self.line_num) + ': < line, "' + myline + '" >')
+        #     myline = self.input_file.readline()
+
+        #     # TODO: add characters to buffer: check size, refill if full, add otherwise
+        #     self.line_num+=1
+
+        #this is like the shit in main_scanner
+        ret_token = '< ENDFILE, "" >'
+        # line_num += 1
+        return ret_token
+
+    def main_scanner(self, string):
+        i = 0
         c = string[i]
-        if (c == 't'):    # store (MEMOP)
+        # store (MEMOP) or sub (ARITHOP)
+        if (c == 's'):
+            # next char
+            i += 1
+            c = string[i]
+            if (c == 't'):    # store (MEMOP)
+                # next char
+                i += 1
+                c = string[i]
+                if (c == 'o'):
+                    # next char
+                    i += 1
+                    c = string[i]
+                    if (c == 'r'):
+                        # next char
+                        i += 1
+                        c = string[i]
+                        if (c == 'e'):
+                            return "store - MEMOP"
+                        else:
+                            return "stor ERROR"
+                    else:
+                        return "sto ERROR"
+                else:
+                    return "st ERROR"
+            elif (c == 'u'):    # sub (ARITHOP)
+                # next char
+                i += 1
+                c = string[i]
+                if (c == 'b'):
+                    return "sub - ARITHOP"
+                else:
+                    return "su ERROR"
+            else:
+                return "s ERROR"
+        elif (c == 'l'):
             # next char
             i += 1
             c = string[i]
@@ -53,190 +128,195 @@ def main_scanner(string):
                 # next char
                 i += 1
                 c = string[i]
-                if (c == 'r'):
+                if (c == 'a'):
                     # next char
                     i += 1
                     c = string[i]
-                    if (c == 'e'):
-                        return "store - MEMOP"
+                    if (c == 'd'):
+                        # next char
+                        i += 1
+                        c = string[i]
+                        if (c == 'I'): # loadI (LOADI)
+                            return "loadI - LOADI"
+                        elif (c == '\n' or c == '\r\n' or c == ' '):    # load (MEMOP)
+                            return "load - MEMOP"
+                        else:
+                            return "load ERROR"  #NOTE- now that i think about it, they should all check tehre is a new line or sum to show end of word
+
                     else:
-                        return "stor ERROR"
+                        return "loa ERROR"
                 else:
-                    return "sto ERROR"
+                    return "lo ERROR"
             else:
-                return "st ERROR"
-        elif (c == 'u'):    # sub (ARITHOP)
+                return "l ERROR"
+        elif (c == 'r'):    # rshift (ARITHOP) or register
             # next char
             i += 1
             c = string[i]
-            if (c == 'b'):
-                return "sub - ARITHOP"
+            if (c >= '0' and c <= '9'):
+                print("possible register")
+                return
+            elif (c == 's'):
+                print("possible rshift")
+                return
             else:
-                return "su ERROR"
-        else:
-            return "s ERROR"
-    elif (c == 'l'):
-        # next char
-        i += 1
-        c = string[i]
-        if (c == 'o'):
+                print("r ERROR")
+                return
+        elif (c == 'm'):    # mult (ARITHOP)
+            print("possible mult")
+            return
+        elif (c == 'a'):    # add (ARITHOP)
+            print("possible add")
+            return
+        elif (c == 'n'):    # nop (NOP)
+            print("possible nop")
+            return
+        elif (c == 'o'):    # output (OUTPUT)
+            print("possible output")
+            return
+        elif (c == '='):    # => (INTO)
+            print("possible =>")
+            return
+        elif (c == '/'):    # COMMENT
+            print("possible comment")
             # next char
             i += 1
             c = string[i]
-            if (c == 'a'):
+
+            if (c == '/'):
                 # next char
                 i += 1
                 c = string[i]
-                if (c == 'd'):
-                    # next char
+
+                # read rest of comment
+                while (i < len(string) and c != '\n' and c != '\r\n'):
+                    print(c)
+                    # get next character
                     i += 1
                     c = string[i]
-                    if (c == 'I'): # loadI (LOADI)
-                        return "loadI - LOADI"
-                    elif (c == '\n' or c == '\r\n' or c == ' '):    # load (MEMOP)
-                        return "load - MEMOP"
-                    else:
-                        return "load ERROR"  #NOTE- now that i think about it, they should all check tehre is a new line or sum to show end of word
-
-                else:
-                    return "loa ERROR"
+                # print(c)
+                if (c == '\n' or c == '\r\n'):
+                    return "COMMENT"
             else:
-                return "lo ERROR"
-        else:
-            return "l ERROR"
-    elif (c == 'r'):    # rshift (ARITHOP) or register
-        # next char
-        i += 1
-        c = string[i]
-        if (c >= '0' and c <= '9'):
-            print("possible register")
+                return "NOT A COMMENT"
+        elif (c == ','):    # COMMA
+            print("possible comma")
             return
-        elif (c == 's'):
-            print("possible rshift")
+        elif (c == '\n' and c == '\r\n'):   # EOL
+            print("possible end of line")
+            return
+        elif (c >= '0' and c <= '9'):   #CONSTANT
+            print("possible constant")
             return
         else:
-            print("r ERROR")
+            print("ERROR - idk what that is!")
             return
-    elif (c == 'm'):    # mult (ARITHOP)
-        print("possible mult")
+    
+    def rollback(self):
+        if (self.point == self.fence):
+            raise RuntimeError("Rollback error!")
+        self.point = (self.point - 1) % (2 * self.BUF_SIZE)
+    
+    
+
+    def reset_buffer(self):
+        """Fills the buffer with zeros.
+
+        Args:
+            buffer: The buffer.
+            point: The starting index of the buffer to fill.
+            n: The size of the buffer.
+        """
+        print("reset buf")
+        for i in range(self.point, self.point + self.BUF_SIZE):
+            self.buffer[i] = 0
         return
-    elif (c == 'a'):    # add (ARITHOP)
-        print("possible add")
-        return
-    elif (c == 'n'):    # nop (NOP)
-        print("possible nop")
-        return
-    elif (c == 'o'):    # output (OUTPUT)
-        print("possible output")
-        return
-    elif (c == '='):    # => (INTO)
-        print("possible =>")
-        return
-    elif (c == '/'):    # COMMENT
-        print("possible comment")
-        # next char
-        i += 1
-        c = string[i]
+    
+    def get_next_char(self):
+        """Gets the character at the specified index from the buffer.
 
-        if (c == '/'):
-            # next char
-            i += 1
-            c = string[i]
+        Args:
+            buffer: The buffer.
+            point: The point index.
+            n: The size of the buffer.
 
-            # read rest of comment
-            while (i < len(string) and c != '\n' and c != '\r\n'):
-                print(c)
-                # get next character
-                i += 1
-                c = string[i]
-            # print(c)
-            if (c == '\n' or c == '\r\n'):
-                return "COMMENT"
-        else:
-            return "NOT A COMMENT"
-    elif (c == ','):    # COMMA
-        print("possible comma")
-        return
-    elif (c == '\n' and c == '\r\n'):   # EOL
-        print("possible end of line")
-        return
-    elif (c >= '0' and c <= '9'):   #CONSTANT
-        print("possible constant")
-        return
-    else:
-        print("ERROR")
-        return
+        Returns:
+            The character at the specified input index.
+        """
+
+        char = self.buffer[self.point]
+        self.point = (self.point + 1) % (2 * self.BUF_SIZE)
+
+        if (self.point % self.BUF_SIZE == 0):
+            reset_buffer(self)
+            self.fence = (self.point + self.BUF_SIZE) % (2 * self.BUF_SIZE)
+
+        return char
+    
+    
+
+    def print_characters_until_eol(self, string):
+        index = 0
+        while index < len(string) and string[index] != '\n':
+            print(string[index])
+            index += 1
+    
+    def direct_code_scanner(self, string):
+        print("scanner.py: " + string)
 
 
-        
-
-
-
-
-def print_characters_until_eol(string):
-  index = 0
-  while index < len(string) and string[index] != '\n':
-    print(string[index])
-    index += 1
-
-def direct_code_scanner(string):
-    print("scanner.py: " + string)
-
-    shit(string)
-
-    index = 0
-    c = string[index]
-    # comments
-    if (c == '/'):
-        print(str(index) + ", " + c)
-
-        index += 1
+        index = 0
         c = string[index]
+        # comments
         if (c == '/'):
-            while (index < len(string) and c != '\n' and c != '\r\n'):
-                c = string[index]
-                print(str(index) + ", " + c)
-                index += 1
-            if (c == '\n' and c == '\r\n'):
-                return "COMMENT"
-            else:
-                return "ERROR"
+            print(str(index) + ", " + c)
 
-
-def comment(string):
-    i = 0
-    c = string[i]
-    if (c == '/'):
-        # next char
-        i += 1
+            index += 1
+            c = string[index]
+            if (c == '/'):
+                while (index < len(string) and c != '\n' and c != '\r\n'):
+                    c = string[index]
+                    print(str(index) + ", " + c)
+                    index += 1
+                if (c == '\n' and c == '\r\n'):
+                    return "COMMENT"
+                else:
+                    return "ERROR"
+    
+    def comment(self, string):
+        i = 0
         c = string[i]
-
         if (c == '/'):
             # next char
             i += 1
             c = string[i]
 
-            # read rest of comment
-            while (i < len(string) and c != '\n' and c != '\r\n'):
-                print(c)
-                # get next character
+            if (c == '/'):
+                # next char
                 i += 1
                 c = string[i]
-            # print(c)
-            if (c == '\n' or c == '\r\n'):
-                return "COMMENT"
+
+                # read rest of comment
+                while (i < len(string) and c != '\n' and c != '\r\n'):
+                    print(c)
+                    # get next character
+                    i += 1
+                    c = string[i]
+                # print(c)
+                if (c == '\n' or c == '\r\n'):
+                    return "COMMENT"
+            else:
+                return "NOT A COMMENT"
         else:
             return "NOT A COMMENT"
-    else:
-        return "NOT A COMMENT"
-
-
-def shit(string):
-    print("in shit")
-    i = 0
-    c = string[i]
-    while (i < len(string) and c != '\n' and c != '\r\n'):
-        print(c)
-        # get next character
-        i += 1
+    
+    def shit(self, string):
+        print("in shit")
+        i = 0
         c = string[i]
+        while (i < len(string) and c != '\n' and c != '\r\n'):
+            print(c)
+            # get next character
+            i += 1
+            c = string[i]
+    

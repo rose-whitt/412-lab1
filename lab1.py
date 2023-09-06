@@ -3,150 +3,110 @@
 import scanner
 import sys
 
-# INITIALIZE DOUBLE BUFFER
-BUF_SIZE = 2048
-input = 0
-Fence = 0
-
-# Create a buffer of size n
-Buffer = [0] *  BUF_SIZE
-
-# Fill the buffer with zeros
-
-
 COMMENT = "// ILOC Front End \n"
 
-def main():
-  reset_buffer()
 
+
+
+
+def scan_func(input_file):
+  scan = scanner.Scanner(input_file)
+  token = scan.start_scan()
+  print(str(scanner.line_num) + ": " + token)
+
+  # tokens should be a string like < cat, "lex" >
+  pre = "< "
+  mid = '", "'
+  post = '" >'
+  EOF_TOKEN = pre + scan.CATEGORIES[9] + mid + "" + post  # < ENDFILE, "" >
+  # While not the end of file token; EOF = empty string
+  while (token != EOF_TOKEN):
+    # call start_scan, which returns token
+    myline = input_file.readline() # returns empty string when at end of file
+    # read line by line into buffer
+    while myline:
+        print(str(scan.line_num) + ': < line, "' + myline + '" >')
+        myline = scan.input_file.readline()
+
+        # TODO: add characters to buffer: check size, refill if full, add otherwise
+        token = scan.start_scan()  # NOTE: i think i dont need to specify line num bc its rlly emptying the buffer
+        scan.line_num+=1
+
+    # print token
+    print(str(scan.line_num) + ": " + token)
+    break
+    # dont need to remove from buffer here bc buffer leaves chars until clearing necessary (full)
+  return token
+  
+
+
+def main():
   # call scan function  
-  #   make scanner object by calling class and then my start scanning func in scanner.py
+  #   make scanner object by calling class with input fileand then my start scanning func in scanner.py
   #   while not the end of the license
   #     the if statements
-  # command_line_args()
 
-  tempArgs = sys.argv # lab1.py will always be first
-  __file__ = tempArgs[1]
-  # Reading a file
-  f = open(__file__, 'r')
-    
+
+
+
   #read()
   # text = f.read(10)
   i = 1
 
-  myline = f.readline() #returns empty string when at end of file
-  while myline:
-    print(str(i) + ": " + myline)
-    print(scanner.main_scanner(myline))
-    i = 0
-    while (i < len(myline)):
-      add_char_to_buf(myline[i])
-
-    myline = f.readline()
-    i+=1
-    
-  print(str(Buffer)[1:-1])
-
-  f.close()
-
-
-  # print(scanner.main_scanner("store"))
-  # print(scanner.main_scanner("sub"))
-  # # print(scanner.main_scanner("su")) # currently index out of range
-  # print(scanner.main_scanner("add"))
-  # print(scanner.main_scanner("adfhkljsdf"))
-  # print(scanner.main_scanner("out"))
-
-
-
-
-  # print("arguments: ")
-  # print(sys.argv)
-
-  # print("---")
-
-  # print("in lab1.py")
-  # print("---")
-
-  # # scanner("i need to work faster")
-  # print(scanner.direct_code_scanner(COMMENT))
-  # print("---")
-  # scanner.print_characters_until_eol("i love bela nelson!")
-
-  # print("---")
-
-
-  # print(scanner.comment(COMMENT))
-
-def add_char_to_buf(c):
-  Buffer[input] = c
-  input = (input + 1) % (2 * BUF_SIZE)
-
-def rollback():
-  if (input == Fence):
-    raise RuntimeError("Rollback error!")
-  input = (input - 1) % (2 * BUF_SIZE)
-
-def get_next_char():
-  """Gets the character at the specified input index.
-
-  Args:
-    buffer: The buffer.
-    input: The input index.
-    n: The size of the buffer.
-
-  Returns:
-    The character at the specified input index.
-  """
-
-  char = Buffer[input]
-  input = (input + 1) % (2 * BUF_SIZE)
-
-  if input % BUF_SIZE == 0:
-    reset_buffer()
-    Fence = (input + BUF_SIZE) % (2 * BUF_SIZE)
-
-  return char
-
-def reset_buffer():
-  """Fills the buffer with zeros.
-
-  Args:
-    buffer: The buffer.
-    input: The starting index of the buffer to fill.
-    n: The size of the buffer.
-  """
-  print("reset buf")
-  for i in range(input, input + BUF_SIZE):
-    Buffer[i] = 0
+  if (sys.argv[1] == '-h'):
+    print("TODO: produce list of valid command line args and description for all required in lab 1 and any i added my self. not required to process command line args that appear after the -h flag")
+  elif (sys.argv[1] == '-r'):
+    print("TODO: read the file, parse it, build the intermediate representation (IR), and print out the information in the intermediate representaiton (in an appropriately human readable format)")
+    if (len(sys.argv) <= 2):
+      print("Must specify a file name after the flag.")
+    else:
+      __file__ = sys.argv[2]
+      # Reading a file
+      f = open(__file__, 'r')
+      f.close()
+  elif (sys.argv[1] == '-p'):
+    print("TODO: read the file, scan it and parse it, build the intermediate representation (IR) and report either success or report all the errors that it finds in the input file.")
+    if (len(sys.argv) <= 2):
+      print("Must specify a file name after the flag.")
+    else:
+      __file__ = sys.argv[2]
+      # Reading a file
+      f = open(__file__, 'r')
+      f.close()
+  elif (sys.argv[1] == '-s'):
+    print("TODO: read file and print to stdout a list of tokens that the scanner found. for each, print line number, tokens type (or syntactic category) and its spelling (or lexeme)")
+    if (len(sys.argv) <= 2):
+      print("Must specify a file name after the flag.")
+    else:
+      __file__ = sys.argv[2]
+      # Reading a file
+      f = open(__file__, 'r')
+      token = scan_func(f)
+      while (token != '< ENDFILE, "" >'): # NOTE: should i read the line by line here?
+        scan_func(f)
+      print("closing.")
+      f.close()
 
 
 
 
-def command_line_args():
-  args = sys.argv # lab1.py will always be first
-  print(args)
-  for i in range(len(args)):
-    print(args[i])
-  
-  if (len(args) >= 2):
-    if (args[1] == '-h'):
-      print("-h flag indicated. this will produce valid command line args")
-    elif (args[1] == '-r'):
-      if (len(args) >= 3):
-        print("-r flag indicated with name" + args[2] +"  this will read file and report ucceses")
-      else:
-        print("-r error, no name speciifed")
-    elif (args[1] == '-p'):
-      if (len(args) >= 3):
-        print("-p flag indicated with name" + args[2] +"  this will read file and print IR")
-      else:
-        print("-p error, no name speciifed")
-    elif (args[1] == '-s'):
-      if (len(args) >= 3):
-        print("-s flag indicated with name" + args[2] + "  this will read file and print tokens")
-      else:
-        print("-s error, no name speciifed")
+  # input_file = sys.argv[1]
+
+  # myline = f.readline() #returns empty string when at end of file
+  # while myline:
+  #   print(str(i) + ": " + myline)
+  #   print(scanner.main_scanner(myline))
+  #   i = 0
+  #   while (i < len(myline)):
+  #     add_char_to_buf(myline[i])
+
+  #   myline = f.readline()
+  #   i+=1
+
+  # print(str(Buffer)[1:-1])
+
+
+
 
 if __name__ == "__main__":
   main()
