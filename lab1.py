@@ -13,46 +13,61 @@ EOF_FLAG = False
 def scan_func(input_file):
   scan = scanner.Scanner(input_file)
   # print("in scan_func in lab1.py, starting start_scan in scanner.py")
-  token = scan.get_token()
-  print(str(scanner.line_num) + ": " + token)
+  # token = scan.get_token()
+  # print(str(scanner.line_num) + ": " + token)
 
   # tokens should be a string like < cat, "lex" >
   pre = "< "
   mid = ', "'
   post = '" >'
-  EOF_TOKEN = pre + scan.CATEGORIES[9] + mid + "" + post  # < ENDFILE, "" >
+  EOF_TOKEN = ["ENDFILE", ""]
   
-  token = ""
+
   
+  
+
+  # while not at end of line (char idx < length of line)
+  #   get token
+
+  # first line to start it
+  scan.cur_line = scan.input_file.readline()
+  # get first token
+  token = scan.get_token()
+  print("first token: " + str(token))
   # While not the end of file token; EOF = empty string
-  while (token != EOF_TOKEN):
+
+  # THIS IS ACTUALLY THE PARSER
+  # while (token != EOF_TOKEN):
     # call start_scan, which returns token
-    myline = input_file.readline() # returns empty string when at end of file
+    # scan.cur_line = input_file.readline() # returns empty string when at end of line
     # read line by line into buffer
-    while myline:
-        print(str(scan.line_num) + ': ' + myline)
-        myline = scan.input_file.readline()
+  
+  shit = 0
+  while (token[0] != 'ENDFILE' and shit < 10):
+    while token[0] != 'NEWLINE':
+      print(str(scan.line_num) + ': ' + scan.cur_line)
 
-        # add to buffer for scanner to read in start_scan()
-        if (scan.point + len(myline) < scan.BUF_SIZE):  # buffer has room
-          scan.buffer[scan.point: scan.point + len(myline)]  = myline
-        else: # buffer is full, empty it and add line
-          scan.buffer = [0] * scan.BUF_SIZE
-          scan.point = 0
-          scan.buffer[scan.point: scan.point + len(myline)]  = myline
-          
+      # TODO: add characters to buffer: check size, refill if full, add otherwise
+      token = scan.get_token()  # NOTE: i think i dont need to specify line num bc its rlly emptying the buffer
+      print("token: " + str(scan.line_num) + ': ' + str(token))
+    scan.line_num+=1
+    print("after while------------------------")
+    # reset
+    scan.cur_line = ""
+    scan.char_idx = -1
+    scan.cur_line = scan.input_file.readline() # TODO: should be doing this at end of while loop
+    print("new line: " + scan.cur_line)
+    token = scan.get_token()
+    print("shit toje: " + str(token))
+    shit += 1
 
-        # TODO: add characters to buffer: check size, refill if full, add otherwise
-        token = scan.get_token()  # NOTE: i think i dont need to specify line num bc its rlly emptying the buffer
-        print(str(scan.line_num) + ': ' +  + token)
-        scan.line_num+=1
-
-    print("eof token: " + EOF_TOKEN)
-    # print token
-    print(str(scan.line_num) + ": " + token)
-    # break
-    # dont need to remove from buffer here bc buffer leaves chars until clearing necessary (full)
-  EOF_FLAG = True;
+  
+  #   print("eof token: " + EOF_TOKEN)
+  #   # print token
+  #   print(str(scan.line_num) + ": " + str(token))
+  #   # break
+  #   # dont need to remove from buffer here bc buffer leaves chars until clearing necessary (full)
+  # EOF_FLAG = True;
   return token
   
 
@@ -114,7 +129,7 @@ def main():
       # Reading a file
       f = open(__file__, 'r')
       token = scan_func(f)
-      while (token != '< ENDFILE, "" >'): # NOTE: should i read the line by line here?
+      while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
         scan_func(f)
       print("closing.")
       f.close()
