@@ -68,7 +68,22 @@ def main():
   i = 1
 
   if (sys.argv[1] == '-h'):
-    print("TODO: produce list of valid command line args and description for all required in lab 1 and any i added my self. not required to process command line args that appear after the -h flag")
+    print("\n")
+    print("Command Syntax:")
+    print("     ./412fe [flags] filename")
+    print("\n")
+    print("Required arguments:")
+    print("     filename is the pathname (absolute or relative) to the input file. When the flag is '-h', no filename should be specified and nothing after the flag is processed.")
+    print("\n")
+    print("Optional flags:")
+    print("     -h      prints this message")
+    print("\n")
+    print("At most one of the following three flags:")
+    print("     -s      prints tokens in token stream, only invokes scanner")
+    print("     -p      invokes parser and resports on success or failure, invokes scanner and parser")
+    print("     -r      prints the human readable version of parser's IR")
+    print("If none is specified, the default action is '-p'.")
+    
   elif (sys.argv[1] == '-r'):
     print("TODO: read the file, parse it, build the intermediate representation (IR), and print out the information in the intermediate representaiton (in an appropriately human readable format)")
     if (len(sys.argv) <= 2):
