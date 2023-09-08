@@ -5,14 +5,15 @@ import sys
 
 COMMENT = "// ILOC Front End \n"
 
+EOF_FLAG = False
 
 
 
 
 def scan_func(input_file):
   scan = scanner.Scanner(input_file)
-  print("in scan_func in lab1.py, starting start_scan in scanner.py")
-  token = scan.start_scan()
+  # print("in scan_func in lab1.py, starting start_scan in scanner.py")
+  token = scan.get_token()
   print(str(scanner.line_num) + ": " + token)
 
   # tokens should be a string like < cat, "lex" >
@@ -29,7 +30,7 @@ def scan_func(input_file):
     myline = input_file.readline() # returns empty string when at end of file
     # read line by line into buffer
     while myline:
-        print(str(scan.line_num) + ': < line, "' + myline + '" >')
+        print(str(scan.line_num) + ': ' + myline)
         myline = scan.input_file.readline()
 
         # add to buffer for scanner to read in start_scan()
@@ -42,7 +43,8 @@ def scan_func(input_file):
           
 
         # TODO: add characters to buffer: check size, refill if full, add otherwise
-        token = scan.start_scan()  # NOTE: i think i dont need to specify line num bc its rlly emptying the buffer
+        token = scan.get_token()  # NOTE: i think i dont need to specify line num bc its rlly emptying the buffer
+        print(str(scan.line_num) + ': ' +  + token)
         scan.line_num+=1
 
     print("eof token: " + EOF_TOKEN)
@@ -50,6 +52,7 @@ def scan_func(input_file):
     print(str(scan.line_num) + ": " + token)
     # break
     # dont need to remove from buffer here bc buffer leaves chars until clearing necessary (full)
+  EOF_FLAG = True;
   return token
   
 

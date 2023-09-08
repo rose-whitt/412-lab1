@@ -65,25 +65,26 @@ class Scanner:
     def main_scanner(self, string):
         i = 0
         c = string
+        print(type(c))
         # store (MEMOP) or sub (ARITHOP)
         if (c == 's'):
             # next char
             i += 1
-            c = self.get_next_char
+            c = self.next_char
             if (c == 't'):    # store (MEMOP)
                 # next char
                 i += 1
-                c = self.get_next_char
+                c = self.next_char
                 if (c == 'o'):
                     # next char
                     i += 1
-                    c = self.get_next_char
+                    c = self.next_char
                     if (c == 'r'):
                         # next char
                         i += 1
-                        c = self.get_next_char
+                        c = self.next_char
                         if (c == 'e'):
-                            return "store - MEMOP"
+                            return '< MEMOP, "store" >'
                         else:
                             return "stor ERROR"
                     else:
@@ -93,9 +94,9 @@ class Scanner:
             elif (c == 'u'):    # sub (ARITHOP)
                 # next char
                 i += 1
-                c = self.get_next_char
+                c = self.next_char
                 if (c == 'b'):
-                    return "sub - ARITHOP"
+                    return '< ARITHOP, "sub" >'
                 else:
                     return "su ERROR"
             else:
@@ -103,25 +104,26 @@ class Scanner:
         elif (c == 'l'):
             # next char
             i += 1
-            c = self.get_next_char
+            c = self.next_char
             if (c == 'o'):
                 # next char
                 i += 1
-                c = self.get_next_char
+                c = self.next_char
                 if (c == 'a'):
                     # next char
                     i += 1
-                    c = self.get_next_char
+                    c = self.next_char
                     if (c == 'd'):
                         # next char
                         i += 1
-                        c = self.get_next_char
+                        c = self.next_char
                         if (c == 'I'): # loadI (LOADI)
-                            return "loadI - LOADI"
+                            return '< LOADI, "loadI" >'
                         elif (c == '\n' or c == '\r\n' or c == ' '):    # load (MEMOP)
-                            return "load - MEMOP"
+                            # TODO: rollback
+                            return '< MEMOP, "load" >'
                         else:
-                            return "load ERROR"  #NOTE- now that i think about it, they should all check tehre is a new line or sum to show end of word
+                            return "load ERROR"  #TODO- now that i think about it, they should all check tehre is a new line or sum to show end of word
 
                     else:
                         return "loa ERROR"
@@ -132,41 +134,130 @@ class Scanner:
         elif (c == 'r'):    # rshift (ARITHOP) or register
             # next char
             i += 1
-            c = self.get_next_char
-            if (c >= '0' and c <= '9'):
+            c = self.next_char
+            print(type(c))
+            if (c >= 0 and c <= 9):
                 print("possible register")
-                return
+                reg_num = 'r' + c
+                c = self.next_char
+                while (c >= '0' and c <= '9'):  # get to end of number
+                    reg_num = reg_num + c
+                    c = self.next_char  # TODO: this may cause adding a char we dont want
+                return '< REG, "' + reg_num + " >"
             elif (c == 's'):
                 print("possible rshift")
-                return
+                i += 1
+                c = self.next_char
+                if (c == 'h'):
+                    i += 1
+                    c = self.next_char
+                    if (c == 'i'):
+                        i += 1
+                        c = self.next_char
+                        if (c == 'f'):
+                            i += 1
+                            c = self.next_char
+                            if (c == 't'):
+                                return '< ARITHOP, "rshift" >'
+                            else:
+                                return "rshif ERROR"
+                        else:
+                            return "rshi ERROR"
+                    else:
+                        return "rsh ERROR"
+
+                else:
+                    return "rs ERROR"
             else:
-                print("r ERROR")
-                return
+                return "r ERROR"
         elif (c == 'm'):    # mult (ARITHOP)
             print("possible mult")
-            return
+            i += 1
+            c = self.next_char
+            if (c == 'u'):
+                i += 1
+                c = self.next_char
+                if (c == 'l'):
+                    i += 1
+                    c = self.next_char
+                    if (c == 't'):
+                        return '< ARITHOP, "mult" >'
+                    else:
+                        return "mul error"
+                else:
+                    return "mu error"
+            else:
+                return "m error"
         elif (c == 'a'):    # add (ARITHOP)
             print("possible add")
-            return
+            if (c == 'd'):
+                i += 1
+                c = self.next_char
+                if (c == 'd'):
+                    return '< ARITHOP, "add" >'
+                else:
+                    return "ad error"
+            else:
+                return "a error"
         elif (c == 'n'):    # nop (NOP)
             print("possible nop")
-            return
+            i += 1
+            c = self.next_char
+            if (c == 'o'):
+                i += 1
+                c = self.next_char
+                if (c == 'p'):
+                    return '< NOP, "nop" >'
+                else:
+                    return "no error (as in nop error)"
+            else:
+                return "n error"
         elif (c == 'o'):    # output (OUTPUT)
             print("possible output")
-            return
+            i += 1
+            c = self.next_char
+            if (c == 'u'):
+                i += 1
+                c = self.next_char
+                if (c == 't'):
+                    i += 1
+                    c = self.next_char
+                    if (c == 'p'):
+                        i += 1
+                        c = self.next_char
+                        if (c == 'u'):
+                            i += 1
+                            c = self.next_char
+                            if (c == 't'):
+                                return '< OUTPUT, "output" >'
+                            else:
+                                return "outpu error"
+                        else:
+                            return "outp error"
+                    else:
+                        return "out error"
+                else:
+                    return "ou error"
+            else:
+                return "o error"
         elif (c == '='):    # => (INTO)
             print("possible =>")
-            return
+            i += 1
+            c = self.next_char
+            if (c == '>'):
+                return '< INTO, "=>" >'
+            else:
+                return "= error"
         elif (c == '/'):    # COMMENT
             print("possible comment")
             # next char
             i += 1
-            c = self.get_next_char
+            c = self.next_char
 
             if (c == '/'):
                 # next char
                 i += 1
-                c = self.get_next_char
+                c = self.next_char
                 print("in comment if, c is: " + str(c))
 
                 # read rest of comment
@@ -174,32 +265,42 @@ class Scanner:
                     print(c)
                     # get next character
                     i += 1
-                    c = self.get_next_char
+                    c = self.next_char
                 # print(c)
                 if (c == '\n' or c == '\r\n'):
-                    return "COMMENT"
+                    return '< NEWLINE, "\n" >'
             else:
                 print("returning not a comment")
                 return "NOT A COMMENT"
         elif (c == ','):    # COMMA
             print("possible comma")
-            return
+            return '< COMMA, "," >'
         elif (c == '\n' and c == '\r\n'):   # EOL
             print("possible end of line")
-            return
-        elif (c >= '0' and c <= '9'):   #CONSTANT
+            return '< NEWLINE, "\n" >'
+        elif (c >= 0 and c <= 9):   #CONSTANT
             print("possible constant")
-            return
+            constant = str(c)
+            i += 1
+            c = self.next_char
+            while (c >= 0 and c <= 9):  # get to end of number
+                constant = constant + str(c)
+                c = self.next_char  # TODO: this may cause adding a char we dont want
+            return '< CONST, "' + constant + " >"
+        elif (c == ''):
+            return '< ENDFILE, "" >'
         else:
             print("ERROR - idk what that is!")
-            return
+            return "error!"
     
     def rollback(self):
         if (self.point == self.fence):
             raise RuntimeError("Rollback error!")
         self.point = (self.point - 1) % (2 * self.BUF_SIZE)
 
-    def get_next_char(self):
+
+    # TODO: ask harry about this, piazza said it should be two chars but shouldnt i be checking for it running out of space in buffer? ik i am reading a line into the buffer, but am i clearing it all after each line??
+    def next_char(self):
         """Gets the character at the specified index from the buffer.
 
         Args:
@@ -211,7 +312,7 @@ class Scanner:
             The character at the specified input index.
         """
 
-        print("buffer: " + str(self.buffer) + "\n" + "point: " + str(self.point) + "\n fence: " + str(self.fence) + "\n  + buf size: " + str(self.BUF_SIZE) + "\n char at point: " + str(self.buffer[self.point]))
+        # print("buffer: " + str(self.buffer) + "\n" + "point: " + str(self.point) + "\n fence: " + str(self.fence) + "\n  + buf size: " + str(self.BUF_SIZE) + "\n char at point: " + str(self.buffer[self.point]))
         char = self.buffer[self.point]
         # moves pointer up
         self.point = (self.point + 1) % (2 * self.BUF_SIZE)
@@ -223,92 +324,27 @@ class Scanner:
 
         return char
     
-    
 
-    def print_characters_until_eol(self, string):
-        index = 0
-        while index < len(string) and string[index] != '\n':
-            print(string[index])
-            index += 1
-    
-    def direct_code_scanner(self, string):
-        print("scanner.py: " + string)
-
-
-        index = 0
-        c = string[index]
-        # comments
-        if (c == '/'):
-            print(str(index) + ", " + c)
-
-            index += 1
-            c = string[index]
-            if (c == '/'):
-                while (index < len(string) and c != '\n' and c != '\r\n'):
-                    c = string[index]
-                    print(str(index) + ", " + c)
-                    index += 1
-                if (c == '\n' and c == '\r\n'):
-                    return "COMMENT"
-                else:
-                    return "ERROR"
-    
-    def comment(self, string):
-        i = 0
-        c = string[i]
-        if (c == '/'):
-            # next char
-            i += 1
-            c = string[i]
-
-            if (c == '/'):
-                # next char
-                i += 1
-                c = string[i]
-
-                # read rest of comment
-                while (i < len(string) and c != '\n' and c != '\r\n'):
-                    print(c)
-                    # get next character
-                    i += 1
-                    c = string[i]
-                # print(c)
-                if (c == '\n' or c == '\r\n'):
-                    return "COMMENT"
-            else:
-                return "NOT A COMMENT"
-        else:
-            return "NOT A COMMENT"
-    
-    def shit(self, string):
-        print("in shit")
-        i = 0
-        c = string[i]
-        while (i < len(string) and c != '\n' and c != '\r\n'):
-            print(c)
-            # get next character
-            i += 1
-            c = string[i]
     
     # returns when it finds a token, return token
-    def start_scan(self):
+    def get_token(self):
         """ Get a line. Returns when it finds a word.
         Returns token < ENDFILE, "" >
         """
         # c = get_next_char(self)
-        print("in start_scan, about to call get_next_char")
+        # print("in start_scan, about to call get_next_char")
 
-        c = self.get_next_char()
-        print("in start_scan, get_next_char result: " + str(c) + "\n going to while loop now")
+        # c = self.next_char()
+        # print("in start_scan, get_next_char result: " + str(c) + "\n going to while loop now")
 
 
-        i = 0
-        while (i < BUF_SIZE):
-            print(self.main_scanner(c[i]))
-            i += 1
+        # i = 0
+        # while (i < BUF_SIZE):
+        #     print(self.main_scanner(c[i]))
+        #     i += 1
         
 
-        print("in start_scan, after while")
+        # print("in start_scan, after while")
 
         # # get next character
         # char = self.buffer[self.point]
@@ -333,6 +369,7 @@ class Scanner:
         #     self.line_num+=1
 
         #this is like the shit in main_scanner
-        ret_token = '< ENDFILE, "" >'   # this is so we dont get infinite loop cuz scan_func expects this EOF token
+        # ret_token = '< ENDFILE, "" >'   # this is so we dont get infinite loop cuz scan_func expects this EOF token
         # line_num += 1
-        return ret_token
+        c = self.next_char()
+        return self.main_scanner(c)
