@@ -33,9 +33,9 @@ EOF = 9     # input has been exhausted
 EOL = 10    # end of current line ("\r\n" or "\n")
 
 # Double Buffer
-BUF_SIZE = 0
-point = 0
-fence = 0
+BUF_SIZE = -1
+point = -1
+fence = -1
 buffer = []
 
 line_num = 1
@@ -45,7 +45,7 @@ class Scanner:
     def __init__(self, input_file):
         # init all variables like buffer and shit
         self.input_file = input_file
-        self.BUF_SIZE = 0
+        self.BUF_SIZE = 10
         self.point = 0
         self.fence = 0
         self.buffer = [0] * self.BUF_SIZE
@@ -167,6 +167,7 @@ class Scanner:
                 # next char
                 i += 1
                 c = self.get_next_char
+                print("in comment if, c is: " + str(c))
 
                 # read rest of comment
                 while (i < len(string) and c != '\n' and c != '\r\n'):
@@ -178,6 +179,7 @@ class Scanner:
                 if (c == '\n' or c == '\r\n'):
                     return "COMMENT"
             else:
+                print("returning not a comment")
                 return "NOT A COMMENT"
         elif (c == ','):    # COMMA
             print("possible comma")
@@ -209,6 +211,7 @@ class Scanner:
             The character at the specified input index.
         """
 
+        print("buffer: " + str(self.buffer) + "\n" + "point: " + str(self.point) + "\n fence: " + str(self.fence) + "\n  + buf size: " + str(self.BUF_SIZE) + "\n char at point: " + str(self.buffer[self.point]))
         char = self.buffer[self.point]
         # moves pointer up
         self.point = (self.point + 1) % (2 * self.BUF_SIZE)
@@ -293,12 +296,19 @@ class Scanner:
         Returns token < ENDFILE, "" >
         """
         # c = get_next_char(self)
+        print("in start_scan, about to call get_next_char")
 
         c = self.get_next_char()
+        print("in start_scan, get_next_char result: " + str(c) + "\n going to while loop now")
 
-        while c:
-            print(self.main_scanner(c))
-            c = self.get_next_char()
+
+        i = 0
+        while (i < BUF_SIZE):
+            print(self.main_scanner(c[i]))
+            i += 1
+        
+
+        print("in start_scan, after while")
 
         # # get next character
         # char = self.buffer[self.point]
@@ -323,6 +333,6 @@ class Scanner:
         #     self.line_num+=1
 
         #this is like the shit in main_scanner
-        ret_token = '< ENDFILE, "" >'
+        ret_token = '< ENDFILE, "" >'   # this is so we dont get infinite loop cuz scan_func expects this EOF token
         # line_num += 1
         return ret_token

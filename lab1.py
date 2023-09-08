@@ -11,6 +11,7 @@ COMMENT = "// ILOC Front End \n"
 
 def scan_func(input_file):
   scan = scanner.Scanner(input_file)
+  print("in scan_func in lab1.py, starting start_scan in scanner.py")
   token = scan.start_scan()
   print(str(scanner.line_num) + ": " + token)
 
