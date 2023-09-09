@@ -18,7 +18,7 @@ def clean_up_list(l):
 
 
 
-def scan_func(input_file):
+def start(input_file, flag):
   scan = scanner.Scanner(input_file)
   parse = rose_parser.RoseParser(scan)
   # print("in scan_func in lab1.py, starting start_scan in scanner.py")
@@ -57,27 +57,25 @@ def scan_func(input_file):
   while (scan.cur_line != ""):
     print("[scan_func] token[0]: " + str(token[0]))
     print("[scan_func, outer while] char idx: " + str(scan.char_idx))
-    
-    # scan.char_idx = -1
-    # token = ["", ""]
-    # scan.cur_line = scan.input_file.readline() # TODO: should be doing this at end of while loop
-    # print("new line: " + scan.cur_line)
-    # print("shit toje: " + str(token))
+
     i += 1
     while (token[0] != scan.EOL and scan.cur_line != "" and token[0] != 'ERROR'):
       j += 1
       print(str(scan.line_num) + ': ' + scan.cur_line)
 
       # SCAN (GET A TOKEN)
-      token = scan.get_token()  # NOTE: i think i dont need to specify line num bc its rlly emptying the buffer
-      scan.token_list.append(token)
+      print("🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸SCAN-START🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
+      token = scan.get_token()
+      print("🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸SCAN-END🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
+      if (token[0] != scan.BLANK):  # ignore whitespace
+        scan.token_list.append(token)
+      # if error, go to next line
+      if (token[0] == "SCANNER_ERROR"):
+        new_line = [scan.EOL, "\n"]
+        scan.token_list.append(new_line)
+        token = new_line  # should make the while look break and then go to next line
       print("token: " + str(scan.line_num) + ': ' + str(token))
     
-
-    
-
-    
-
     print("after while------------------------")
     
     print(scan.token_list)
@@ -88,9 +86,11 @@ def scan_func(input_file):
 
 
     # ------------------PARSE-----------------
-    print("-----------------PARSE----------------")
+    
+    print("🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲PARSE-START🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲")
     print(parse.parse_line(scan.token_list, scan.line_num))
-    print("-----------------PARSE----------------")
+    print("🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲PARSE-END🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲")
+
 
 
 
@@ -178,6 +178,7 @@ def main():
       __file__ = sys.argv[2]
       # Reading a file
       f = open(__file__, 'r')
+      start(f, '-r')
       f.close()
   elif (sys.argv[1] == '-p'):
     print("TODO: read the file, scan it and parse it, build the intermediate representation (IR) and report either success or report all the errors that it finds in the input file.")
@@ -187,6 +188,7 @@ def main():
       __file__ = sys.argv[2]
       # Reading a file
       f = open(__file__, 'r')
+      start(f, '-p')
       f.close()
   elif (sys.argv[1] == '-s'):
     print("TODO: read file and print to stdout a list of tokens that the scanner found. for each, print line number, tokens type (or syntactic category) and its spelling (or lexeme)")
@@ -197,7 +199,7 @@ def main():
       # Reading a file
       poo = 0
       f = open(__file__, 'r')
-      token = scan_func(f)
+      start(f, '-s')
       # while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
       #   scan_func(f)
       #   poo += 1

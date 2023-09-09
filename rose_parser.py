@@ -16,6 +16,8 @@ class RoseParser():
         self.INTO = 8    # "=>"
         self.EOF = 9     # input has been exhausted
         self.EOL = 10    # end of current line ("\r\n" or "\n")
+        self.BLANK = 11     # not an opcode, but used to signal blank space or tab
+
 
 
     def parse_line(self, token_list, line_num):
@@ -32,7 +34,7 @@ class RoseParser():
                     return False
                 idx += 1
                 if (token_list[idx][0] != self.REGISTER):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISSTER in ' + token_list[idx - 3][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 3][1] + "\n")
                     return False
                 idx += 1
                 if (token_list[idx][0] == self.EOL):
