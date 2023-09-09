@@ -22,94 +22,169 @@ class RoseParser():
 
     def parse_line(self, token_list, line_num):
         idx = 0
+        while (token_list[idx][0] == self.BLANK):   # iterate to first non-blank
+            print("poo")
+            idx += 1
+        print("[PARSER-DEBUG] " + str(idx) + " index, number of blanks.")
+        memop_idx = idx
         if (token_list[idx][0] == self.MEMOP):
             idx += 1
+            if (token_list[idx][0] != self.BLANK):
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing blank after opcode ' + token_list[memop_idx][1] + "\n")
+                return False
+            else:
+                while (token_list[idx][0] == self.BLANK):   # iterate to first non-blank after opcode
+                    print("CUNT")
+                    idx += 1
+            
+            # remove rest of blanks now that we checked -- jk i think its faster to just skip them bc with removing wed have to iterate over list twice
+            
             if (token_list[idx][0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 1][1] + "\n")
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[memop_idx][1] + "\n")
                 return False
             else:
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 if (token_list[idx][0] != self.INTO):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[idx - 2][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[memop_idx][1] + "\n")
                     return False
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 if (token_list[idx][0] != self.REGISTER):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 3][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[memop_idx][1] + "\n")
                     return False
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 if (token_list[idx][0] == self.EOL):
-                    print("[PARSER] Valid " + token_list[idx - 4][1] + " sentence")
+                    print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                     return True
                 else:
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 4][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
                     return False
         elif (token_list[idx][0] == self.LOADI):
             idx += 1
-            sys.stderr.write("shit" + str(token_list[idx][0]))
+            if (token_list[idx][0] != self.BLANK):
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing blank after opcode ' + token_list[memop_idx][1] + "\n")
+                return False
+            else:
+                while (token_list[idx][0] == self.BLANK):   # iterate to first non-blank after opcode
+                    print("CUNT")
+                    idx += 1
+            print("[PARSER] next char is " +  token_list[idx][1])
+
 
             if (token_list[idx][0] != self.CONSTANT):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing CONSTANT in ' + token_list[idx - 1][1])
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing CONSTANT in ' + token_list[memop_idx][1])
                 return False
             else:
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 if (token_list[idx][0] != self.INTO):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[idx - 2][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[memop_idx][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) +  " - got character '" +  token_list[idx][1] + "' instead.\n")
                     return False
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 if (token_list[idx][0] != self.REGISTER):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[idx - 3][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[memop_idx][1] + "\n")
                     return False
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 if (token_list[idx][0] == self.EOL):
-                    print("[PARSER] Valid " + token_list[idx - 4][1] + " sentence")
-
+                    print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                     return True
                 else:
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 4][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
                     return False
         elif (token_list[idx][0] == self.ARITHOP):
             idx += 1
+            if (token_list[idx][0] != self.BLANK):
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing blank after opcode ' + token_list[memop_idx][1] + "\n")
+                return False
+            else:
+                while (token_list[idx][0] == self.BLANK):   # iterate to first non-blank after opcode
+                    print("CUNT")
+                    idx += 1
+            print("[PARSER] next char is " +  token_list[idx][1])
+
+            
             if (token_list[idx][0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 1][1] + "\n")
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[memop_idx][1] + "\n")
                 return False
             else:
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 if (token_list[idx][0] != self.COMMA):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing COMMA in ' + token_list[idx - 2][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing COMMA in ' + token_list[memop_idx][1] + "\n")
                     return False
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 # ARITHOP REG COMMA 
                 if (token_list[idx][0] != self.REGISTER):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 3][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[memop_idx][1] + "\n")
                     return False
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 if (token_list[idx][0] != self.INTO):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[idx - 4][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[memop_idx][1] + "\n")
                     return False
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 if (token_list[idx][0] != self.REGISTER):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 5][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[memop_idx][1] + "\n")
                     return False
                 idx += 1
+                while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
                 if (token_list[idx][0] == self.EOL):
-                    print("[PARSER] Valid " + token_list[idx - 6][1] + " sentence")
+                    print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                     return True
                 else:
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 6][1] + "\n")
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
                     return False
         elif (token_list[idx][0] == self.OUTPUT):
             idx += 1
+            if (token_list[idx][0] != self.BLANK):
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing blank after opcode ' + token_list[memop_idx][1] + "\n")
+                return False
+            else:
+                while (token_list[idx][0] == self.BLANK):   # iterate to first non-blank after opcode
+                    print("CUNT")
+                    idx += 1
+            print("[PARSER] next char is " +  token_list[idx][1])
+
             if (token_list[idx][0] != self.CONSTANT):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing CONSTANT in ' + token_list[idx - 1][1] + "\n")
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing CONSTANT in ' + token_list[memop_idx][1] + "\n")
                 return False
             idx += 1
+            while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
+                    idx += 1
             if (token_list[idx][0] == self.EOL):
-                print("[PARSER] Valid " + token_list[idx - 2][1] + " sentence")
-
+                print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                 return True
             else:
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 2][1] + "\n")
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
                 return False
+        elif (token_list[idx][0] == self.NOP):
+            idx += 1
+            if (token_list[idx][0] != self.BLANK and token_list[idx][0] != self.EOL and token_list[idx][0] != self.EOF):
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               wrong thing after NOP' +  "\n")
+                return False
+            else:
+                print("[PARSER] Valid NOP sentence")
+                return True
+
+
 
         
         return self.CATEGORIES
