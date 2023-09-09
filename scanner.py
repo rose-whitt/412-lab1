@@ -342,7 +342,7 @@ class Scanner:
                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "/" is not a valid word.\n')
                 return ["SCANNER_ERROR", "/"]
         elif (c == ord(',')):    # COMMA
-            return ["COMMA", ","]
+            return [self.COMMA, ","]
         elif (c == ord('\n') or c == 10):   # EOL, Line Feed (LF) is used as a new line character in linux, ascii value is 10
             print("new line")
             return [self.EOL, "\\n"]
@@ -365,7 +365,7 @@ class Scanner:
                 constant = constant + chr(c)
                 c = self.next_char()  # TODO: this may cause adding a char we dont want
             self.rollback()
-            return ["CONST", constant]
+            return [self.CONSTANT, constant]
         elif (c == 0):  # 0 is value of empty string
             # TODO: is this always the last line of the file??
             return [self.EOF, ""]
@@ -384,13 +384,7 @@ class Scanner:
     def next_char(self):
         # character 10 is a line break
         # print("[next_char] (before) len, idx, char: " + str(len(self.cur_line)) + ", " + str(self.char_idx) + ", " + str(ord(self.cur_line[self.char_idx])))
-        print("[next char] line in ascii: " + str(ord(self.cur_line[0])))
-        print("[next_char] len: " + str(len(self.cur_line)))
-        print("[next_char] char idx: " + str(len(self.cur_line)))
-        if (self.char_idx < len(self.cur_line) and self.char_idx >= 0):
-            print("[next_char] char: " + str(ord(self.cur_line[self.char_idx])))
-
-
+        
         self.char_idx += 1
 
         return ord(self.cur_line[self.char_idx])

@@ -9,15 +9,6 @@ COMMENT = "// ILOC Front End \n"
 EOF_FLAG = False
 
 
-def clean_up_list(l):
-  temp = []
-  for x in l:
-    if (x[0] != 'UNKNOWN'):
-      temp.append(x)
-  return temp
-
-
-
 def start(input_file, flag):
   scan = scanner.Scanner(input_file)
   parse = rose_parser.RoseParser(scan)
@@ -55,13 +46,13 @@ def start(input_file, flag):
   i = 0
   j = 0
   while (scan.cur_line != ""):
-    print("[scan_func] token[0]: " + str(token[0]))
-    print("[scan_func, outer while] char idx: " + str(scan.char_idx))
+    # print("[scan_func] token[0]: " + str(token[0]))
+    # print("[scan_func, outer while] char idx: " + str(scan.char_idx))
 
     i += 1
     while (token[0] != scan.EOL and scan.cur_line != "" and token[0] != 'ERROR'):
       j += 1
-      print(str(scan.line_num) + ': ' + scan.cur_line)
+      # print(str(scan.line_num) + ': ' + scan.cur_line)
 
       # SCAN (GET A TOKEN)
       print("🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸SCAN-START🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
@@ -74,14 +65,13 @@ def start(input_file, flag):
         new_line = [scan.EOL, "\n"]
         scan.token_list.append(new_line)
         token = new_line  # should make the while look break and then go to next line
-      print("token: " + str(scan.line_num) + ': ' + str(token))
+      # print("token: " + str(scan.line_num) + ': ' + str(token))
     
-    print("after while------------------------")
+    # print("after while------------------------")
     
     print(scan.token_list)
 
     
-    scan.token_list = clean_up_list(scan.token_list)
     scan.file_token_lists.append(scan.token_list) # add token list to line list
 
 
@@ -104,14 +94,16 @@ def start(input_file, flag):
     scan.cur_line = scan.input_file.readline()
     scan.line_num+=1
     shit += 1
-    print("new line: " + scan.cur_line)
-    print("shit toje: " + str(token))
+    # print("new line: " + scan.cur_line)
+    # print("shit toje: " + str(token))
   
-  print("i: "  + str(i))
-  print("j: "  + str(i))
+  scan.file_token_lists.append(EOF_TOKEN)
+  
+  # print("i: "  + str(i))
+  # print("j: "  + str(i))
 
-  print("token list len: " +  str(len(scan.token_list)))
-  print("token list len: " +  str(len(scan.file_token_lists)))
+  # print("token list len: " +  str(len(scan.token_list)))
+  # print("token list len: " +  str(len(scan.file_token_lists)))
 
   boob = 0
   num_tokens = 0
@@ -121,7 +113,7 @@ def start(input_file, flag):
     
     # print(scan)
     print(scan.file_token_lists[boob])
-    print(str(boob) + ": " + str(temp))
+    # print(str(boob) + ": " + str(temp))
     boob += 1
 
   print("total num tokens: " + str(num_tokens))
@@ -135,7 +127,9 @@ def start(input_file, flag):
   #   # break
   #   # dont need to remove from buffer here bc buffer leaves chars until clearing necessary (full)
   # EOF_FLAG = True;
-  print(scan.file_token_lists)
+  for i in scan.file_token_lists:
+    print(str(i))
+  # print(scan.file_token_lists)
   return EOF_TOKEN
   
 

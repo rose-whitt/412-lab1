@@ -25,7 +25,7 @@ class RoseParser():
         if (token_list[idx][0] == self.MEMOP):
             idx += 1
             if (token_list[idx][0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 1][1])
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 1][1] + "\n")
                 return False
             else:
                 idx += 1
@@ -45,6 +45,8 @@ class RoseParser():
                     return False
         elif (token_list[idx][0] == self.LOADI):
             idx += 1
+            sys.stderr.write("shit" + str(token_list[idx][0]))
+
             if (token_list[idx][0] != self.CONSTANT):
                 sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing CONSTANT in ' + token_list[idx - 1][1])
                 return False
@@ -63,6 +65,36 @@ class RoseParser():
                     return True
                 else:
                     sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 4][1] + "\n")
+                    return False
+        elif (token_list[idx][0] == self.ARITHOP):
+            idx += 1
+            if (token_list[idx][0] != self.REGISTER):
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 1][1])
+                return False
+            else:
+                idx += 1
+                if (token_list[idx][0] != self.COMMA):
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing COMMA in ' + token_list[idx - 2][1] + "\n")
+                    return False
+                idx += 1
+                # ARITHOP REG COMMA 
+                if (token_list[idx][0] != self.REGISTER):
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 3][1] + "\n")
+                    return False
+                idx += 1
+                if (token_list[idx][0] != self.INTO):
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[idx - 4][1] + "\n")
+                    return False
+                idx += 1
+                if (token_list[idx][0] != self.REGISTER):
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 5][1] + "\n")
+                    return False
+                idx += 1
+                if (token_list[idx][0] == self.EOL):
+                    print("[PARSER] valid sentence")
+                    return True
+                else:
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 6][1] + "\n")
                     return False
         
         return self.CATEGORIES
