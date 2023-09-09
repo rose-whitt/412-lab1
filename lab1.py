@@ -1,6 +1,7 @@
 #!/usr/bin/python -u
 
 import scanner
+import rose_parser
 import sys
 
 COMMENT = "// ILOC Front End \n"
@@ -50,6 +51,8 @@ def scan_func(input_file):
   scan.cur_line = scan.input_file.readline()
   token = ["", ""]
   shit = 0
+  i = 0
+  j = 0
   while (scan.cur_line != ""):
     print("[scan_func] token[0]: " + str(token[0]))
     print("[scan_func, outer while] char idx: " + str(scan.char_idx))
@@ -59,28 +62,67 @@ def scan_func(input_file):
     # scan.cur_line = scan.input_file.readline() # TODO: should be doing this at end of while loop
     # print("new line: " + scan.cur_line)
     # print("shit toje: " + str(token))
-
+    i += 1
     while (token[0] != 'NEWLINE' and scan.cur_line != "" and token[0] != 'ERROR'):
+      j += 1
       print(str(scan.line_num) + ': ' + scan.cur_line)
-      print("[scan_func, inner while] char idx: " + str(scan.char_idx))
-      # TODO: add characters to buffer: check size, refill if full, add otherwise
+
+      # SCAN (GET A TOKEN)
       token = scan.get_token()  # NOTE: i think i dont need to specify line num bc its rlly emptying the buffer
       scan.token_list.append(token)
       print("token: " + str(scan.line_num) + ': ' + str(token))
-    scan.line_num+=1
+    
+
+    
+
+    
+
     print("after while------------------------")
-    # reset
-    scan.char_idx = -1
-    token = ["", ""]
+    
     print(scan.token_list)
+
+    
     scan.token_list = clean_up_list(scan.token_list)
     scan.file_token_lists.append(scan.token_list) # add token list to line list
+
+
+    # ------------------PARSE-----------------
+    rose_parser.parse(scan)
+
+
+    # RESET
+    scan.char_idx = -1
+    token = ["", ""]
     scan.token_list = []  # new line, new list
-    scan.cur_line = scan.input_file.readline() # TODO: should be doing this at end of while loop
+
+
+    # INCREMENT
+    scan.cur_line = scan.input_file.readline()
+    scan.line_num+=1
+    shit += 1
     print("new line: " + scan.cur_line)
     print("shit toje: " + str(token))
+  
+  print("i: "  + str(i))
+  print("j: "  + str(i))
+
+  print("token list len: " +  str(len(scan.token_list)))
+  print("token list len: " +  str(len(scan.file_token_lists)))
+
+  boob = 0
+  num_tokens = 0
+  for i in scan.file_token_lists:
+    temp = len(scan.file_token_lists[boob])
+    num_tokens += len(scan.file_token_lists[boob])
     
-    shit += 1
+    # print(scan)
+    print(scan.file_token_lists[boob])
+    print(str(boob) + ": " + str(temp))
+    boob += 1
+
+  print("total num tokens: " + str(num_tokens))
+  
+
 
   
   #   print("eof token: " + EOF_TOKEN)
@@ -149,11 +191,13 @@ def main():
     else:
       __file__ = sys.argv[2]
       # Reading a file
+      poo = 0
       f = open(__file__, 'r')
       token = scan_func(f)
-      while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
-        scan_func(f)
-      print("closing.")
+      # while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
+      #   scan_func(f)
+      #   poo += 1
+      print("closing.- " + str(poo))
       f.close()
 
 

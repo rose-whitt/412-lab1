@@ -128,7 +128,22 @@ class Scanner:
             # next char
             i += 1
             c = self.next_char()
-            if (c == ord('o')):
+            if (c == ord('s')):
+                print("possible rshift")
+                i += 1
+                c = self.next_char()
+                if (c == ord('h')):
+                    i += 1
+                    c = self.next_char()
+                    if (c == ord('i')):
+                        i += 1
+                        c = self.next_char()
+                        if (c == ord('f')):
+                            i += 1
+                            c = self.next_char()
+                            if (c == ord('t')):
+                                return ["ARITHOP", "rshift"]
+            elif (c == ord('o')):
                 # next char
                 i += 1
                 c = self.next_char()
