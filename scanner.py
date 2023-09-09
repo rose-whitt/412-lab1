@@ -155,6 +155,7 @@ class Scanner:
                 while (c >= ord('0') and c <= ord('9')):  # get to end of number
                     reg_num = reg_num + chr(c)
                     c = self.next_char()  # TODO: this may cause adding a char we dont want
+                self.rollback()
                 return ["REG", reg_num]
             elif (c == ord('s')):
                 print("possible rshift")
@@ -290,22 +291,26 @@ class Scanner:
                 #     i += 1
                 #     c = self.next_char()
             else:
+                self.rollback()
                 return "NOT A COMMENT"
         elif (c == ord(',')):    # COMMA
             return ["COMMA", ","]
         elif (c == ord('\n')):   # EOL
+            print("new line")
             return ["NEWLINE", "\\n"]
         elif (c == ord('\r')):
             i += 1
             c = self.next_char()
             if (c == ord('\n')):
+                print("one of the weird new lines")
                 return ["NEWLINE", "\\r\\n"]
         elif (c >= ord('0') and c <= ord('9')):   #CONSTANT
-            print("possible constant")
             constant = chr(c)
+            print("possible constant: " + chr(c) + ", " + str(c))
             i += 1
             c = self.next_char()
             while (c >= ord('0') and c <= ord('9')):  # get to end of number
+                print("possible constant: " + chr(c) + ", " + str(c))
                 constant = constant + chr(c)
                 c = self.next_char()  # TODO: this may cause adding a char we dont want
             return ["CONST", constant]
@@ -322,7 +327,17 @@ class Scanner:
 
     # TODO: ask harry about this, piazza said it should be two chars but shouldnt i be checking for it running out of space in buffer? ik i am reading a line into the buffer, but am i clearing it all after each line??
     def next_char(self):
+        # character 10 is a line break
+        # print("[next_char] (before) len, idx, char: " + str(len(self.cur_line)) + ", " + str(self.char_idx) + ", " + str(ord(self.cur_line[self.char_idx])))
+        print("[next char] line in ascii: " + str(ord(self.cur_line[0])))
+        print("[next_char] len: " + str(len(self.cur_line)))
+        print("[next_char] char idx: " + str(len(self.cur_line)))
+        if (self.char_idx < len(self.cur_line) and self.char_idx >= 0):
+            print("[next_char] char: " + str(ord(self.cur_line[self.char_idx])))
+
+
         self.char_idx += 1
+
         return ord(self.cur_line[self.char_idx])
     
 

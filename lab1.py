@@ -30,10 +30,9 @@ def scan_func(input_file):
   #   get token
 
   # first line to start it
-  scan.cur_line = scan.input_file.readline()
+  # scan.cur_line = scan.input_file.readline()
   # get first token
-  token = scan.get_token()
-  print("first token: " + str(token))
+  # token = scan.get_token()
   # While not the end of file token; EOF = empty string
 
   # THIS IS ACTUALLY THE PARSER
@@ -41,24 +40,28 @@ def scan_func(input_file):
     # call start_scan, which returns token
     # scan.cur_line = input_file.readline() # returns empty string when at end of line
     # read line by line into buffer
-  
+  token = ["", ""]
   shit = 0
-  while (token[0] != 'ENDFILE' and shit < 10):
-    while token[0] != 'NEWLINE':
-      print(str(scan.line_num) + ': ' + scan.cur_line)
+  while (token[0] != 'ENDFILE' and shit < 20):
+    print("[scan_func] token[0]: " + str(token[0]))
+    print("[scan_func, outer while] char idx: " + str(scan.char_idx))
+    scan.cur_line = ""
+    scan.char_idx = -1
+    token = ["", ""]
+    scan.cur_line = scan.input_file.readline() # TODO: should be doing this at end of while loop
+    print("new line: " + scan.cur_line)
+    print("shit toje: " + str(token))
 
+    while (token[0] != 'NEWLINE' and scan.cur_line != ""):
+      print(str(scan.line_num) + ': ' + scan.cur_line)
+      print("[scan_func, inner while] char idx: " + str(scan.char_idx))
       # TODO: add characters to buffer: check size, refill if full, add otherwise
       token = scan.get_token()  # NOTE: i think i dont need to specify line num bc its rlly emptying the buffer
       print("token: " + str(scan.line_num) + ': ' + str(token))
     scan.line_num+=1
     print("after while------------------------")
     # reset
-    scan.cur_line = ""
-    scan.char_idx = -1
-    scan.cur_line = scan.input_file.readline() # TODO: should be doing this at end of while loop
-    print("new line: " + scan.cur_line)
-    token = scan.get_token()
-    print("shit toje: " + str(token))
+    
     shit += 1
 
   
