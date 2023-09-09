@@ -32,6 +32,27 @@ class RoseParser():
                     return False
                 idx += 1
                 if (token_list[idx][0] != self.REGISTER):
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISSTER in ' + token_list[idx - 3][1] + "\n")
+                    return False
+                idx += 1
+                if (token_list[idx][0] == self.EOL):
+                    print("[parser] valid sentence")
+                    return True
+                else:
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 4][1] + "\n")
+                    return False
+        elif (token_list[idx][0] == self.LOADI):
+            idx += 1
+            if (token_list[idx][0] != self.CONSTANT):
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing CONSTANT in ' + token_list[idx - 1][1])
+                return False
+            else:
+                idx += 1
+                if (token_list[idx][0] != self.INTO):
+                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[idx - 2][1] + "\n")
+                    return False
+                idx += 1
+                if (token_list[idx][0] != self.REGISTER):
                     sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[idx - 3][1] + "\n")
                     return False
                 idx += 1
@@ -41,5 +62,6 @@ class RoseParser():
                 else:
                     sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 4][1] + "\n")
                     return False
+        
         return self.CATEGORIES
     
