@@ -53,6 +53,8 @@ class Scanner:
         self.cur_line = cur_line
         self.char_idx = char_idx
         self.line_num = 1
+        self.token_list = []
+        self.file_token_lists = []
         self.CATEGORIES = CATEGORIES
         self.MEMOP = 0   # load, store
         self.LOADI = 1   # loadI

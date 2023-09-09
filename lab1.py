@@ -8,6 +8,13 @@ COMMENT = "// ILOC Front End \n"
 EOF_FLAG = False
 
 
+def clean_up_list(l):
+  temp = []
+  for x in l:
+    if (x[0] != 'UNKNOWN'):
+      temp.append(x)
+  return temp
+
 
 
 def scan_func(input_file):
@@ -58,12 +65,17 @@ def scan_func(input_file):
       print("[scan_func, inner while] char idx: " + str(scan.char_idx))
       # TODO: add characters to buffer: check size, refill if full, add otherwise
       token = scan.get_token()  # NOTE: i think i dont need to specify line num bc its rlly emptying the buffer
+      scan.token_list.append(token)
       print("token: " + str(scan.line_num) + ': ' + str(token))
     scan.line_num+=1
     print("after while------------------------")
     # reset
     scan.char_idx = -1
     token = ["", ""]
+    print(scan.token_list)
+    scan.token_list = clean_up_list(scan.token_list)
+    scan.file_token_lists.append(scan.token_list) # add token list to line list
+    scan.token_list = []  # new line, new list
     scan.cur_line = scan.input_file.readline() # TODO: should be doing this at end of while loop
     print("new line: " + scan.cur_line)
     print("shit toje: " + str(token))
@@ -77,6 +89,7 @@ def scan_func(input_file):
   #   # break
   #   # dont need to remove from buffer here bc buffer leaves chars until clearing necessary (full)
   # EOF_FLAG = True;
+  print(scan.file_token_lists)
   return EOF_TOKEN
   
 
