@@ -43,7 +43,7 @@ def scan_func(input_file):
   scan.cur_line = scan.input_file.readline()
   token = ["", ""]
   shit = 0
-  while (scan.cur_line != "" and shit < 20):
+  while (scan.cur_line != ""):
     print("[scan_func] token[0]: " + str(token[0]))
     print("[scan_func, outer while] char idx: " + str(scan.char_idx))
     
@@ -53,7 +53,7 @@ def scan_func(input_file):
     # print("new line: " + scan.cur_line)
     # print("shit toje: " + str(token))
 
-    while (token[0] != 'NEWLINE' and scan.cur_line != ""):
+    while (token[0] != 'NEWLINE' and scan.cur_line != "" and token[0] != 'ERROR'):
       print(str(scan.line_num) + ': ' + scan.cur_line)
       print("[scan_func, inner while] char idx: " + str(scan.char_idx))
       # TODO: add characters to buffer: check size, refill if full, add otherwise
