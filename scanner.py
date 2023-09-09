@@ -101,8 +101,8 @@ class Scanner:
                         i += 1
                         c = self.next_char()
                         if (c == ord('e')):
-                            # temp = ["MEMOP", "store"]
-                            return ["MEMOP", "store"]
+                            # temp = [self.MEMOP, "store"]
+                            return [self.MEMOP, "store"]
                         else:
                             sys.stderr.write("ERROR " + str(self.line_num) + '               "stor" is not a valid word.')
                             return ["ERROR", "stor"]
@@ -117,7 +117,7 @@ class Scanner:
                 i += 1
                 c = self.next_char()
                 if (c == ord('b')):
-                    return ["ARITHOP", "sub"]
+                    return [self.ARITHOP, "sub"]
                 else:
                     sys.stderr.write("ERROR " + str(self.line_num) + '               "su" is not a valid word.')
                     return ["ERROR", "su"]
@@ -142,7 +142,7 @@ class Scanner:
                             i += 1
                             c = self.next_char()
                             if (c == ord('t')):
-                                return ["ARITHOP", "rshift"]
+                                return [self.ARITHOP, "rshift"]
             elif (c == ord('o')):
                 # next char
                 i += 1
@@ -156,10 +156,10 @@ class Scanner:
                         i += 1
                         c = self.next_char()
                         if (c == ord('I')): # loadI (LOADI)
-                            return ["LOADI", "loadI"]
+                            return [self.LOADI, "loadI"]
                         else:
                             self.rollback()
-                            return ["MEMOP", "load"]
+                            return [self.MEMOP, "load"]
                     else:
                         sys.stderr.write("ERROR " + str(self.line_num) + '               "loa" is not a valid word.')
                         return ["ERROR", "loa"]
@@ -182,7 +182,7 @@ class Scanner:
                     reg_num = reg_num + chr(c)
                     c = self.next_char()  # TODO: this may cause adding a char we dont want
                 self.rollback()
-                return ["REG", reg_num]
+                return [self.REGISTER, reg_num]
             elif (c == ord('s')):
                 print("possible rshift")
                 i += 1
@@ -197,7 +197,7 @@ class Scanner:
                             i += 1
                             c = self.next_char()
                             if (c == ord('t')):
-                                return ["ARITHOP", "rshift"]
+                                return [self.ARITHOP, "rshift"]
                             else:
                                 sys.stderr.write("ERROR " + str(self.line_num) + '               "rshif" is not a valid word.')
                                 return ["ERROR", "rshif"]
@@ -225,7 +225,7 @@ class Scanner:
                     i += 1
                     c = self.next_char()
                     if (c == ord('t')):
-                        return ["ARITHOP", "mult"]
+                        return [self.ARITHOP, "mult"]
                     else:
                         sys.stderr.write("ERROR " + str(self.line_num) + '               "mul" is not a valid word.')
                         return ["ERROR", "mul"]
@@ -243,7 +243,7 @@ class Scanner:
                 i += 1
                 c = self.next_char()
                 if (c == ord('d')):
-                    return ["ARITHOP", "add"]
+                    return [self.ARITHOP, "add"]
                 else:
                     sys.stderr.write("ERROR " + str(self.line_num) + '               "ad" is not a valid word.')
                     return ["ERROR", "ad"]
@@ -258,7 +258,7 @@ class Scanner:
                 i += 1
                 c = self.next_char()
                 if (c == ord('p')):
-                    return ["NOP", "nop"]
+                    return [self.NOP, "nop"]
                 else:
                     sys.stderr.write("ERROR " + str(self.line_num) + '               "no" is not a valid word.')
                     return ["ERROR", "no"]
@@ -282,7 +282,7 @@ class Scanner:
                             i += 1
                             c = self.next_char()
                             if (c == ord('t')):
-                                return ["OUTPUT", "output"]
+                                return [self.OUTPUT, "output"]
                             else:
                                 sys.stderr.write("ERROR " + str(self.line_num) + '               "outpu" is not a valid word.')
                                 return ["ERROR", "outpu"]
@@ -304,7 +304,7 @@ class Scanner:
             c = self.next_char()
             print("next char after equal: " + chr(c))
             if (c == ord('>')):
-                return ["INTO", "=>"]
+                return [self.INTO, "=>"]
             else:
                 sys.stderr.write("ERROR " + str(self.line_num) + '               "=" is not a valid word.')
                 return ["ERROR", "="]
@@ -321,7 +321,7 @@ class Scanner:
                 c = self.next_char()
                 print("in comment if, c is: " + chr(c))
 
-                return ["NEWLINE", "//"]
+                return [self.EOL, "//"]
 
                 # # read rest of comment
                 # while (True):
@@ -342,7 +342,7 @@ class Scanner:
             return ["COMMA", ","]
         elif (c == ord('\n') or c == 10):   # EOL, Line Feed (LF) is used as a new line character in linux, ascii value is 10
             print("new line")
-            return ["NEWLINE", "\\n"]
+            return [self.EOL, "\\n"]
         elif (c == ord('\r')):
             i += 1
             c = self.next_char()
@@ -364,7 +364,7 @@ class Scanner:
             self.rollback()
             return ["CONST", constant]
         elif (c == 0):  # 0 is value of empty string
-            return ["ENDFILE", ""]
+            return [self.EOF, ""]
         else:
             return ["UNKNOWN", chr(c)]
         

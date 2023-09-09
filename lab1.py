@@ -20,6 +20,7 @@ def clean_up_list(l):
 
 def scan_func(input_file):
   scan = scanner.Scanner(input_file)
+  parse = rose_parser.RoseParser(scan)
   # print("in scan_func in lab1.py, starting start_scan in scanner.py")
   # token = scan.get_token()
   # print(str(scanner.line_num) + ": " + token)
@@ -28,7 +29,7 @@ def scan_func(input_file):
   pre = "< "
   mid = ', "'
   post = '" >'
-  EOF_TOKEN = ["ENDFILE", ""]
+  EOF_TOKEN = [scan.EOF, ""]
   
 
   
@@ -63,7 +64,7 @@ def scan_func(input_file):
     # print("new line: " + scan.cur_line)
     # print("shit toje: " + str(token))
     i += 1
-    while (token[0] != 'NEWLINE' and scan.cur_line != "" and token[0] != 'ERROR'):
+    while (token[0] != scan.EOL and scan.cur_line != "" and token[0] != 'ERROR'):
       j += 1
       print(str(scan.line_num) + ': ' + scan.cur_line)
 
@@ -87,7 +88,10 @@ def scan_func(input_file):
 
 
     # ------------------PARSE-----------------
-    rose_parser.parse(scan)
+    print("-----------------PARSE----------------")
+    print(parse.parse_line(scan.token_list, scan.line_num))
+    print("-----------------PARSE----------------")
+
 
 
     # RESET
