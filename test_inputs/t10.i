@@ -1,5 +1,6 @@
 loadI 10 => r1  // random operation
-add  4 r1, r1 => r2
+add   r1, r1 => r2
+output 5
 // a real comment
 sub r2, r1 => r3
 /

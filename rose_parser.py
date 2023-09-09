@@ -38,7 +38,7 @@ class RoseParser():
                     return False
                 idx += 1
                 if (token_list[idx][0] == self.EOL):
-                    print("[parser] valid sentence")
+                    print("[PARSER] Valid " + token_list[idx - 4][1] + " sentence")
                     return True
                 else:
                     sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 4][1] + "\n")
@@ -61,7 +61,8 @@ class RoseParser():
                     return False
                 idx += 1
                 if (token_list[idx][0] == self.EOL):
-                    print("[parser] valid sentence")
+                    print("[PARSER] Valid " + token_list[idx - 4][1] + " sentence")
+
                     return True
                 else:
                     sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 4][1] + "\n")
@@ -69,7 +70,7 @@ class RoseParser():
         elif (token_list[idx][0] == self.ARITHOP):
             idx += 1
             if (token_list[idx][0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 1][1])
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[idx - 1][1] + "\n")
                 return False
             else:
                 idx += 1
@@ -91,11 +92,25 @@ class RoseParser():
                     return False
                 idx += 1
                 if (token_list[idx][0] == self.EOL):
-                    print("[PARSER] valid sentence")
+                    print("[PARSER] Valid " + token_list[idx - 6][1] + " sentence")
                     return True
                 else:
                     sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 6][1] + "\n")
                     return False
+        elif (token_list[idx][0] == self.OUTPUT):
+            idx += 1
+            if (token_list[idx][0] != self.CONSTANT):
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing CONSTANT in ' + token_list[idx - 1][1] + "\n")
+                return False
+            idx += 1
+            if (token_list[idx][0] == self.EOL):
+                print("[PARSER] Valid " + token_list[idx - 2][1] + " sentence")
+
+                return True
+            else:
+                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[idx - 2][1] + "\n")
+                return False
+
         
         return self.CATEGORIES
     
