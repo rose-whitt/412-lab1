@@ -40,17 +40,18 @@ def scan_func(input_file):
     # call start_scan, which returns token
     # scan.cur_line = input_file.readline() # returns empty string when at end of line
     # read line by line into buffer
+  scan.cur_line = scan.input_file.readline()
   token = ["", ""]
   shit = 0
-  while (token[0] != 'ENDFILE' and shit < 20):
+  while (scan.cur_line != "" and shit < 20):
     print("[scan_func] token[0]: " + str(token[0]))
     print("[scan_func, outer while] char idx: " + str(scan.char_idx))
-    scan.cur_line = ""
-    scan.char_idx = -1
-    token = ["", ""]
-    scan.cur_line = scan.input_file.readline() # TODO: should be doing this at end of while loop
-    print("new line: " + scan.cur_line)
-    print("shit toje: " + str(token))
+    
+    # scan.char_idx = -1
+    # token = ["", ""]
+    # scan.cur_line = scan.input_file.readline() # TODO: should be doing this at end of while loop
+    # print("new line: " + scan.cur_line)
+    # print("shit toje: " + str(token))
 
     while (token[0] != 'NEWLINE' and scan.cur_line != ""):
       print(str(scan.line_num) + ': ' + scan.cur_line)
@@ -61,6 +62,11 @@ def scan_func(input_file):
     scan.line_num+=1
     print("after while------------------------")
     # reset
+    scan.char_idx = -1
+    token = ["", ""]
+    scan.cur_line = scan.input_file.readline() # TODO: should be doing this at end of while loop
+    print("new line: " + scan.cur_line)
+    print("shit toje: " + str(token))
     
     shit += 1
 
@@ -71,7 +77,7 @@ def scan_func(input_file):
   #   # break
   #   # dont need to remove from buffer here bc buffer leaves chars until clearing necessary (full)
   # EOF_FLAG = True;
-  return token
+  return EOF_TOKEN
   
 
 
