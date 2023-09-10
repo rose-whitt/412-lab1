@@ -41,17 +41,19 @@ def start(input_file, flag):
     # call start_scan, which returns token
     # scan.cur_line = input_file.readline() # returns empty string when at end of line
     # read line by line into buffer
-  scan.cur_line = scan.input_file.readline()
+  # scan.cur_line = scan.input_file.readline()
+  scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
+  # print(str(scan.cur_line))
   token = ["", ""]
   shit = 0
   i = 0
   j = 0
-  while (scan.cur_line != ""):
+  while (len(scan.cur_line) != 0):
     # print("[scan_func] token[0]: " + str(token[0]))
     # print("[scan_func, outer while] char idx: " + str(scan.char_idx))
 
     i += 1
-    while (token[0] != scan.EOL and scan.cur_line != "" and token[0] != 'ERROR'):
+    while (token[0] != scan.EOL and len(scan.cur_line) != 0 and token[0] != 'ERROR'):
       j += 1
       # print(str(scan.line_num) + ': ' + scan.cur_line)
 
@@ -101,7 +103,10 @@ def start(input_file, flag):
 
 
     # INCREMENT
-    scan.cur_line = scan.input_file.readline()
+    # scan.cur_line = scan.input_file.readline()
+    scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
+    # print(str(scan.cur_line))
+
     scan.line_num+=1
     shit += 1
     # print("new line: " + scan.cur_line)
