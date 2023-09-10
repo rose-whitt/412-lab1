@@ -104,7 +104,6 @@ class Scanner:
                         i += 1
                         c = self.next_char()
                         if (c == ord('e')):
-                            # temp = [self.MEMOP, "store"]
                             return [self.MEMOP, "store"]
                         else:
                             sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "stor" is not a valid word.\n')
@@ -121,6 +120,7 @@ class Scanner:
                 c = self.next_char()
                 if (c == ord('b')):
                     return [self.ARITHOP, "sub"]
+
                 else:
                     sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "su" is not a valid word.\n')
                     return ["SCANNER_ERROR", "su"]
@@ -146,6 +146,18 @@ class Scanner:
                             c = self.next_char()
                             if (c == ord('t')):
                                 return [self.ARITHOP, "lshift"]
+                            else:
+                                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "lshif" is not a valid word.\n')
+                                return ["SCANNER_ERROR", "lshif"]
+                        else:
+                                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "lshi" is not a valid word.\n')
+                                return ["SCANNER_ERROR", "lshi"]
+                    else:
+                        sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "lsh" is not a valid word.\n')
+                        return ["SCANNER_ERROR", "lsh"]
+                else:
+                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "ls" is not a valid word.\n')
+                    return ["SCANNER_ERROR", "ls"]                   
             elif (c == ord('o')):
                 # next char
                 i += 1
@@ -185,7 +197,7 @@ class Scanner:
                     reg_num = reg_num + chr(c)
                     c = self.next_char()  # TODO: this may cause adding a char we dont want
                 self.rollback()
-                return [self.REGISTER, reg_num]
+                return [self.REGISTER, reg_num] # no space after necessary bc not an opcode
             elif (c == ord('s')):
                 # print("possible rshift")
                 i += 1
@@ -261,7 +273,7 @@ class Scanner:
                 i += 1
                 c = self.next_char()
                 if (c == ord('p')):
-                    return [self.NOP, "nop"]
+                    return [self.NOP, "nop"]    # opcode, but doesnt need a space after it
                 else:
                     sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "no" is not a valid word.\n')
                     return ["SCANNER_ERROR", "no"]
@@ -286,6 +298,354 @@ class Scanner:
                             c = self.next_char()
                             if (c == ord('t')):
                                 return [self.OUTPUT, "output"]
+                            else:
+                                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "outpu" is not a valid word.\n')
+                                return ["SCANNER_ERROR", "outpu"]
+                        else:
+                            sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "outp" is not a valid word.\n')
+                            return ["SCANNER_ERROR", "outp"]
+                    else:
+                        sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "out" is not a valid word.\n')
+                        return ["SCANNER_ERROR", "out"]
+                else:
+                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "ou" is not a valid word.\n')
+                    return ["SCANNER_ERROR", "ou"]
+            else:
+                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "o" is not a valid word.\n')
+                return ["SCANNER_ERROR", "o"]
+        elif (c == ord('=')):    # => (INTO)
+            # print("possible =>")
+            i += 1
+            c = self.next_char()
+            # print("next char after equal: " + chr(c))
+            if (c == ord('>')):
+                return [self.INTO, "=>"]
+            else:
+                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "=" is not a valid word.\n')
+                return ["SCANNER_ERROR", "="]
+        elif (c == ord('/')):    # COMMENT
+            # print("possible comment")
+            # next char
+            i += 1
+            c = self.next_char()
+            # print("c: " + chr(c))
+
+            if (c == ord('/')):
+                # next char
+                i += 1
+                c = self.next_char()
+                
+                return [self.EOL, "\\n"] # ignore comments, just treat EOL
+
+            else:
+                self.rollback()
+                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "/" is not a valid word.\n')
+                return ["SCANNER_ERROR", "/"]
+        elif (c == ord(',')):    # COMMA
+            return [self.COMMA, ","]
+        elif (c == ord('\n') or c == 10):   # EOL, Line Feed (LF) is used as a new line character in linux, ascii value is 10
+            # print("new line")
+            return [self.EOL, "\\n"]
+        elif (c == ord('\r')):
+            i += 1
+            c = self.next_char()
+            if (c == ord('\n')):
+                # print("one of the weird new lines")
+                return ["NEWLINE", "\\r\\n"]
+            else:
+                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "\r" is not a valid word.\n')
+                return ["SCANNER_ERROR", "\r"]
+        elif (c >= ord('0') and c <= ord('9')):   #CONSTANT
+            constant = chr(c)
+            # print("possible constant: " + chr(c) + ", " + str(c))
+            i += 1
+            c = self.next_char()
+            while (c >= ord('0') and c <= ord('9')):  # get to end of number
+                # print("possible constant: " + chr(c) + ", " + str(c))
+                constant = constant + chr(c)
+                c = self.next_char()  # TODO: this may cause adding a char we dont want
+            self.rollback()
+            return [self.CONSTANT, constant]
+        elif (c == 0):  # 0 is value of empty string
+            # TODO: is this always the last line of the file??
+            return [self.EOF, ""]
+        elif (c == ord(' ') or c == ord('\t')):
+            # TODO: or should i just do get next char and return
+            return [self.BLANK, " "]
+        else:
+            return ["SCANNER_ERROR", chr(c)]
+    
+
+    def with_blanks_main_scanner(self, string):
+        i = 0
+        c = string
+        # print(type(c))
+        # print("string: " + chr(string))
+        # store (MEMOP) or sub (ARITHOP)
+        if (c == ord('s')):
+            # next char
+            i += 1
+            c = self.next_char()
+            if (c == ord('t')):    # store (MEMOP)
+                # next char
+                i += 1
+                c = self.next_char()
+                if (c == ord('o')):
+                    # next char
+                    i += 1
+                    c = self.next_char()
+                    if (c == ord('r')):
+                        # next char
+                        i += 1
+                        c = self.next_char()
+                        if (c == ord('e')):
+                            i += 1
+                            c = self.next_char()
+                            if (c == ord(' ') or c == ord('\t')):    # must have a space after opcode
+                                # temp = [self.MEMOP, "store"]
+                                return [self.MEMOP, "store"]
+                            else:
+                                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               ' + chr(c) + ' is not a valid word.\n')
+                                return ["SCANNER_ERROR", chr(c)]
+                        else:
+                            sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "stor" is not a valid word.\n')
+                            return ["SCANNER_ERROR", "stor"]
+                    else:
+                        sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "sto" is not a valid word.\n')
+                        return ["SCANNER_ERROR", "sto"]
+                else:
+                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "st" is not a valid word.\n')
+                    return ["SCANNER_ERROR", "stor"]
+            elif (c == ord('u')):    # sub (ARITHOP)
+                # next char
+                i += 1
+                c = self.next_char()
+                if (c == ord('b')):
+                    i += 1
+                    c = self.next_char()
+                    if (c == ord(' ') or c == ord('\t')):    # must have a space after opcode
+                        # temp = [self.MEMOP, "store"]
+                        return [self.ARITHOP, "sub"]
+                    else:
+                        sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               ' + chr(c) + ' is not a valid word.\n')
+                        return ["SCANNER_ERROR", chr(c)]
+                else:
+                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "su" is not a valid word.\n')
+                    return ["SCANNER_ERROR", "su"]
+            else:
+                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "s" is not a valid word.\n')
+                return ["SCANNER_ERROR", "s"]
+        elif (c == ord('l')):
+            # next char
+            i += 1
+            c = self.next_char()
+            if (c == ord('s')):
+                # print("possible lshift")
+                i += 1
+                c = self.next_char()
+                if (c == ord('h')):
+                    i += 1
+                    c = self.next_char()
+                    if (c == ord('i')):
+                        i += 1
+                        c = self.next_char()
+                        if (c == ord('f')):
+                            i += 1
+                            c = self.next_char()
+                            if (c == ord('t')):
+                                i += 1
+                                c = self.next_char()
+                                if (c == ord(' ') or c == ord('\t')):    # must have a space after opcode
+                                    return [self.ARITHOP, "lshift"]
+                                else:
+                                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               ' + chr(c) + ' is not a valid word.\n')
+                                    return ["SCANNER_ERROR", chr(c)]
+                            else:
+                                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "lshif" is not a valid word.\n')
+                                return ["SCANNER_ERROR", "lshif"]
+                        else:
+                                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "lshi" is not a valid word.\n')
+                                return ["SCANNER_ERROR", "lshi"]
+                    else:
+                        sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "lsh" is not a valid word.\n')
+                        return ["SCANNER_ERROR", "lsh"]
+                else:
+                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "ls" is not a valid word.\n')
+                    return ["SCANNER_ERROR", "ls"]                   
+            elif (c == ord('o')):
+                # next char
+                i += 1
+                c = self.next_char()
+                if (c == ord('a')):
+                    # next char
+                    i += 1
+                    c = self.next_char()
+                    if (c == ord('d')):
+                        # next char
+                        i += 1
+                        c = self.next_char()
+                        if (c == ord('I')): # loadI (LOADI)
+                            i += 1
+                            c = self.next_char()
+                            if (c == ord(' ') or c == ord('\t')):    # must have a space after opcode
+                                return [self.LOADI, "loadI"]
+                            else:
+                                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               ' + chr(c) + ' is not a valid word.\n')
+                                return ["SCANNER_ERROR", chr(c)]
+
+                        else:
+                            i += 1
+                            c = self.next_char()
+                            if (c == ord(' ') or c == ord('\t')):    # must have a space after opcode
+                                # self.rollback()
+                                return [self.MEMOP, "load"]
+                    else:
+                        sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "loa" is not a valid word.\n')
+                        return ["SCANNER_ERROR", "loa"]
+                else:
+                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "lo" is not a valid word.\n')
+                    return ["SCANNER_ERROR", "lo"]
+            else:
+                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "l" is not a valid word.\n')
+                return ["SCANNER_ERROR", "l"]
+        elif (c == ord('r')):    # rshift (ARITHOP) or register
+            # next char
+            i += 1
+            c = self.next_char()
+            # print(type(c))
+            if (c >= ord('0') and c <= ord('9')):
+                # print("possible register")
+                reg_num = 'r' + chr(c)
+                c = self.next_char()
+                while (c >= ord('0') and c <= ord('9')):  # get to end of number
+                    reg_num = reg_num + chr(c)
+                    c = self.next_char()  # TODO: this may cause adding a char we dont want
+                self.rollback()
+                return [self.REGISTER, reg_num] # no space after necessary bc not an opcode
+            elif (c == ord('s')):
+                # print("possible rshift")
+                i += 1
+                c = self.next_char()
+                if (c == ord('h')):
+                    i += 1
+                    c = self.next_char()
+                    if (c == ord('i')):
+                        i += 1
+                        c = self.next_char()
+                        if (c == ord('f')):
+                            i += 1
+                            c = self.next_char()
+                            if (c == ord('t')):
+                                i += 1
+                                c = self.next_char()
+                                if (c == ord(' ') or c == ord('\t')):    # must have a space after opcode
+                                    return [self.ARITHOP, "rshift"]
+                                else:
+                                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               ' + chr(c) + ' is not a valid word.\n')
+                                    return ["SCANNER_ERROR", chr(c)]
+                            else:
+                                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "rshif" is not a valid word.\n')
+                                return ["SCANNER_ERROR", "rshif"]
+                        else:
+                            sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "rshi" is not a valid word.\n')
+                            return ["SCANNER_ERROR", "rshi"]
+                    else:
+                        sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "rsh" is not a valid word.\n')
+                        return ["SCANNER_ERROR", "rsh"]
+
+                else:
+                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "rs" is not a valid word.\n')
+                    return ["SCANNER_ERROR", "rs"]
+            else:
+                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "r" is not a valid word.\n')
+                return ["SCANNER_ERROR", "r"]
+        elif (c == ord('m')):    # mult (ARITHOP)
+            # print("possible mult")
+            i += 1
+            c = self.next_char()
+            if (c == ord('u')):
+                i += 1
+                c = self.next_char()
+                if (c == ord('l')):
+                    i += 1
+                    c = self.next_char()
+                    if (c == ord('t')):
+                        i += 1
+                        c = self.next_char()
+                        if (c == ord(' ') or c == ord('\t')):    # must have a space after opcode
+                            return [self.ARITHOP, "mult"]
+                        else:
+                            sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               ' + chr(c) + ' is not a valid word.\n')
+                            return ["SCANNER_ERROR", chr(c)]
+                    else:
+                        sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "mul" is not a valid word.\n')
+                        return ["SCANNER_ERROR", "mul"]
+                else:
+                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "mu" is not a valid word.\n')
+                    return ["SCANNER_ERROR", "mu"]
+            else:
+                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "m" is not a valid word.\n')
+                return ["SCANNER_ERROR", "m"]
+        elif (c == ord('a')):    # add (ARITHOP)
+            # print("possible add")
+            i += 1
+            c = self.next_char()
+            if (c == ord('d')):
+                i += 1
+                c = self.next_char()
+                if (c == ord('d')):
+                    i += 1
+                    c = self.next_char()
+                    if (c == ord(' ') or c == ord('\t')):    # must have a space after opcode
+                        return [self.ARITHOP, "add"]
+                    else:
+                        sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               ' + chr(c) + ' is not a valid word.\n')
+                        return ["SCANNER_ERROR", chr(c)]
+                else:
+                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "ad" is not a valid word.\n')
+                    return ["SCANNER_ERROR", "ad"]
+            else:
+                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "a" is not a valid word.\n')
+                return ["SCANNER_ERROR", "a"]
+        elif (c == ord('n')):    # nop (NOP)
+            # print("possible nop")
+            i += 1
+            c = self.next_char()
+            if (c == ord('o')):
+                i += 1
+                c = self.next_char()
+                if (c == ord('p')):
+                    return [self.NOP, "nop"]    # opcode, but doesnt need a space after it
+                else:
+                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "no" is not a valid word.\n')
+                    return ["SCANNER_ERROR", "no"]
+            else:
+                sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "n" is not a valid word.\n')
+                return ["SCANNER_ERROR", "n"]
+        elif (c == ord('o')):    # output (OUTPUT)
+            # print("possible output")
+            i += 1
+            c = self.next_char()
+            if (c == ord('u')):
+                i += 1
+                c = self.next_char()
+                if (c == ord('t')):
+                    i += 1
+                    c = self.next_char()
+                    if (c == ord('p')):
+                        i += 1
+                        c = self.next_char()
+                        if (c == ord('u')):
+                            i += 1
+                            c = self.next_char()
+                            if (c == ord('t')):
+                                i += 1
+                                c = self.next_char()
+                                if (c == ord(' ') or c == ord('\t')):    # must have a space after opcode
+                                    return [self.OUTPUT, "output"]
+                                else:
+                                    sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               ' + chr(c) + ' is not a valid word.\n')
+                                    return ["SCANNER_ERROR", chr(c)]
                             else:
                                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "outpu" is not a valid word.\n')
                                 return ["SCANNER_ERROR", "outpu"]
@@ -374,7 +734,6 @@ class Scanner:
             return [self.BLANK, " "]
         else:
             return ["SCANNER_ERROR", chr(c)]
-        
     
     def rollback(self):
         self.char_idx -= 1
@@ -392,8 +751,6 @@ class Scanner:
     
     def next_ascii_char(self):
         self.char_idx += 1
-
-
         return self.cur_line[self.char_idx]
     
 

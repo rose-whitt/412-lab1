@@ -60,8 +60,8 @@ def start(input_file, flag):
       token = scan.get_token()
       # print("🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸SCAN-END🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
 
-      # if (token[0] != scan.BLANK):  # ignore whitespace
-      scan.token_list.append(token) # need white space to check operations in parser
+      if (token[0] != scan.BLANK):  # ignore whitespace
+        scan.token_list.append(token) # need white space to check operations in parser
       # if error, go to next line
       if (token[0] == "SCANNER_ERROR"):
         new_line = [scan.EOL, "\n"]
