@@ -55,6 +55,9 @@ class Scanner:
         self.cur_line = cur_line
         self.char_idx = char_idx
         self.line_num = 1
+        self.num_scanner_errors = 0
+        self.num_iloc_ops = 0
+
         self.token_list = []
         self.file_token_lists = []
         self.CATEGORIES = CATEGORIES
@@ -373,6 +376,7 @@ class Scanner:
             # TODO: or should i just do get next char and return
             return [self.BLANK, " "]
         else:
+            sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               ' + chr(c) + ' is not a valid word.\n')
             return ["SCANNER_ERROR", chr(c)]
     
 
@@ -685,18 +689,6 @@ class Scanner:
                 # print("in comment if, c is: " + chr(c))
                 
                 return [self.EOL, "\\n"] # ignore comments, just treat EOL
-
-                # # read rest of comment
-                # while (True):
-                #     if (c == ord('\n')):
-                #         return ["NEWLINE", "\\n"]
-                #     elif (c == ord('\r')):
-                #         i += 1
-                #         c = self.next_char()
-                #         if (c == ord('\n')):
-                #             return ["NEWLINE", "\\r\\n"]
-                #     i += 1
-                #     c = self.next_char()
             else:
                 self.rollback()
                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "/" is not a valid word.\n')

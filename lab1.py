@@ -64,11 +64,15 @@ def start(input_file, flag):
         scan.token_list.append(token) # need white space to check operations in parser
       # if error, go to next line
       if (token[0] == "SCANNER_ERROR"):
-        new_line = [scan.EOL, "\n"]
+        scan.num_scanner_errors += 1
+        new_line = [scan.EOL, "\\n"]
         scan.token_list.append(new_line)
         token = new_line  # should make the while look break and then go to next line
+      # TODO: increment in parser instead
+      # else: # count successful iloc operations
+      #   scan.num_iloc_ops += 1
 
-      if (token[0] != "SCANNER_ERROR" and token[0] >= 0 and token[0] <= 10):  # only print opcodes
+      if (token[0] != "SCANNER_ERROR" and token[0] >= 0 and token[0] <= 10 and flag == '-s'):  # dont print blanks (11), only print like this if -s flag
         print(str(scan.line_num) + ': < ' + str(scan.CATEGORIES[token[0]]) + ', "' + str(token[1]) + '" >')
     
     # print("after while------------------------")
@@ -103,41 +107,14 @@ def start(input_file, flag):
     # print("new line: " + scan.cur_line)
     # print("shit toje: " + str(token))
   
-  print(str(scan.line_num) + ': < ' + str(scan.CATEGORIES[EOF_TOKEN[0]]) + ', "' + str(EOF_TOKEN[1]) + '" >')
+  if (flag == '-s'):
+    print(str(scan.line_num) + ': < ' + str(scan.CATEGORIES[EOF_TOKEN[0]]) + ', "' + str(EOF_TOKEN[1]) + '" >')
   
+  # TODO: increment in parser instead
+  # if (flag == '-p'):
+  #   print(str(scan.num_iloc_ops) + " ILOC operations found.")
   scan.file_token_lists.append(EOF_TOKEN)
   
-  # print("i: "  + str(i))
-  # print("j: "  + str(i))
-
-  # print("token list len: " +  str(len(scan.token_list)))
-  # print("token list len: " +  str(len(scan.file_token_lists)))
-
-  boob = 0
-  num_tokens = 0
-  # for i in scan.file_token_lists:
-  #   temp = len(scan.file_token_lists[boob])
-  #   num_tokens += len(scan.file_token_lists[boob])
-    
-  #   # print(scan)
-  #   print(scan.file_token_lists[boob])
-  #   # print(str(boob) + ": " + str(temp))
-  #   boob += 1
-
-  # print("total num tokens: " + str(num_tokens))
-  
-
-
-  
-  #   print("eof token: " + EOF_TOKEN)
-  #   # print token
-  #   print(str(scan.line_num) + ": " + str(token))
-  #   # break
-  #   # dont need to remove from buffer here bc buffer leaves chars until clearing necessary (full)
-  # EOF_FLAG = True;
-  # for i in scan.file_token_lists:
-  #   print(str(i))
-  # print(scan.file_token_lists)
   return EOF_TOKEN
 
 

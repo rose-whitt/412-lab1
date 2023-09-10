@@ -39,7 +39,7 @@ class RoseParser():
                     return False
                 idx += 1
                 if (token_list[idx][0] == self.EOL):
-                    print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
+                    # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                     return True
                 else:
                     sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
@@ -63,7 +63,7 @@ class RoseParser():
                 idx += 1
 
                 if (token_list[idx][0] == self.EOL):
-                    print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
+                    # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                     return True
                 else:
                     sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
@@ -96,7 +96,7 @@ class RoseParser():
                 # while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
                 #     idx += 1
                 if (token_list[idx][0] == self.EOL):
-                    print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
+                    # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                     return True
                 else:
                     sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
@@ -110,7 +110,7 @@ class RoseParser():
             idx += 1
 
             if (token_list[idx][0] == self.EOL):
-                print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
+                # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                 return True
             else:
                 sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
@@ -121,7 +121,7 @@ class RoseParser():
                 sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               wrong thing after NOP' +  "\n")
                 return False
             else:
-                print("[PARSER] Valid NOP sentence")
+                # print("[PARSER] Valid NOP sentence")
                 return True
 
 
