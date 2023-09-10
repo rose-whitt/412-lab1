@@ -9,6 +9,7 @@ COMMENT = "// ILOC Front End \n"
 EOF_FLAG = False
 
 
+
 def start(input_file, flag):
   scan = scanner.Scanner(input_file)
   parse = rose_parser.RoseParser(scan)
@@ -55,9 +56,10 @@ def start(input_file, flag):
       # print(str(scan.line_num) + ': ' + scan.cur_line)
 
       # SCAN (GET A TOKEN)
-      print("🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸SCAN-START🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
+      # print("🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸SCAN-START🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
       token = scan.get_token()
-      print("🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸SCAN-END🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
+      # print("🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸SCAN-END🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
+
       # if (token[0] != scan.BLANK):  # ignore whitespace
       scan.token_list.append(token) # need white space to check operations in parser
       # if error, go to next line
@@ -65,11 +67,13 @@ def start(input_file, flag):
         new_line = [scan.EOL, "\n"]
         scan.token_list.append(new_line)
         token = new_line  # should make the while look break and then go to next line
-      # print("token: " + str(scan.line_num) + ': ' + str(token))
+
+      if (token[0] != "SCANNER_ERROR" and token[0] >= 0 and token[0] <= 10):  # only print opcodes
+        print(str(scan.line_num) + ': < ' + str(scan.CATEGORIES[token[0]]) + ', "' + str(token[1]) + '" >')
     
     # print("after while------------------------")
     
-    print(scan.token_list)
+    # print(scan.token_list)
 
     
     scan.file_token_lists.append(scan.token_list) # add token list to line list
@@ -77,9 +81,11 @@ def start(input_file, flag):
 
     # ------------------PARSE-----------------
     
-    print("🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲PARSE-START🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲")
-    print(parse.parse_line(scan.token_list, scan.line_num))
-    print("🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲PARSE-END🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲")
+    # print("🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲PARSE-START🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲")
+    
+    if (flag == '-p' or flag == 'r'):
+      parse.parse_line(scan.token_list, scan.line_num)
+    # print("🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲PARSE-END🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲")
 
 
 
@@ -97,6 +103,8 @@ def start(input_file, flag):
     # print("new line: " + scan.cur_line)
     # print("shit toje: " + str(token))
   
+  print(str(scan.line_num) + ': < ' + str(scan.CATEGORIES[EOF_TOKEN[0]]) + ', "' + str(EOF_TOKEN[1]) + '" >')
+  
   scan.file_token_lists.append(EOF_TOKEN)
   
   # print("i: "  + str(i))
@@ -107,16 +115,16 @@ def start(input_file, flag):
 
   boob = 0
   num_tokens = 0
-  for i in scan.file_token_lists:
-    temp = len(scan.file_token_lists[boob])
-    num_tokens += len(scan.file_token_lists[boob])
+  # for i in scan.file_token_lists:
+  #   temp = len(scan.file_token_lists[boob])
+  #   num_tokens += len(scan.file_token_lists[boob])
     
-    # print(scan)
-    print(scan.file_token_lists[boob])
-    # print(str(boob) + ": " + str(temp))
-    boob += 1
+  #   # print(scan)
+  #   print(scan.file_token_lists[boob])
+  #   # print(str(boob) + ": " + str(temp))
+  #   boob += 1
 
-  print("total num tokens: " + str(num_tokens))
+  # print("total num tokens: " + str(num_tokens))
   
 
 
@@ -127,10 +135,41 @@ def start(input_file, flag):
   #   # break
   #   # dont need to remove from buffer here bc buffer leaves chars until clearing necessary (full)
   # EOF_FLAG = True;
-  for i in scan.file_token_lists:
-    print(str(i))
+  # for i in scan.file_token_lists:
+  #   print(str(i))
   # print(scan.file_token_lists)
   return EOF_TOKEN
+
+
+def demand_parse_start(input_file):
+  scan = scanner.Scanner(input_file)
+  parse = rose_parser.RoseParser(scan)
+  # global linenum = 0
+  # global line_idx = 0
+  scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
+  print(scan.cur_line)
+  # token = scan.get_token()
+  # while (token != [scan.EOF, ""]):
+  #   if (token[0] == scan.MEMOP):
+  #     finish_memop(scan)
+  #     break
+  #   elif (token[0] == scan.LOADI):
+  #     break
+  #   elif (token[0] == scan.ARITHOP):
+  #     break
+  #   elif (token[0] == scan.OUTPUT):
+  #     break
+  #   elif (token[0] == scan.NOP):
+  #     break
+  #   else:
+  #     sys.stderr.write("ERROR: no OPCODE\n")
+  #     break
+  
+
+  def finish_memop(scan):
+    token = scan.get_token()
+    
+      
   
 
 
@@ -165,7 +204,7 @@ def main():
     print("If none is specified, the default action is '-p'.")
     
   elif (sys.argv[1] == '-r'):
-    print("TODO: read the file, parse it, build the intermediate representation (IR), and print out the information in the intermediate representaiton (in an appropriately human readable format)")
+    # print("TODO: read the file, parse it, build the intermediate representation (IR), and print out the information in the intermediate representaiton (in an appropriately human readable format)")
     if (len(sys.argv) <= 2):
       print("Must specify a file name after the flag.")
     else:
@@ -175,7 +214,7 @@ def main():
       start(f, '-r')
       f.close()
   elif (sys.argv[1] == '-p'):
-    print("TODO: read the file, scan it and parse it, build the intermediate representation (IR) and report either success or report all the errors that it finds in the input file.")
+    # print("TODO: read the file, scan it and parse it, build the intermediate representation (IR) and report either success or report all the errors that it finds in the input file.")
     if (len(sys.argv) <= 2):
       print("Must specify a file name after the flag.")
     else:
@@ -185,7 +224,7 @@ def main():
       start(f, '-p')
       f.close()
   elif (sys.argv[1] == '-s'):
-    print("TODO: read file and print to stdout a list of tokens that the scanner found. for each, print line number, tokens type (or syntactic category) and its spelling (or lexeme)")
+    # print("TODO: read file and print to stdout a list of tokens that the scanner found. for each, print line number, tokens type (or syntactic category) and its spelling (or lexeme)")
     if (len(sys.argv) <= 2):
       print("Must specify a file name after the flag.")
     else:
@@ -199,6 +238,21 @@ def main():
       #   poo += 1
       print("closing.- " + str(poo))
       f.close()
+  elif (sys.argv[1] == '-z'): # flag for me testing changing my impl
+    if (len(sys.argv) <= 2):
+      print("Must specify a file name after the flag.")
+    else:
+      __file__ = sys.argv[2]
+      # Reading a file
+      poo = 0
+      f = open(__file__, 'r')
+      demand_parse_start(f)
+      # while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
+      #   scan_func(f)
+      #   poo += 1
+      print("closing.- " + str(poo))
+      f.close()
+
 
 
 

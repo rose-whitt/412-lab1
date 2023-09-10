@@ -23,9 +23,9 @@ class RoseParser():
     def parse_line(self, token_list, line_num):
         idx = 0
         while (token_list[idx][0] == self.BLANK):   # iterate to first non-blank
-            print("poo")
+            # print("poo")
             idx += 1
-        print("[PARSER-DEBUG] " + str(idx) + " index, number of blanks.")
+        # print("[PARSER-DEBUG] " + str(idx) + " index, number of blanks.")
         memop_idx = idx
         if (token_list[idx][0] == self.MEMOP):
             idx += 1
@@ -34,7 +34,7 @@ class RoseParser():
                 return False
             else:
                 while (token_list[idx][0] == self.BLANK):   # iterate to first non-blank after opcode
-                    print("CUNT")
+                    # print("CUNT")
                     idx += 1
             
             # remove rest of blanks now that we checked -- jk i think its faster to just skip them bc with removing wed have to iterate over list twice
@@ -71,9 +71,9 @@ class RoseParser():
                 return False
             else:
                 while (token_list[idx][0] == self.BLANK):   # iterate to first non-blank after opcode
-                    print("CUNT")
+                    # print("CUNT")
                     idx += 1
-            print("[PARSER] next char is " +  token_list[idx][1])
+            # print("[PARSER] next char is " +  token_list[idx][1])
 
 
             if (token_list[idx][0] != self.CONSTANT):
@@ -109,9 +109,9 @@ class RoseParser():
                 return False
             else:
                 while (token_list[idx][0] == self.BLANK):   # iterate to first non-blank after opcode
-                    print("CUNT")
+                    # print("CUNT")
                     idx += 1
-            print("[PARSER] next char is " +  token_list[idx][1])
+            # print("[PARSER] next char is " +  token_list[idx][1])
 
             
             if (token_list[idx][0] != self.REGISTER):
@@ -159,9 +159,9 @@ class RoseParser():
                 return False
             else:
                 while (token_list[idx][0] == self.BLANK):   # iterate to first non-blank after opcode
-                    print("CUNT")
+                    # print("CUNT")
                     idx += 1
-            print("[PARSER] next char is " +  token_list[idx][1])
+            # print("[PARSER] next char is " +  token_list[idx][1])
 
             if (token_list[idx][0] != self.CONSTANT):
                 sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing CONSTANT in ' + token_list[memop_idx][1] + "\n")

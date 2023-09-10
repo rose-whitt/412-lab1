@@ -18,7 +18,7 @@ import sys
 
 
 # ILOC categories. Use integer macros to index it.
-CATEGORIES = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO", "ENDFILE", "NEWLINE"]
+CATEGORIES = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONST", "REG", "COMMA", "INTO", "ENDFILE", "NEWLINE"]
 
 
 # category integer macros
@@ -84,8 +84,8 @@ class Scanner:
     def main_scanner(self, string):
         i = 0
         c = string
-        print(type(c))
-        print("string: " + chr(string))
+        # print(type(c))
+        # print("string: " + chr(string))
         # store (MEMOP) or sub (ARITHOP)
         if (c == ord('s')):
             # next char
@@ -132,7 +132,7 @@ class Scanner:
             i += 1
             c = self.next_char()
             if (c == ord('s')):
-                print("possible rshift")
+                # print("possible lshift")
                 i += 1
                 c = self.next_char()
                 if (c == ord('h')):
@@ -145,7 +145,7 @@ class Scanner:
                             i += 1
                             c = self.next_char()
                             if (c == ord('t')):
-                                return [self.ARITHOP, "rshift"]
+                                return [self.ARITHOP, "lshift"]
             elif (c == ord('o')):
                 # next char
                 i += 1
@@ -176,9 +176,9 @@ class Scanner:
             # next char
             i += 1
             c = self.next_char()
-            print(type(c))
+            # print(type(c))
             if (c >= ord('0') and c <= ord('9')):
-                print("possible register")
+                # print("possible register")
                 reg_num = 'r' + chr(c)
                 c = self.next_char()
                 while (c >= ord('0') and c <= ord('9')):  # get to end of number
@@ -187,7 +187,7 @@ class Scanner:
                 self.rollback()
                 return [self.REGISTER, reg_num]
             elif (c == ord('s')):
-                print("possible rshift")
+                # print("possible rshift")
                 i += 1
                 c = self.next_char()
                 if (c == ord('h')):
@@ -218,7 +218,7 @@ class Scanner:
                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "r" is not a valid word.\n')
                 return ["SCANNER_ERROR", "r"]
         elif (c == ord('m')):    # mult (ARITHOP)
-            print("possible mult")
+            # print("possible mult")
             i += 1
             c = self.next_char()
             if (c == ord('u')):
@@ -239,7 +239,7 @@ class Scanner:
                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "m" is not a valid word.\n')
                 return ["SCANNER_ERROR", "m"]
         elif (c == ord('a')):    # add (ARITHOP)
-            print("possible add")
+            # print("possible add")
             i += 1
             c = self.next_char()
             if (c == ord('d')):
@@ -254,7 +254,7 @@ class Scanner:
                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "a" is not a valid word.\n')
                 return ["SCANNER_ERROR", "a"]
         elif (c == ord('n')):    # nop (NOP)
-            print("possible nop")
+            # print("possible nop")
             i += 1
             c = self.next_char()
             if (c == ord('o')):
@@ -269,7 +269,7 @@ class Scanner:
                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "n" is not a valid word.\n')
                 return ["SCANNER_ERROR", "n"]
         elif (c == ord('o')):    # output (OUTPUT)
-            print("possible output")
+            # print("possible output")
             i += 1
             c = self.next_char()
             if (c == ord('u')):
@@ -302,29 +302,29 @@ class Scanner:
                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "o" is not a valid word.\n')
                 return ["SCANNER_ERROR", "o"]
         elif (c == ord('=')):    # => (INTO)
-            print("possible =>")
+            # print("possible =>")
             i += 1
             c = self.next_char()
-            print("next char after equal: " + chr(c))
+            # print("next char after equal: " + chr(c))
             if (c == ord('>')):
                 return [self.INTO, "=>"]
             else:
                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "=" is not a valid word.\n')
                 return ["SCANNER_ERROR", "="]
         elif (c == ord('/')):    # COMMENT
-            print("possible comment")
+            # print("possible comment")
             # next char
             i += 1
             c = self.next_char()
-            print("c: " + chr(c))
+            # print("c: " + chr(c))
 
             if (c == ord('/')):
                 # next char
                 i += 1
                 c = self.next_char()
-                print("in comment if, c is: " + chr(c))
+                # print("in comment if, c is: " + chr(c))
                 
-                return [self.EOL, "\n"] # ignore comments, just treat EOL
+                return [self.EOL, "\\n"] # ignore comments, just treat EOL
 
                 # # read rest of comment
                 # while (True):
@@ -344,24 +344,24 @@ class Scanner:
         elif (c == ord(',')):    # COMMA
             return [self.COMMA, ","]
         elif (c == ord('\n') or c == 10):   # EOL, Line Feed (LF) is used as a new line character in linux, ascii value is 10
-            print("new line")
+            # print("new line")
             return [self.EOL, "\\n"]
         elif (c == ord('\r')):
             i += 1
             c = self.next_char()
             if (c == ord('\n')):
-                print("one of the weird new lines")
+                # print("one of the weird new lines")
                 return ["NEWLINE", "\\r\\n"]
             else:
                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "\r" is not a valid word.\n')
                 return ["SCANNER_ERROR", "\r"]
         elif (c >= ord('0') and c <= ord('9')):   #CONSTANT
             constant = chr(c)
-            print("possible constant: " + chr(c) + ", " + str(c))
+            # print("possible constant: " + chr(c) + ", " + str(c))
             i += 1
             c = self.next_char()
             while (c >= ord('0') and c <= ord('9')):  # get to end of number
-                print("possible constant: " + chr(c) + ", " + str(c))
+                # print("possible constant: " + chr(c) + ", " + str(c))
                 constant = constant + chr(c)
                 c = self.next_char()  # TODO: this may cause adding a char we dont want
             self.rollback()
@@ -370,6 +370,7 @@ class Scanner:
             # TODO: is this always the last line of the file??
             return [self.EOF, ""]
         elif (c == ord(' ') or c == ord('\t')):
+            # TODO: or should i just do get next char and return
             return [self.BLANK, " "]
         else:
             return ["SCANNER_ERROR", chr(c)]
@@ -384,11 +385,24 @@ class Scanner:
     def next_char(self):
         # character 10 is a line break
         # print("[next_char] (before) len, idx, char: " + str(len(self.cur_line)) + ", " + str(self.char_idx) + ", " + str(ord(self.cur_line[self.char_idx])))
-        
         self.char_idx += 1
+
 
         return ord(self.cur_line[self.char_idx])
     
+    def next_ascii_char(self):
+        self.char_idx += 1
+
+
+        return self.cur_line[self.char_idx]
+    
+
+    def convert_line_to_ascii_list(self, line):
+        buf = []
+        for char in line:
+            buf.append(ord(char))
+        
+        return buf
 
     
     # returns when it finds a token, return token
