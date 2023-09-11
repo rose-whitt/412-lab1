@@ -327,7 +327,7 @@ class Scanner:
                 sys.stderr.write("SCANNER_ERROR " + str(self.line_num) + '               "=" is not a valid word.\n')
                 return ["SCANNER_ERROR", "="]
         elif (c == ord('/')):    # COMMENT
-            # print("possible comment")
+            print("possible comment")
             # next char
             i += 1
             c = self.next_ascii_char()

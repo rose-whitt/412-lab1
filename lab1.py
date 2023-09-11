@@ -130,26 +130,42 @@ def demand_parse_start(input_file):
   # global line_idx = 0
   scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
   print(scan.cur_line)
-  # token = scan.get_token()
-  # while (token != [scan.EOF, ""]):
-  #   if (token[0] == scan.MEMOP):
-  #     finish_memop(scan)
-  #     break
-  #   elif (token[0] == scan.LOADI):
-  #     break
-  #   elif (token[0] == scan.ARITHOP):
-  #     break
-  #   elif (token[0] == scan.OUTPUT):
-  #     break
-  #   elif (token[0] == scan.NOP):
-  #     break
-  #   else:
-  #     sys.stderr.write("ERROR: no OPCODE\n")
-  #     break
+
+  token = scan.get_token()
+  while (token[0] != scan.EOF):
+    if (token[0] == scan.MEMOP):
+      print("[PARSE] MEMOP")
+      parse.finish_memop(scan)
+      scan.char_idx = 0
+    elif (token[0] == scan.LOADI):
+      print("[PARSE] LOADI")
+      parse.finish_loadI(scan)
+      scan.char_idx = 0
+    elif (token[0] == scan.ARITHOP):
+      print("[PARSE] ARITHOP")
+      parse.finish_arithop(scan)
+      scan.char_idx = 0
+    elif (token[0] == scan.OUTPUT):
+      print("[PARSE] OUTPUT")
+      parse.finish_output(scan)
+      scan.char_idx = 0
+    elif (token[0] == scan.NOP):
+      print("[PARSE] NOP")
+      parse.finish_nop(scan)
+      scan.char_idx = 0
+    elif (token[0] == scan.EOL):
+      print("[PARSE] EOL")
+      scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
+      print(str(scan.cur_line))
+      scan.line_num += 1
+      scan.char_idx = 0
+    else:
+      print("ELSE: " + str(token[0]))
+      sys.stderr.write("ERROR: no OPCODE\n")
+    token = scan.get_token()  
+    
   
 
-  def finish_memop(scan):
-    token = scan.get_token()
     
       
   
@@ -203,7 +219,8 @@ def main():
       __file__ = sys.argv[2]
       # Reading a file
       f = open(__file__, 'r')
-      start(f, '-p')
+      # start(f, '-p')
+      demand_parse_start(f)
       f.close()
   elif (sys.argv[1] == '-s'):
     # print("TODO: read file and print to stdout a list of tokens that the scanner found. for each, print line number, tokens type (or syntactic category) and its spelling (or lexeme)")
