@@ -6,6 +6,8 @@ class RoseParser():
         self.scan = scan
         self.CATEGORIES = scan.CATEGORIES
         self.line_num = scan.line_num
+        self.OPS = []
+
         self.MEMOP = 0   # load, store
         self.LOADI = 1   # loadI
         self.ARITHOP = 2 # add, sub, mult, lshift, rshift
@@ -18,7 +20,10 @@ class RoseParser():
         self.EOF = 9     # input has been exhausted
         self.EOL = 10    # end of current line ("\r\n" or "\n")
         self.BLANK = 11     # not an opcode, but used to signal blank space or tab
-        self.OPS = []
+        self.SCANNER_ERROR = 12 # not an opcode, used to signify error in scanner (lexical/spelling error)
+
+
+        
 
 
 
@@ -135,10 +140,6 @@ class RoseParser():
 
     def finish_memop(self, scan):
         token = scan.get_token()
-        if (token[0] != self.BLANK):
-            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after MEMOP opcode (load or store); token: ' + str(token[0]) +  '\n')
-            return False
-        token = scan.get_token()
         while (token[0] == self.BLANK):
             token = scan.get_token()
         if (token[0] != self.REGISTER):
@@ -155,7 +156,7 @@ class RoseParser():
             while (token[0] == self.BLANK):
                 token = scan.get_token()
             if (token[0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing second REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing target (second) REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  '\n')
                 return False
             else:
                 token = scan.get_token()
@@ -166,6 +167,7 @@ class RoseParser():
                     # TODO: build IR for this OP, add IR to list of OPS
                     self.OPS.append([scan.line_num, 'MEMOP'])
                     scan.line_num += 1
+                    scan.char_idx = -1
                     scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                     return True
                 else:
@@ -173,10 +175,6 @@ class RoseParser():
                     return False
 
     def finish_loadI(self, scan):
-        token = scan.get_token()
-        if (token[0] != self.BLANK):
-            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after LOADI opcode (load or store); token: ' + str(token[0]) +  '\n')
-            return False
         token = scan.get_token()
         while (token[0] == self.BLANK):
             token = scan.get_token()
@@ -203,6 +201,7 @@ class RoseParser():
                 # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                 self.OPS.append([scan.line_num, 'LOADI'])
                 scan.line_num += 1
+                scan.char_idx = -1
                 scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                 return True
             else:
@@ -211,10 +210,9 @@ class RoseParser():
             
     def finish_arithop(self, scan):
         token = scan.get_token() 
-        if (token[0] != self.BLANK):
-            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after ARITHOP opcode; token: ' + str(token[0]) +  '\n')
-            return False
-        token = scan.get_token()
+        # if (token[0] != self.BLANK):
+        #     sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after ARITHOP opcode; token: ' + str(token[0]) +  '\n')
+        #     return False
         while (token[0] == self.BLANK):
             token = scan.get_token()
         if (token[0] != self.REGISTER):
@@ -244,7 +242,7 @@ class RoseParser():
             while (token[0] == self.BLANK):
                 token = scan.get_token()
             if (token[0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing third REGISTER in ARITHOP; token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing target (third) REGISTER in ARITHOP; token: ' + str(token[0]) +  '\n')
                 return False
             token = scan.get_token()
             while (token[0] == self.BLANK):
@@ -253,6 +251,7 @@ class RoseParser():
                 # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                 self.OPS.append([scan.line_num, 'ARITHOP'])
                 scan.line_num += 1
+                scan.char_idx = -1
                 scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                 return True
             else:
@@ -261,10 +260,13 @@ class RoseParser():
             
     def finish_output(self, scan):
         token = scan.get_token()
-        if (token[0] != self.BLANK):
-            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after OUTPUT opcode; token: ' + str(token[0]) +  '\n')
-            return False
-        token = scan.get_token()
+        while (token[0] == self.BLANK):
+            token = scan.get_token()
+        # NOTE: i think the scanner picks up on the no 
+        # if (token[0] != self.BLANK):
+        #     sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after OUTPUT opcode; token: ' + str(token[0]) +  '\n')
+        #     return False
+        # token = scan.get_token()
         if (token[0] != self.CONSTANT):
             sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing CONSTANT in OUTPUT; token: ' + str(token[0]) +  '\n')
             return False
@@ -273,6 +275,7 @@ class RoseParser():
             # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
             self.OPS.append([scan.line_num, 'OUTPUT'])
             scan.line_num += 1
+            scan.char_idx = -1
             scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
             return True
         else:
@@ -290,5 +293,6 @@ class RoseParser():
             # print("[PARSER] Valid NOP sentence")
             self.OPS.append([scan.line_num, 'NOP'])
             scan.line_num += 1
+            scan.char_idx = -1
             scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
             return True
