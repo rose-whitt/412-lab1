@@ -159,6 +159,9 @@ def demand_parse_start(input_file):
       print(str(scan.cur_line))
       scan.line_num += 1
       scan.char_idx = 0
+    elif (token[0] == scan.BLANK):
+      token = scan.get_token()
+      continue
     else:
       print("ELSE: " + str(token[0]))
       sys.stderr.write("ERROR: no OPCODE\n")

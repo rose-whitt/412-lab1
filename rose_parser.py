@@ -135,20 +135,32 @@ class RoseParser():
 
     def finish_memop(self, scan):
         token = scan.get_token()
+        if (token[0] != self.BLANK):
+            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after MEMOP opcode (load or store); token: ' + str(token[0]) +  '\n')
+            return False
+        token = scan.get_token()
+        while (token[0] == self.BLANK):
+            token = scan.get_token()
         if (token[0] != self.REGISTER):
             sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing first REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  '\n')
             return False
         else:
             token = scan.get_token()
+            while (token[0] == self.BLANK):
+                token = scan.get_token()
             if (token[0] != self.INTO):
                 sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing INTO in MEMOP (load or store); token: ' + str(token[0]) +  '\n')
                 return False
             token = scan.get_token()
+            while (token[0] == self.BLANK):
+                token = scan.get_token()
             if (token[0] != self.REGISTER):
                 sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing second REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  '\n')
                 return False
             else:
                 token = scan.get_token()
+                while (token[0] == self.BLANK):
+                    token = scan.get_token()
                 if (token[0] == self.EOL):
                     # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                     # TODO: build IR for this OP, add IR to list of OPS
@@ -162,19 +174,31 @@ class RoseParser():
 
     def finish_loadI(self, scan):
         token = scan.get_token()
+        if (token[0] != self.BLANK):
+            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after LOADI opcode (load or store); token: ' + str(token[0]) +  '\n')
+            return False
+        token = scan.get_token()
+        while (token[0] == self.BLANK):
+            token = scan.get_token()
         if (token[0] != self.CONSTANT):
             sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing CONSTANT in LOADI; token: ' + str(token[0]) +  '\n')
             return False
         else:
             token = scan.get_token()
+            while (token[0] == self.BLANK):
+                token = scan.get_token()
             if (token[0] != self.INTO):
                 sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing INTO in LOADI; token: ' + str(token[0]) +  '\n')
                 return False
             token = scan.get_token()
+            while (token[0] == self.BLANK):
+                token = scan.get_token()
             if (token[0] != self.REGISTER):
                 sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing REGISTER in LOADI; token: ' + str(token[0]) +  '\n')
                 return False
             token = scan.get_token()
+            while (token[0] == self.BLANK):
+                token = scan.get_token()
             if (token[0] == self.EOL):
                 # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                 self.OPS.append([scan.line_num, 'LOADI'])
@@ -187,28 +211,44 @@ class RoseParser():
             
     def finish_arithop(self, scan):
         token = scan.get_token() 
+        if (token[0] != self.BLANK):
+            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after ARITHOP opcode; token: ' + str(token[0]) +  '\n')
+            return False
+        token = scan.get_token()
+        while (token[0] == self.BLANK):
+            token = scan.get_token()
         if (token[0] != self.REGISTER):
             sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing first REGISTER in ARITHOP; token: ' + str(token[0]) +  '\n')
             return False
         else:
             token = scan.get_token()
+            while (token[0] == self.BLANK):
+                token = scan.get_token()
             if (token[0] != self.COMMA):
                 sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing COMMA in ARITHOP; token: ' + str(token[0]) +  '\n')
                 return False
             token = scan.get_token()
+            while (token[0] == self.BLANK):
+                token = scan.get_token()
             # ARITHOP REG COMMA 
             if (token[0] != self.REGISTER):
                 sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing second REGISTER in ARITHOP; token: ' + str(token[0]) +  '\n')
                 return False
             token = scan.get_token()
+            while (token[0] == self.BLANK):
+                token = scan.get_token()
             if (token[0] != self.INTO):
                 sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing INTO in ARITHOP; token: ' + str(token[0]) +  '\n')
                 return False
             token = scan.get_token()
+            while (token[0] == self.BLANK):
+                token = scan.get_token()
             if (token[0] != self.REGISTER):
                 sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing third REGISTER in ARITHOP; token: ' + str(token[0]) +  '\n')
                 return False
             token = scan.get_token()
+            while (token[0] == self.BLANK):
+                token = scan.get_token()
             if (token[0] == self.EOL):
                 # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                 self.OPS.append([scan.line_num, 'ARITHOP'])
@@ -220,6 +260,10 @@ class RoseParser():
                 return False
             
     def finish_output(self, scan):
+        token = scan.get_token()
+        if (token[0] != self.BLANK):
+            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after OUTPUT opcode; token: ' + str(token[0]) +  '\n')
+            return False
         token = scan.get_token()
         if (token[0] != self.CONSTANT):
             sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing CONSTANT in OUTPUT; token: ' + str(token[0]) +  '\n')
@@ -237,6 +281,8 @@ class RoseParser():
     
     def finish_nop(self, scan):
         token = scan.get_token()
+        while (token[0] == self.BLANK):
+            token = scan.get_token()
         if (token[0] != self.EOL and token[0] != self.EOF):
             sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               wrong thing after NOP; token: ' + str(token[0]) +  '\n')
             return False

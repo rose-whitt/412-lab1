@@ -401,8 +401,13 @@ class Scanner:
         return self.cur_line[self.char_idx]
     
     def next_ascii_char(self):
-        self.char_idx += 1
-        return self.cur_line[self.char_idx]
+        if (self.char_idx >= len(self.cur_line)):
+            scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
+
+            return ord('\n')
+        else:
+            self.char_idx += 1
+            return self.cur_line[self.char_idx]
     
 
     def convert_line_to_ascii_list(self, line):
