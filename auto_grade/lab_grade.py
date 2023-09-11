@@ -19,14 +19,20 @@ def check_output(file_name,line_nums):
     output_lines = [ ] + [-1]
     while True:
         o_line = o_file.readline().strip(' ')
+        print("o_line before: " + o_line)
         if o_line == '':
             break
 
         if o_line.find("ERROR") != -1:
             # found the ERROR at the head of the line
+            print("found the error at head of line")
+            print("o_line: " + o_line)
             t_line = o_line[6:].strip(' ')
+            print("t_line: " + t_line)
+
 
             if t_line[:1].isdigit():
+                print("CUNT")
                 t_line = t_line.split(':',1)[0]
                 if not int(t_line) == output_lines[-1]:
                     output_lines = output_lines + [int(t_line)]

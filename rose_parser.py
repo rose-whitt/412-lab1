@@ -23,140 +23,26 @@ class RoseParser():
         self.SCANNER_ERROR = 12 # not an opcode, used to signify error in scanner (lexical/spelling error)
 
 
-        
-
-
-
-    def parse_line(self, token_list, line_num):
-        idx = 0
-        memop_idx = idx
-        print('IN PARSE LINE')
-        if (token_list[idx][0] == self.MEMOP):
-            idx += 1
-            if (token_list[idx][0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[memop_idx][1] + "\n")
-                return False
-            else:
-                idx += 1
-                if (token_list[idx][0] != self.INTO):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[memop_idx][1] + "\n")
-                    return False
-                idx += 1
-                if (token_list[idx][0] != self.REGISTER):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[memop_idx][1] + "\n")
-                    return False
-                idx += 1
-                if (token_list[idx][0] == self.EOL):
-                    # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
-                    return True
-                else:
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
-                    return False
-        elif (token_list[idx][0] == self.LOADI):
-            idx += 1
-            if (token_list[idx][0] != self.CONSTANT):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing CONSTANT in ' + token_list[memop_idx][1])
-                return False
-            else:
-                idx += 1
-
-                if (token_list[idx][0] != self.INTO):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[memop_idx][1] + "\n")
-                    return False
-                idx += 1
-
-                if (token_list[idx][0] != self.REGISTER):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[memop_idx][1] + "\n")
-                    return False
-                idx += 1
-
-                if (token_list[idx][0] == self.EOL):
-                    # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
-                    return True
-                else:
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
-                    return False
-        elif (token_list[idx][0] == self.ARITHOP):
-            idx += 1
-            
-            if (token_list[idx][0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[memop_idx][1] + "\n")
-                return False
-            else:
-                idx += 1
-                if (token_list[idx][0] != self.COMMA):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing COMMA in ' + token_list[memop_idx][1] + "\n")
-                    return False
-                idx += 1
-                # ARITHOP REG COMMA 
-                if (token_list[idx][0] != self.REGISTER):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[memop_idx][1] + "\n")
-                    return False
-                idx += 1
-                if (token_list[idx][0] != self.INTO):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing INTO in ' + token_list[memop_idx][1] + "\n")
-                    return False
-                idx += 1
-                if (token_list[idx][0] != self.REGISTER):
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing REGISTER in ' + token_list[memop_idx][1] + "\n")
-                    return False
-                idx += 1
-                # while (token_list[idx][0] == self.BLANK):   # iterate to next non-blank
-                #     idx += 1
-                if (token_list[idx][0] == self.EOL):
-                    # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
-                    return True
-                else:
-                    sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
-                    return False
-        elif (token_list[idx][0] == self.OUTPUT):
-            idx += 1
-
-            if (token_list[idx][0] != self.CONSTANT):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing CONSTANT in ' + token_list[memop_idx][1] + "\n")
-                return False
-            idx += 1
-
-            if (token_list[idx][0] == self.EOL):
-                # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
-                return True
-            else:
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               Missing EOL in ' + token_list[memop_idx][1] + "\n")
-                return False
-        elif (token_list[idx][0] == self.NOP):
-            idx += 1
-            if (token_list[idx][0] != self.EOL and token_list[idx][0] != self.EOF):
-                sys.stderr.write("[PARSER] ERROR " + str(line_num) + '               wrong thing after NOP' +  "\n")
-                return False
-            else:
-                # print("[PARSER] Valid NOP sentence")
-                return True
-
-
-
-        
-        return self.CATEGORIES
-    
 
     def finish_memop(self, scan):
         token = scan.get_token()
         while (token[0] == self.BLANK):
             token = scan.get_token()
         if (token[0] != self.REGISTER):
-            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing first REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  '\n')
+            sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing first REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
         else:
             token = scan.get_token()
             while (token[0] == self.BLANK):
                 token = scan.get_token()
             if (token[0] != self.INTO):
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing INTO in MEMOP (load or store); token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing INTO in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
             token = scan.get_token()
             while (token[0] == self.BLANK):
                 token = scan.get_token()
             if (token[0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing target (second) REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing target (second) REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
             else:
                 token = scan.get_token()
@@ -171,7 +57,7 @@ class RoseParser():
                     scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                     return True
                 else:
-                    sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing EOL in MEMOP (load or store); token: ' + str(token[0]) +  '\n')
+                    sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
                     return False
 
     def finish_loadI(self, scan):
@@ -179,20 +65,20 @@ class RoseParser():
         while (token[0] == self.BLANK):
             token = scan.get_token()
         if (token[0] != self.CONSTANT):
-            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing CONSTANT in LOADI; token: ' + str(token[0]) +  '\n')
+            sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing CONSTANT in LOADI; token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
         else:
             token = scan.get_token()
             while (token[0] == self.BLANK):
                 token = scan.get_token()
             if (token[0] != self.INTO):
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing INTO in LOADI; token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing INTO in LOADI; token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
             token = scan.get_token()
             while (token[0] == self.BLANK):
                 token = scan.get_token()
             if (token[0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing REGISTER in LOADI; token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing REGISTER in LOADI; token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
             token = scan.get_token()
             while (token[0] == self.BLANK):
@@ -205,44 +91,44 @@ class RoseParser():
                 scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                 return True
             else:
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing EOL in LOADI; token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in LOADI; token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
             
     def finish_arithop(self, scan):
         token = scan.get_token() 
         # if (token[0] != self.BLANK):
-        #     sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after ARITHOP opcode; token: ' + str(token[0]) +  '\n')
+        #     sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing BLANK after ARITHOP opcode; token: ' + str(token[0]) +  ' - [PARSER]\n')
         #     return False
         while (token[0] == self.BLANK):
             token = scan.get_token()
         if (token[0] != self.REGISTER):
-            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing first REGISTER in ARITHOP; token: ' + str(token[0]) +  '\n')
+            sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing first REGISTER in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
         else:
             token = scan.get_token()
             while (token[0] == self.BLANK):
                 token = scan.get_token()
             if (token[0] != self.COMMA):
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing COMMA in ARITHOP; token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing COMMA in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
             token = scan.get_token()
             while (token[0] == self.BLANK):
                 token = scan.get_token()
             # ARITHOP REG COMMA 
             if (token[0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing second REGISTER in ARITHOP; token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing second REGISTER in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
             token = scan.get_token()
             while (token[0] == self.BLANK):
                 token = scan.get_token()
             if (token[0] != self.INTO):
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing INTO in ARITHOP; token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing INTO in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
             token = scan.get_token()
             while (token[0] == self.BLANK):
                 token = scan.get_token()
             if (token[0] != self.REGISTER):
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing target (third) REGISTER in ARITHOP; token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing target (third) REGISTER in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
             token = scan.get_token()
             while (token[0] == self.BLANK):
@@ -255,7 +141,7 @@ class RoseParser():
                 scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                 return True
             else:
-                sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing EOL in ARITHOP; token: ' + str(token[0]) +  '\n')
+                sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
             
     def finish_output(self, scan):
@@ -264,11 +150,11 @@ class RoseParser():
             token = scan.get_token()
         # NOTE: i think the scanner picks up on the no 
         # if (token[0] != self.BLANK):
-        #     sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing BLANK after OUTPUT opcode; token: ' + str(token[0]) +  '\n')
+        #     sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing BLANK after OUTPUT opcode; token: ' + str(token[0]) +  ' - [PARSER]\n')
         #     return False
         # token = scan.get_token()
         if (token[0] != self.CONSTANT):
-            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing CONSTANT in OUTPUT; token: ' + str(token[0]) +  '\n')
+            sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing CONSTANT in OUTPUT; token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
         token = scan.get_token()
         if (token[0] == self.EOL):
@@ -278,8 +164,8 @@ class RoseParser():
             scan.char_idx = -1
             scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
             return True
-        else:
-            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               Missing EOL in OUTPUT; token: ' + str(token[0]) +  '\n')
+        else:   # NOTE: i think that i should add a case to see if its a scanner error so then i woudlnt print it out, and if its soemthing else, then print out the char
+            sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in OUTPUT; token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
     
     def finish_nop(self, scan):
@@ -287,7 +173,7 @@ class RoseParser():
         while (token[0] == self.BLANK):
             token = scan.get_token()
         if (token[0] != self.EOL and token[0] != self.EOF):
-            sys.stderr.write("[PARSER] ERROR " + str(scan.line_num) + '               wrong thing after NOP; token: ' + str(token[0]) +  '\n')
+            sys.stderr.write("ERROR " + str(scan.line_num) + ':               wrong thing after NOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
         else:
             # print("[PARSER] Valid NOP sentence")

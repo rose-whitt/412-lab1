@@ -10,118 +10,6 @@ EOF_FLAG = False
 
 
 
-def start(input_file, flag):
-  scan = scanner.Scanner(input_file)
-  parse = rose_parser.RoseParser(scan)
-  # print("in scan_func in lab1.py, starting start_scan in scanner.py")
-  # token = scan.get_token()
-  # print(str(scanner.line_num) + ": " + token)
-
-  # tokens should be a string like < cat, "lex" >
-  pre = "< "
-  mid = ', "'
-  post = '" >'
-  EOF_TOKEN = [scan.EOF, ""]
-  
-
-  
-  
-
-  # while not at end of line (char idx < length of line)
-  #   get token
-
-  # first line to start it
-  # scan.cur_line = scan.input_file.readline()
-  # get first token
-  # token = scan.get_token()
-  # While not the end of file token; EOF = empty string
-
-  # THIS IS ACTUALLY THE PARSER
-  # while (token != EOF_TOKEN):
-    # call start_scan, which returns token
-    # scan.cur_line = input_file.readline() # returns empty string when at end of line
-    # read line by line into buffer
-  # scan.cur_line = scan.input_file.readline()
-  scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
-  # print(str(scan.cur_line))
-  token = ["", ""]
-  shit = 0
-  i = 0
-  j = 0
-  while (len(scan.cur_line) != 0):
-    # print("[scan_func] token[0]: " + str(token[0]))
-    # print("[scan_func, outer while] char idx: " + str(scan.char_idx))
-
-    i += 1
-    while (token[0] != scan.EOL and len(scan.cur_line) != 0 and token[0] != 'ERROR'):
-      j += 1
-      # print(str(scan.line_num) + ': ' + scan.cur_line)
-
-      # SCAN (GET A TOKEN)
-      # print("🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸SCAN-START🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
-      token = scan.get_token()
-      # print("🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸SCAN-END🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
-
-      if (token[0] != scan.BLANK):  # ignore whitespace
-        scan.token_list.append(token) # need white space to check operations in parser
-      # if error, go to next line
-      if (token[0] == scan.SCANNER_ERROR):
-        scan.num_scanner_errors += 1
-        new_line = [scan.EOL, "\\n"]
-        scan.token_list.append(new_line)
-        token = new_line  # should make the while look break and then go to next line
-      # TODO: increment in parser instead
-      # else: # count successful iloc operations
-      #   scan.num_iloc_ops += 1
-
-      if (token[0] != scan.SCANNER_ERROR and token[0] >= 0 and token[0] <= 10 and flag == '-s'):  # dont print blanks (11), only print like this if -s flag
-        print(str(scan.line_num) + ': < ' + str(scan.CATEGORIES[token[0]]) + ', "' + str(token[1]) + '" >')
-    
-    # print("after while------------------------")
-    
-    # print(scan.token_list)
-
-    
-    scan.file_token_lists.append(scan.token_list) # add token list to line list
-
-
-    # ------------------PARSE-----------------
-    
-    # print("🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲PARSE-START🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲")
-    
-    if (flag == '-p' or flag == 'r'):
-      parse.parse_line(scan.token_list, scan.line_num)
-    # print("🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲PARSE-END🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲")
-
-
-
-
-    # RESET
-    scan.char_idx = -1
-    token = ["", ""]
-    scan.token_list = []  # new line, new list
-
-
-    # INCREMENT
-    # scan.cur_line = scan.input_file.readline()
-    scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
-    # print(str(scan.cur_line))
-
-    scan.line_num+=1
-    shit += 1
-    # print("new line: " + scan.cur_line)
-    # print("shit toje: " + str(token))
-  
-  if (flag == '-s'):
-    print(str(scan.line_num) + ': < ' + str(scan.CATEGORIES[EOF_TOKEN[0]]) + ', "' + str(EOF_TOKEN[1]) + '" >')
-  
-  # TODO: increment in parser instead
-  # if (flag == '-p'):
-  #   print(str(scan.num_iloc_ops) + " ILOC operations found.")
-  scan.file_token_lists.append(EOF_TOKEN)
-  
-  return EOF_TOKEN
-
 
 def demand_parse_start(input_file, flag):
   scan = scanner.Scanner(input_file)
@@ -200,7 +88,7 @@ def demand_parse_start(input_file, flag):
         continue
       else:
         print("ELSE: " + str(token[0]))
-        sys.stderr.write("[PARSE] ERROR " + str(scan.line_num) + ": no OPCODE\n")
+        sys.stderr.write("ERROR " + str(scan.line_num) + ": no OPCODE - [PARSER]\n")
         scan.line_num += 1
         scan.char_idx = -1
         scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())

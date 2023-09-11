@@ -112,13 +112,13 @@ class Scanner:
                         if (c == ord('e')):
                             return [self.MEMOP, "store"]
                         else:
-                            sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "stor" is not a valid word.\n')
+                            sys.stderr.write("ERROR " + str(self.line_num) + ':               "stor" is not a valid word - [SCANNER]\n')
                             return [self.SCANNER_ERROR, "stor"]
                     else:
-                        sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "sto" is not a valid word.\n')
+                        sys.stderr.write("ERROR " + str(self.line_num) + ':               "sto" is not a valid word - [SCANNER]\n')
                         return [self.SCANNER_ERROR, "sto"]
                 else:
-                    sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "st" is not a valid word.\n')
+                    sys.stderr.write("ERROR " + str(self.line_num) + ':               "st" is not a valid word - [SCANNER]\n')
                     return [self.SCANNER_ERROR, "stor"]
             elif (c == ord('u')):    # sub (ARITHOP)
                 # next char
@@ -128,10 +128,10 @@ class Scanner:
                     return [self.ARITHOP, "sub"]
 
                 else:
-                    sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "su" is not a valid word.\n')
+                    sys.stderr.write("ERROR " + str(self.line_num) + ':               "su" is not a valid word - [SCANNER]\n')
                     return [self.SCANNER_ERROR, "su"]
             else:
-                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "s" is not a valid word.\n')
+                sys.stderr.write("ERROR " + str(self.line_num) + ':               "s" is not a valid word - [SCANNER]\n')
                 return [self.SCANNER_ERROR, "s"]
         elif (c == ord('l')):
             # next char
@@ -153,16 +153,16 @@ class Scanner:
                             if (c == ord('t')):
                                 return [self.ARITHOP, "lshift"]
                             else:
-                                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "lshif" is not a valid word.\n')
+                                sys.stderr.write("ERROR " + str(self.line_num) + ':               "lshif" is not a valid word - [SCANNER]\n')
                                 return [self.SCANNER_ERROR, "lshif"]
                         else:
-                                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "lshi" is not a valid word.\n')
+                                sys.stderr.write("ERROR " + str(self.line_num) + ':               "lshi" is not a valid word - [SCANNER]\n')
                                 return [self.SCANNER_ERROR, "lshi"]
                     else:
-                        sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "lsh" is not a valid word.\n')
+                        sys.stderr.write("ERROR " + str(self.line_num) + ':               "lsh" is not a valid word - [SCANNER]\n')
                         return [self.SCANNER_ERROR, "lsh"]
                 else:
-                    sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "ls" is not a valid word.\n')
+                    sys.stderr.write("ERROR " + str(self.line_num) + ':               "ls" is not a valid word - [SCANNER]\n')
                     return [self.SCANNER_ERROR, "ls"]                   
             elif (c == ord('o')):
                 # next char
@@ -182,13 +182,13 @@ class Scanner:
                             self.rollback_ascii()
                             return [self.MEMOP, "load"]
                     else:
-                        sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "loa" is not a valid word.\n')
+                        sys.stderr.write("ERROR " + str(self.line_num) + ':               "loa" is not a valid word - [SCANNER]\n')
                         return [self.SCANNER_ERROR, "loa"]
                 else:
-                    sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "lo" is not a valid word.\n')
+                    sys.stderr.write("ERROR " + str(self.line_num) + ':               "lo" is not a valid word - [SCANNER]\n')
                     return [self.SCANNER_ERROR, "lo"]
             else:
-                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "l" is not a valid word.\n')
+                sys.stderr.write("ERROR " + str(self.line_num) + ':               "l" is not a valid word - [SCANNER]\n')
                 return [self.SCANNER_ERROR, "l"]
         elif (c == ord('r')):    # rshift (ARITHOP) or register
             # next char
@@ -220,20 +220,20 @@ class Scanner:
                             if (c == ord('t')):
                                 return [self.ARITHOP, "rshift"]
                             else:
-                                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "rshif" is not a valid word.\n')
+                                sys.stderr.write("ERROR " + str(self.line_num) + ':               "rshif" is not a valid word - [SCANNER]\n')
                                 return [self.SCANNER_ERROR, "rshif"]
                         else:
-                            sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "rshi" is not a valid word.\n')
+                            sys.stderr.write("ERROR " + str(self.line_num) + ':               "rshi" is not a valid word - [SCANNER]\n')
                             return [self.SCANNER_ERROR, "rshi"]
                     else:
-                        sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "rsh" is not a valid word.\n')
+                        sys.stderr.write("ERROR " + str(self.line_num) + ':               "rsh" is not a valid word - [SCANNER]\n')
                         return [self.SCANNER_ERROR, "rsh"]
 
                 else:
-                    sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "rs" is not a valid word.\n')
+                    sys.stderr.write("ERROR " + str(self.line_num) + ':               "rs" is not a valid word - [SCANNER]\n')
                     return [self.SCANNER_ERROR, "rs"]
             else:
-                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "r" is not a valid word.\n')
+                sys.stderr.write("ERROR " + str(self.line_num) + ':               "r" is not a valid word - [SCANNER]\n')
                 return [self.SCANNER_ERROR, "r"]
         elif (c == ord('m')):    # mult (ARITHOP)
             # print("possible mult")
@@ -248,13 +248,13 @@ class Scanner:
                     if (c == ord('t')):
                         return [self.ARITHOP, "mult"]
                     else:
-                        sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "mul" is not a valid word.\n')
+                        sys.stderr.write("ERROR " + str(self.line_num) + ':               "mul" is not a valid word - [SCANNER]\n')
                         return [self.SCANNER_ERROR, "mul"]
                 else:
-                    sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "mu" is not a valid word.\n')
+                    sys.stderr.write("ERROR " + str(self.line_num) + ':               "mu" is not a valid word - [SCANNER]\n')
                     return [self.SCANNER_ERROR, "mu"]
             else:
-                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "m" is not a valid word.\n')
+                sys.stderr.write("ERROR " + str(self.line_num) + ':               "m" is not a valid word - [SCANNER]\n')
                 return [self.SCANNER_ERROR, "m"]
         elif (c == ord('a')):    # add (ARITHOP)
             # print("possible add")
@@ -266,10 +266,10 @@ class Scanner:
                 if (c == ord('d')):
                     return [self.ARITHOP, "add"]
                 else:
-                    sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "ad" is not a valid word.\n')
+                    sys.stderr.write("ERROR " + str(self.line_num) + ':               "ad" is not a valid word - [SCANNER]\n')
                     return [self.SCANNER_ERROR, "ad"]
             else:
-                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "a" is not a valid word.\n')
+                sys.stderr.write("ERROR " + str(self.line_num) + ':               "a" is not a valid word - [SCANNER]\n')
                 return [self.SCANNER_ERROR, "a"]
         elif (c == ord('n')):    # nop (NOP)
             # print("possible nop")
@@ -281,10 +281,10 @@ class Scanner:
                 if (c == ord('p')):
                     return [self.NOP, "nop"]    # opcode, but doesnt need a space after it
                 else:
-                    sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "no" is not a valid word.\n')
+                    sys.stderr.write("ERROR " + str(self.line_num) + ':               "no" is not a valid word - [SCANNER]\n')
                     return [self.SCANNER_ERROR, "no"]
             else:
-                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "n" is not a valid word.\n')
+                sys.stderr.write("ERROR " + str(self.line_num) + ':               "n" is not a valid word - [SCANNER]\n')
                 return [self.SCANNER_ERROR, "n"]
         elif (c == ord('o')):    # output (OUTPUT)
             # print("possible output")
@@ -305,19 +305,19 @@ class Scanner:
                             if (c == ord('t')):
                                 return [self.OUTPUT, "output"]
                             else:
-                                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "outpu" is not a valid word.\n')
+                                sys.stderr.write("ERROR " + str(self.line_num) + ':               "outpu" is not a valid word - [SCANNER]\n')
                                 return [self.SCANNER_ERROR, "outpu"]
                         else:
-                            sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "outp" is not a valid word.\n')
+                            sys.stderr.write("ERROR " + str(self.line_num) + ':               "outp" is not a valid word - [SCANNER]\n')
                             return [self.SCANNER_ERROR, "outp"]
                     else:
-                        sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "out" is not a valid word.\n')
+                        sys.stderr.write("ERROR " + str(self.line_num) + ':               "out" is not a valid word - [SCANNER]\n')
                         return [self.SCANNER_ERROR, "out"]
                 else:
-                    sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "ou" is not a valid word.\n')
+                    sys.stderr.write("ERROR " + str(self.line_num) + ':               "ou" is not a valid word - [SCANNER]\n')
                     return [self.SCANNER_ERROR, "ou"]
             else:
-                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "o" is not a valid word.\n')
+                sys.stderr.write("ERROR " + str(self.line_num) + ':               "o" is not a valid word - [SCANNER]\n')
                 return [self.SCANNER_ERROR, "o"]
         elif (c == ord('=')):    # => (INTO)
             # print("possible =>")
@@ -327,7 +327,7 @@ class Scanner:
             if (c == ord('>')):
                 return [self.INTO, "=>"]
             else:
-                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "=" is not a valid word.\n')
+                sys.stderr.write("ERROR " + str(self.line_num) + ':               "=" is not a valid word - [SCANNER]\n')
                 return [self.SCANNER_ERROR, "="]
         elif (c == ord('/')):    # COMMENT
             print("possible comment")
@@ -345,7 +345,7 @@ class Scanner:
 
             else:
                 self.rollback_ascii()
-                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "/" is not a valid word.\n')
+                sys.stderr.write("ERROR " + str(self.line_num) + ':               "/" is not a valid word - [SCANNER]\n')
                 return [self.SCANNER_ERROR, "/"]
         elif (c == ord(',')):    # COMMA
             return [self.COMMA, ","]
@@ -361,7 +361,7 @@ class Scanner:
                 self.char_idx = -1
                 return [self.EOL, "\\r\\n"]
             else:
-                sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               "\r" is not a valid word.\n')
+                sys.stderr.write("ERROR " + str(self.line_num) + ':               "\r" is not a valid word - [SCANNER]\n')
                 return [self.SCANNER_ERROR, "\r"]
         elif (c >= ord('0') and c <= ord('9')):   #CONSTANT
             constant = chr(c)
@@ -382,7 +382,7 @@ class Scanner:
             # TODO: or should i just do get next char and return
             return [self.BLANK, " "]
         else:
-            sys.stderr.write("[SCANNER] ERROR " + str(self.line_num) + '               ' + chr(c) + ' is not a valid word.\n')
+            sys.stderr.write("ERROR " + str(self.line_num) + ':               ' + chr(c) + ' is not a valid word - [SCANNER]\n')
             return [self.SCANNER_ERROR, chr(c)]
     
 
