@@ -402,7 +402,7 @@ class Scanner:
     
     def next_ascii_char(self):
         if (self.char_idx >= len(self.cur_line)):
-            scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
+            self.cur_line = self.convert_line_to_ascii_list(self.input_file.readline())
 
             return ord('\n')
         else:
