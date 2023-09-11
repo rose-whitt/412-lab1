@@ -1,2 +1,2 @@
 Name	NetId	Conform	Correct	Scales	Points	Date	Late Days
-Rose Whitt	rew9	87.5	0.0	100	56.25	2023-09-09	-2
+no README	no README	87.5	100.0	100	96.25	2023-09-11	-1
