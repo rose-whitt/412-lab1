@@ -12,7 +12,7 @@ EOF_FLAG = False
 
 
 def demand_parse_start(input_file, flag):
-  print("PUSSY")
+  # print("PUSSY")
   scan = scanner.Scanner(input_file)
   parse = rose_parser.RoseParser(scan)
   # global linenum = 0
@@ -28,12 +28,23 @@ def demand_parse_start(input_file, flag):
 
 
   token = scan.get_token()
-  print(token)
+  # print(token)
 
   if (flag == '-s'):
     while (token[0] != scan.EOF):
-      i += 1
-      token = scan.get_token()
+      while (token[0] != scan.EOL and token[0] != scan.SCANNER_ERROR):
+        i += 1
+        token = scan.get_token()
+        # print(str(scan.line_num) + ": bitch")
+        # if (token[0] >= 0 and token[0] <= 10):
+        #   # print(str(token))
+        #   print(str(scan.line_num) + ": < " + str(scan.CATEGORIES[token[0]]) + ', "' + str(token[1]) + '" >')
+      # if (token[0] == scan.EOL):
+      #     print("its eol")
+      #     print(str(scan.line_num) + ": < " + str(scan.CATEGORIES[token[0]]) + ', "' + str(token[1]) + '" >')
+      # print("out")
+      scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
+      token = scan.get_token()  
   else:
 
     while (token[0] != scan.EOF):
@@ -107,6 +118,7 @@ def demand_parse_start(input_file, flag):
     
     # print(str(len(parse.OPS)) + " valid ILOC operations: " + str(parse.OPS))
     print(str(len(parse.OPS)) + " valid ILOC operations")
+  print(str(scan.num_scanner_errors) + " scanner errors.")
 
     
   
@@ -180,7 +192,6 @@ def main():
       # while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
       #   scan_func(f)
       #   poo += 1
-      print("closing.- " + str(poo))
       f.close()
   elif (sys.argv[1] == '-z'): # flag for me testing changing my impl
     if (len(sys.argv) <= 2):
@@ -194,7 +205,6 @@ def main():
       # while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
       #   scan_func(f)
       #   poo += 1
-      print("closing.- " + str(poo))
       f.close()
 
 
