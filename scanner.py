@@ -54,10 +54,12 @@ class Scanner:
         # init all variables like buffer and shit
         self.input_file = input_file
         self.cur_line = cur_line
+        self.cur_line_len = len(self.cur_line)
         self.char_idx = char_idx
         self.line_num = 1
         self.num_scanner_errors = 0
         self.num_iloc_ops = 0
+        self.test_line_num = 0
 
         self.token_list = []
         self.file_token_lists = []
@@ -89,7 +91,7 @@ class Scanner:
     def main_scanner(self, string):
         i = 0
         c = string
-        print("[MAIN SCANNER]: char idx: " + str(self.char_idx))
+        # print("[MAIN SCANNER]: char idx: " + str(self.char_idx))
         # print(type(c))
         # print("string: " + chr(string))
         # store (MEMOP) or sub (ARITHOP)
@@ -199,10 +201,13 @@ class Scanner:
                 # print("possible register")
                 reg_num = 'r' + chr(c)
                 c = self.next_ascii_char()
+                count = 0
                 while (c >= ord('0') and c <= ord('9')):  # get to end of number
                     reg_num = reg_num + chr(c)
                     c = self.next_ascii_char()  # TODO: this may cause adding a char we dont want
-                self.rollback_ascii()
+                    count += 1
+                if (count != 0):
+                    self.rollback_ascii()
                 return [self.REGISTER, reg_num] # no space after necessary bc not an opcode
             elif (c == ord('s')):
                 # print("possible rshift")
@@ -350,15 +355,18 @@ class Scanner:
         elif (c == ord(',')):    # COMMA
             return [self.COMMA, ","]
         elif (c == ord('\n') or c == 10):   # EOL, Line Feed (LF) is used as a new line character in linux, ascii value is 10
-            # print("new line")
+            print("new line")
+            print(self.cur_line)
             self.char_idx = -1
+            self.line_num += 1
             return [self.EOL, "\\n"]
         elif (c == ord('\r')):
             i += 1
             c = self.next_ascii_char()
-            if (c == ord('\n')):
+            if (c == ord('\n') or c == 10):
                 # print("one of the weird new lines")
                 self.char_idx = -1
+                self.line_num += 1
                 return [self.EOL, "\\r\\n"]
             else:
                 sys.stderr.write("ERROR " + str(self.line_num) + ':               "\r" is not a valid word - [SCANNER]\n')
@@ -368,11 +376,15 @@ class Scanner:
             # print("possible constant: " + chr(c) + ", " + str(c))
             i += 1
             c = self.next_ascii_char()
+            print("const: " + str(c))
+            count = 0
             while (c >= ord('0') and c <= ord('9')):  # get to end of number
-                # print("possible constant: " + chr(c) + ", " + str(c))
+                print("possible constant: " + chr(c) + ", " + str(c))
                 constant = constant + chr(c)
                 c = self.next_ascii_char()  # TODO: this may cause adding a char we dont want
-            self.rollback_ascii()
+                count += 1
+            if (count != 0):
+                self.rollback_ascii()
             return [self.CONSTANT, constant]
         elif (c == 0):  # 0 is value of empty string
             # TODO: is this always the last line of the file??
@@ -386,37 +398,30 @@ class Scanner:
             return [self.SCANNER_ERROR, chr(c)]
     
 
-    
-    def rollback(self):
-        self.char_idx -= 1
-        return ord(self.cur_line[self.char_idx])
-
-
-    # TODO: ask harry about this, piazza said it should be two chars but shouldnt i be checking for it running out of space in buffer? ik i am reading a line into the buffer, but am i clearing it all after each line??
-    def next_char(self):
-        # character 10 is a line break
-        # print("[next_ascii_char] (before) len, idx, char: " + str(len(self.cur_line)) + ", " + str(self.char_idx) + ", " + str(ord(self.cur_line[self.char_idx])))
-        self.char_idx += 1
-
-
-        return ord(self.cur_line[self.char_idx])
-    
 
     def rollback_ascii(self):
+        # print(str(self.cur_line))
         self.char_idx -= 1
+        # print("rollback idx: " + str(self.char_idx))
         return self.cur_line[self.char_idx]
     
     def next_ascii_char(self):
-        print("cur idx: " + str(self.char_idx))
+        # print("cur idx: " + str(self.char_idx))
+        # print("len: " + str(self.cur_line_len))
+        # print(str(self.cur_line))
         # print(self.cur_line)
-        if (self.char_idx >= len(self.cur_line)):
-            self.cur_line = self.convert_line_to_ascii_list(self.input_file.readline())
-
-            return ord('\n')
-        elif (len(self.cur_line) == 0):
+        if (self.cur_line_len == 0):
+            # print("zero len")
             return 0
+        elif (self.char_idx >= self.cur_line_len - 1):
+            # self.cur_line = self.convert_line_to_ascii_list(self.input_file.readline())
+            # print("outta bounds yo")
+
+
+            return ord('\n')   
         else:
             self.char_idx += 1
+            # print(self.char_idx)
             return self.cur_line[self.char_idx]
     
 
@@ -424,6 +429,9 @@ class Scanner:
         buf = []
         for char in line:
             buf.append(ord(char))
+        
+        self.cur_line_len = len(buf)
+        self.test_line_num += 1
         
         return buf
 
