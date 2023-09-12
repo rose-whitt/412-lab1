@@ -56,6 +56,8 @@ class RoseParser():
                     # scan.char_idx = -1
                     scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                     return True
+                elif (token[0] == self.SCANNER_ERROR):
+                    return False
                 else:
                     sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
                     return False
@@ -90,6 +92,8 @@ class RoseParser():
                 # scan.char_idx = -1
                 scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                 return True
+            elif (token[0] == self.SCANNER_ERROR):
+                return False
             else:
                 sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in LOADI; token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
@@ -140,6 +144,8 @@ class RoseParser():
                 # scan.char_idx = -1
                 scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                 return True
+            elif (token[0] == self.SCANNER_ERROR):
+                return False
             else:
                 sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
                 return False
@@ -166,6 +172,8 @@ class RoseParser():
             # scan.char_idx = -1
             scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
             return True
+        elif (token[0] == self.SCANNER_ERROR):
+            return False
         else:   # NOTE: i think that i should add a case to see if its a scanner error so then i woudlnt print it out, and if its soemthing else, then print out the char
             sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in OUTPUT; token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
@@ -174,7 +182,9 @@ class RoseParser():
         token = scan.get_token()
         while (token[0] == self.BLANK):
             token = scan.get_token()
-        if (token[0] != self.EOL and token[0] != self.EOF):
+        if (token[0] == self.SCANNER_ERROR):
+            return False
+        elif (token[0] != self.EOL and token[0] != self.EOF):
             sys.stderr.write("ERROR " + str(scan.line_num) + ':               wrong thing after NOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
         else:
