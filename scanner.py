@@ -387,20 +387,6 @@ class Scanner:
     
 
     
-    def rollback(self):
-        self.char_idx -= 1
-        return ord(self.cur_line[self.char_idx])
-
-
-    # TODO: ask harry about this, piazza said it should be two chars but shouldnt i be checking for it running out of space in buffer? ik i am reading a line into the buffer, but am i clearing it all after each line??
-    def next_char(self):
-        # character 10 is a line break
-        # print("[next_ascii_char] (before) len, idx, char: " + str(len(self.cur_line)) + ", " + str(self.char_idx) + ", " + str(ord(self.cur_line[self.char_idx])))
-        self.char_idx += 1
-
-
-        return ord(self.cur_line[self.char_idx])
-    
 
     def rollback_ascii(self):
         self.char_idx -= 1
