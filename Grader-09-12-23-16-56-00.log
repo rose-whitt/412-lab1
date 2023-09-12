@@ -6,7 +6,7 @@ Auto-grader Configuration:
 Testing submission: lab1.tar
 No README file found
 Name: no README, NetId: no README
-	Date From Files: 2023-09-11
+	Date From Files: 2023-09-12
 
 --- built front end and should be ready to run ---
 
@@ -46,11 +46,11 @@ Testing Conformance	(If we got this far, the tar file worked.)
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.069402 seconds
-	T16k.i:  	0.06792400000000001 seconds
-	T32k.i:  	0.06878000000000001 seconds
-	T64k.i:  	0.06835899999999999 seconds
-	T128k.i:  	0.069088 seconds
+	T8k.i:  	0.035001 seconds
+	T16k.i:  	0.034788 seconds
+	T32k.i:  	0.035326 seconds
+	T64k.i:  	0.036143999999999996 seconds
+	T128k.i:  	0.036825000000000004 seconds
 
 	The code may not work; 3 codes showed minimal growth
 	This effect may also be timer variability.
