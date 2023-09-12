@@ -32,17 +32,16 @@ def demand_parse_start(input_file, flag):
     while (token[0] != scan.EOF):
       token = scan.get_token()
   else:
-
     while (token[0] != scan.EOF):
       # i += 1
-      print("char idx: " + str(scan.char_idx))
+      # print("char idx: " + str(scan.char_idx))
       if (token[0] == scan.MEMOP):
-        if (parse.finish_memop(scan) == False):
+        if (parse.finish_memop(scan) == False): # scanner error
           scan.line_num += 1
           scan.char_idx = -1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         else:
-          print("[PARSE] " + str(scan.line_num) + ": MEMOP")
+          print("[PARSE] " + str(scan.line_num) + ": MEMOP, " + str(scan.test_line_num))
             
         scan.char_idx = -1
       elif (token[0] == scan.LOADI):
@@ -51,7 +50,7 @@ def demand_parse_start(input_file, flag):
           scan.char_idx = -1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         else:
-          print("[PARSE] " + str(scan.line_num) + ": LOADI")
+          print("[PARSE] " + str(scan.line_num) + ": LOADI, " + str(scan.test_line_num))
         scan.char_idx = -1
       elif (token[0] == scan.ARITHOP):
         if (parse.finish_arithop(scan) == False):
@@ -59,7 +58,7 @@ def demand_parse_start(input_file, flag):
           scan.char_idx = -1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         else:
-          print("[PARSE] " + str(scan.line_num) + ": ARITHOP")
+          print("[PARSE] " + str(scan.line_num) + ": ARITHOP, " + str(scan.test_line_num))
         scan.char_idx = -1
       elif (token[0] == scan.OUTPUT):
         if (parse.finish_output(scan) == False):
@@ -67,7 +66,7 @@ def demand_parse_start(input_file, flag):
           scan.char_idx = -1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         else:
-          print("[PARSE] " + str(scan.line_num) + ": OUTPUT")
+          print("[PARSE] " + str(scan.line_num) + ": OUTPUT, " + str(scan.test_line_num))
         scan.char_idx = -1
       elif (token[0] == scan.NOP):
         if (parse.finish_nop(scan) == False):
@@ -75,10 +74,10 @@ def demand_parse_start(input_file, flag):
           scan.char_idx = -1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         else:
-          print("[PARSE] " + str(scan.line_num) + ": NOP")
+          print("[PARSE] " + str(scan.line_num) + ": NOP, " + str(scan.test_line_num))
         scan.char_idx = -1
       elif (token[0] == scan.EOL):
-        print("[PARSE] " + str(scan.line_num) + ": EOL")
+        print("[PARSE] " + str(scan.line_num) + ": EOL, " + str(scan.test_line_num))
         scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         # print(str(scan.cur_line))
         scan.line_num += 1
@@ -118,6 +117,10 @@ def main():
   # text = f.read(10)
   i = 1
 
+  arg_len = len(sys.argv)
+
+  if (arg_len < 2):
+    print("no flag indicated")
   if (sys.argv[1] == '-h'):
     print("\n")
     print("Command Syntax:")
@@ -137,7 +140,7 @@ def main():
     
   elif (sys.argv[1] == '-r'):
     # print("TODO: read the file, parse it, build the intermediate representation (IR), and print out the information in the intermediate representaiton (in an appropriately human readable format)")
-    if (len(sys.argv) <= 2):
+    if (arg_len <= 2):
       print("Must specify a file name after the flag.")
     else:
       __file__ = sys.argv[2]
@@ -147,7 +150,7 @@ def main():
       f.close()
   elif (sys.argv[1] == '-p'):
     # print("TODO: read the file, scan it and parse it, build the intermediate representation (IR) and report either success or report all the errors that it finds in the input file.")
-    if (len(sys.argv) <= 2):
+    if (arg_len <= 2):
       print("Must specify a file name after the flag.")
     else:
       __file__ = sys.argv[2]
@@ -158,7 +161,7 @@ def main():
       f.close()
   elif (sys.argv[1] == '-s'):
     # print("TODO: read file and print to stdout a list of tokens that the scanner found. for each, print line number, tokens type (or syntactic category) and its spelling (or lexeme)")
-    if (len(sys.argv) <= 2):
+    if (arg_len <= 2):
       print("Must specify a file name after the flag.")
     else:
       __file__ = sys.argv[2]
@@ -166,20 +169,6 @@ def main():
       poo = 0
       f = open(__file__, 'r')
       demand_parse_start(f, '-s')
-      # while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
-      #   scan_func(f)
-      #   poo += 1
-      print("closing.- " + str(poo))
-      f.close()
-  elif (sys.argv[1] == '-z'): # flag for me testing changing my impl
-    if (len(sys.argv) <= 2):
-      print("Must specify a file name after the flag.")
-    else:
-      __file__ = sys.argv[2]
-      # Reading a file
-      poo = 0
-      f = open(__file__, 'r')
-      demand_parse_start(f, '-z')
       # while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
       #   scan_func(f)
       #   poo += 1

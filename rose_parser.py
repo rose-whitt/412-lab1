@@ -153,10 +153,13 @@ class RoseParser():
         #     sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing BLANK after OUTPUT opcode; token: ' + str(token[0]) +  ' - [PARSER]\n')
         #     return False
         # token = scan.get_token()
+        print("token in output: " + str(token))
+
         if (token[0] != self.CONSTANT):
             sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing CONSTANT in OUTPUT; token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
         token = scan.get_token()
+
         if (token[0] == self.EOL):
             # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
             self.OPS.append([scan.line_num, 'OUTPUT'])
@@ -165,6 +168,7 @@ class RoseParser():
             scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
             return True
         else:   # NOTE: i think that i should add a case to see if its a scanner error so then i woudlnt print it out, and if its soemthing else, then print out the char
+            print("token in output: " + str(token))
             sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in OUTPUT; token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
     
