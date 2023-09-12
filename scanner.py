@@ -418,6 +418,7 @@ class Scanner:
         # self.line_num += 1
         # self.char_idx = -1
         # return buf
+        print("rose: " + str(self.line_num))
         buf = []
         newline_flag = False
         i = 0
@@ -432,11 +433,18 @@ class Scanner:
         print("i: " + str(i) + ", len: " + str(len(buf)))
         self.line_num += 1
         self.char_idx = -1
+        print("new line flag: " + str(newline_flag))
 
-        
-        print("[CONVERSION] new line flag: " + str(newline_flag))
-        buf.append(ord(' '))    # add blank
-        buf.append(ord('\n'))   # add new line
+        self.cur_line_len = len(buf)
+        if (self.cur_line_len == 0 and newline_flag != True):
+            self.END_OF_FILE = True
+            buf.append("")
+            self.cur_line_len += 1
+        else:
+            # print("[CONVERSION] new line flag: " + str(newline_flag))
+            buf.append(ord(' '))    # add blank
+            buf.append(ord('\n'))   # add new line
+            self.cur_line_len += 2
         
 
         print("[CONVERSION] buf: " + str(buf))
@@ -454,8 +462,12 @@ class Scanner:
         #this is like the shit in main_scanner
         # ret_token = '< ENDFILE, "" >'   # this is so we dont get infinite loop cuz scan_func expects this EOF token
         # line_num += 1
+        print("in get token")
         if (self.END_OF_FILE != True):
+            print("not end of file")
             c = self.next_ascii_char()
             return self.main_scanner(c)
         else:
-            c = [self.EOF, ""]
+            print("end of file")
+            c = 0
+            return self.main_scanner(c)

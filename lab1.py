@@ -28,14 +28,15 @@ def demand_parse_start(input_file, flag):
 
 
   token = scan.get_token()
+  print(token)
 
   if (flag == '-s'):
-    while (token[0] != scan.EOF and i < 100):
+    while (token[0] != scan.EOF):
       i += 1
       token = scan.get_token()
   else:
 
-    while (token[0] != scan.EOF and i < 100):
+    while (token[0] != scan.EOF):
       i += 1
       print("char idx: " + str(scan.char_idx))
       if (token[0] == scan.MEMOP):
@@ -101,7 +102,8 @@ def demand_parse_start(input_file, flag):
         # scan.line_num += 1
         # scan.char_idx = -1
         scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
-      token = scan.get_token() 
+      token = scan.get_token()
+      print(token)
     
     # print(str(len(parse.OPS)) + " valid ILOC operations: " + str(parse.OPS))
     print(str(len(parse.OPS)) + " valid ILOC operations")
