@@ -3,11 +3,14 @@ Auto-grader Configuration:
   normal deadline is:	 2023-09-12
  
 =======================================================================
-Testing submission: lab1.tar
-No README file found
-Name: no README, NetId: no README
-	Date From Files: 2023-09-12
+Testing submission: comp412-lab1.tar
+Name: Comp 412, NetId: comp412
+	Date From Files: 2023-08-24
 
+--- building executable ---
+rm -f 412fe *.o
+cp placeholder 412fe
+chmod 711 412fe
 --- built front end and should be ready to run ---
 
 Testing Correctness
@@ -39,33 +42,45 @@ Testing Correctness
 
 Testing Conformance	(If we got this far, the tar file worked.)
 
-	Found message, but ERROR was not in uppercase (1)
 	Produced 'ERROR' message on missing or bad file name
 	Help message check found all options
 
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.035001 seconds
-	T16k.i:  	0.034788 seconds
-	T32k.i:  	0.035326 seconds
-	T64k.i:  	0.036143999999999996 seconds
-	T128k.i:  	0.036825000000000004 seconds
-
-	The code may not work; 3 codes showed minimal growth
-	This effect may also be timer variability.
-	Run the auto-timer to see more accurate results.
+	T8k.i:  	0.0069500000000000004 seconds
+	T16k.i:  	0.007426 seconds
+	T32k.i:  	0.011184 seconds
+	T64k.i:  	0.018914999999999998 seconds
+	T128k.i:  	0.034015000000000004 seconds
 
 	Scaling appears to be linear.
 
 Scoring (on the provided test blocks):
 
 	Correctness:	100.0%
-	Conformance:	87.5%
+	Conformance:	100.0%
 
 	Run the auto-timer to see Scalability results
 
-finished testing submission lab1.tar
+finished testing submission comp412-lab1.tar
+=======================================================================
+Testing submission: noway.tar
+
+***	Problem reading files; date is inaccurate.
+
+No README file found
+Name: no README, NetId: no README
+	Date From Files: 2020-01-01
+
+chmod: cannot access '412fe': No such file or directory
+--- built front end and should be ready to run ---
+
+noway.tar didn't folllow the instructions: no 412fe
+submission failed to build correctly
+likely a problem with tar file, make file, or script
+
+finished testing submission noway.tar
 =======================================================================
 
 Grading run complete.

@@ -1,2 +1,2 @@
-Name	NetId	Conform	Correct	Scales	Points	Date	Late Days
-no README	no README	87.5	100.0	100	96.25	2023-09-12	0
+NetId	Name	T1k	T2k	T4k	T8k	T16k	T32k	T64k	T128k	Lang.	Scaling Pts	Eff Pts %
+No README	unknown	0.0631	0.0996	0.1666	0.3082	0.5884	1.1442	2.2647	4.5480	python 	 linear	100	15.06383333333332
