@@ -12,6 +12,7 @@ EOF_FLAG = False
 
 
 def demand_parse_start(input_file, flag):
+  print("PUSSY")
   scan = scanner.Scanner(input_file)
   parse = rose_parser.RoseParser(scan)
   # global linenum = 0
