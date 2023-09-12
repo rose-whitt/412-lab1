@@ -157,6 +157,8 @@ class RoseParser():
             sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing CONSTANT in OUTPUT; token: ' + str(token[0]) +  ' - [PARSER]\n')
             return False
         token = scan.get_token()
+        while (token[0] == self.BLANK):
+            token = scan.get_token()
         if (token[0] == self.EOL):
             # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
             self.OPS.append([scan.line_num, 'OUTPUT'])

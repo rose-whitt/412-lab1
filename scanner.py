@@ -55,9 +55,11 @@ class Scanner:
         self.input_file = input_file
         self.cur_line = cur_line
         self.char_idx = char_idx
+        self.cur_line_len = 0
         self.line_num = 0
         self.num_scanner_errors = 0
         self.num_iloc_ops = 0
+        self.END_OF_FILE = False
 
         self.token_list = []
         self.file_token_lists = []
@@ -409,33 +411,38 @@ class Scanner:
     def convert_line_to_ascii_list(self, line):
         
 
+        # buf = []
+        # for char in line:
+        #     buf.append(ord(char))
+        # print("[CONVERSION] buf: " + str(buf))
+        # self.line_num += 1
+        # self.char_idx = -1
+        # return buf
         buf = []
+        newline_flag = False
+        i = 0
         for char in line:
-            buf.append(ord(char))
-        print("[CONVERSION] buf: " + str(buf))
+            if (char != '\n'):
+                buf.append(ord(char))
+            else:   # do not add new line to buf
+                newline_flag = True
+                break
+            i += 1
+        
+        print("i: " + str(i) + ", len: " + str(len(buf)))
         self.line_num += 1
         self.char_idx = -1
+
+        
+        print("[CONVERSION] new line flag: " + str(newline_flag))
+        buf.append(ord(' '))    # add blank
+        buf.append(ord('\n'))   # add new line
+        
+
+        print("[CONVERSION] buf: " + str(buf))
+
+        
         return buf
-        # buf = []
-        # newline_flag = False
-        # i = 0
-        # for char in line:
-        #     if (char != '\n'):
-        #         buf.append(ord(char))
-        #     else:   # do not add new line to buf
-        #         newline_flag = True
-        #         break
-        #     i += 1
-        
-        # print("[CONVERSION] new line flag: " + str(newline_flag))
-        # buf.append(ord(' '))    # add blank
-        # buf.append(ord('\n'))   # add new line
-        
-
-        # print("[CONVERSION] buf: " + str(buf))
-
-        
-        # return buf
 
     
     # returns when it finds a token, return token
@@ -447,5 +454,8 @@ class Scanner:
         #this is like the shit in main_scanner
         # ret_token = '< ENDFILE, "" >'   # this is so we dont get infinite loop cuz scan_func expects this EOF token
         # line_num += 1
-        c = self.next_ascii_char()
-        return self.main_scanner(c)
+        if (self.END_OF_FILE != True):
+            c = self.next_ascii_char()
+            return self.main_scanner(c)
+        else:
+            c = [self.EOF, ""]

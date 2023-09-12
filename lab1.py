@@ -81,8 +81,8 @@ def demand_parse_start(input_file, flag):
           print("[PARSE] " + str(scan.line_num - 1) + ": NOP")
         scan.char_idx = -1
       elif (token[0] == scan.EOL):
-        print("EOL BITCH")
-        print("[PARSE] " + str(scan.line_num) + ": EOL")
+        # print("EOL BITCH")
+        # print("[PARSE] " + str(scan.line_num) + ": EOL")
         scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         print("EOL MOFO: " + str(scan.line_num))
 
@@ -93,6 +93,8 @@ def demand_parse_start(input_file, flag):
         print("BLANK CUNT")
         token = scan.get_token()
         continue
+      elif (token[0] == scan.SCANNER_ERROR):  # dont continue to parse if scanner error
+        scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
       else:
         print("ELSE: " + str(token[0]))
         sys.stderr.write("ERROR " + str(scan.line_num - 1) + ": no OPCODE - [PARSER]\n")
