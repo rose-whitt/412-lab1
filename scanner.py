@@ -46,7 +46,7 @@ buffer = []
 
 cur_line = ""
 char_idx = -1
-line_num = 1
+line_num = 0
 
 class Scanner:
 
@@ -55,7 +55,7 @@ class Scanner:
         self.input_file = input_file
         self.cur_line = cur_line
         self.char_idx = char_idx
-        self.line_num = 1
+        self.line_num = 0
         self.num_scanner_errors = 0
         self.num_iloc_ops = 0
 
@@ -394,24 +394,48 @@ class Scanner:
     
     def next_ascii_char(self):
         print("cur idx: " + str(self.char_idx))
-        # print(self.cur_line)
-        if (self.char_idx >= len(self.cur_line)):
-            self.cur_line = self.convert_line_to_ascii_list(self.input_file.readline())
+        # # print(self.cur_line)
+        # if (self.char_idx >= len(self.cur_line)):
+        #     self.cur_line = self.convert_line_to_ascii_list(self.input_file.readline())
 
-            return ord('\n')
-        elif (len(self.cur_line) == 0):
-            return 0
-        else:
-            self.char_idx += 1
-            return self.cur_line[self.char_idx]
+        #     return ord('\n')
+        # elif (len(self.cur_line) == 0):
+        #     return 0
+        # else:
+        self.char_idx += 1
+        return self.cur_line[self.char_idx]
     
 
     def convert_line_to_ascii_list(self, line):
+        
+
         buf = []
         for char in line:
             buf.append(ord(char))
-        
+        print("[CONVERSION] buf: " + str(buf))
+        self.line_num += 1
+        self.char_idx = -1
         return buf
+        # buf = []
+        # newline_flag = False
+        # i = 0
+        # for char in line:
+        #     if (char != '\n'):
+        #         buf.append(ord(char))
+        #     else:   # do not add new line to buf
+        #         newline_flag = True
+        #         break
+        #     i += 1
+        
+        # print("[CONVERSION] new line flag: " + str(newline_flag))
+        # buf.append(ord(' '))    # add blank
+        # buf.append(ord('\n'))   # add new line
+        
+
+        # print("[CONVERSION] buf: " + str(buf))
+
+        
+        # return buf
 
     
     # returns when it finds a token, return token

@@ -22,7 +22,7 @@ def demand_parse_start(input_file, flag):
 
   # print(scan.cur_line)
 
-  # i = 0
+  i = 0
   
 
 
@@ -30,68 +30,74 @@ def demand_parse_start(input_file, flag):
   token = scan.get_token()
 
   if (flag == '-s'):
-    while (token[0] != scan.EOF):
+    while (token[0] != scan.EOF and i < 100):
+      i += 1
       token = scan.get_token()
   else:
 
-    while (token[0] != scan.EOF):
-      # i += 1
+    while (token[0] != scan.EOF and i < 100):
+      i += 1
       print("char idx: " + str(scan.char_idx))
       if (token[0] == scan.MEMOP):
         if (parse.finish_memop(scan) == False):
-          scan.line_num += 1
-          scan.char_idx = -1
+          # scan.line_num += 1
+          # scan.char_idx = -1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         else:
-          print("[PARSE] " + str(scan.line_num) + ": MEMOP")
+          print("[PARSE] " + str(scan.line_num - 1) + ": MEMOP")
             
         scan.char_idx = -1
       elif (token[0] == scan.LOADI):
         if (parse.finish_loadI(scan) == False):
-          scan.line_num += 1
-          scan.char_idx = -1
+          # scan.line_num += 1
+          # scan.char_idx = -1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         else:
-          print("[PARSE] " + str(scan.line_num) + ": LOADI")
+          print("[PARSE] " + str(scan.line_num - 1) + ": LOADI")
         scan.char_idx = -1
       elif (token[0] == scan.ARITHOP):
         if (parse.finish_arithop(scan) == False):
-          scan.line_num += 1
-          scan.char_idx = -1
+          # scan.line_num += 1
+          # scan.char_idx = -1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         else:
-          print("[PARSE] " + str(scan.line_num) + ": ARITHOP")
+          print("[PARSE] " + str(scan.line_num - 1) + ": ARITHOP")
         scan.char_idx = -1
       elif (token[0] == scan.OUTPUT):
         if (parse.finish_output(scan) == False):
-          scan.line_num += 1
-          scan.char_idx = -1
+          print("cunt")
+          # scan.line_num += 1
+          # scan.char_idx = -1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         else:
-          print("[PARSE] " + str(scan.line_num) + ": OUTPUT")
+          print("[PARSE] " + str(scan.line_num - 1) + ": OUTPUT")
         scan.char_idx = -1
       elif (token[0] == scan.NOP):
         if (parse.finish_nop(scan) == False):
-          scan.line_num += 1
-          scan.char_idx = -1
+          # scan.line_num += 1
+          # scan.char_idx = -1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
         else:
-          print("[PARSE] " + str(scan.line_num) + ": NOP")
+          print("[PARSE] " + str(scan.line_num - 1) + ": NOP")
         scan.char_idx = -1
       elif (token[0] == scan.EOL):
+        print("EOL BITCH")
         print("[PARSE] " + str(scan.line_num) + ": EOL")
         scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
+        print("EOL MOFO: " + str(scan.line_num))
+
         # print(str(scan.cur_line))
-        scan.line_num += 1
-        scan.char_idx = -1
+        # scan.line_num += 1
+        # scan.char_idx = -1
       elif (token[0] == scan.BLANK):
+        print("BLANK CUNT")
         token = scan.get_token()
         continue
       else:
         print("ELSE: " + str(token[0]))
-        sys.stderr.write("ERROR " + str(scan.line_num) + ": no OPCODE - [PARSER]\n")
-        scan.line_num += 1
-        scan.char_idx = -1
+        sys.stderr.write("ERROR " + str(scan.line_num - 1) + ": no OPCODE - [PARSER]\n")
+        # scan.line_num += 1
+        # scan.char_idx = -1
         scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
       token = scan.get_token() 
     

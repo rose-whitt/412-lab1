@@ -52,8 +52,8 @@ class RoseParser():
                     # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                     # TODO: build IR for this OP, add IR to list of OPS
                     self.OPS.append([scan.line_num, 'MEMOP'])
-                    scan.line_num += 1
-                    scan.char_idx = -1
+                    # scan.line_num += 1
+                    # scan.char_idx = -1
                     scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                     return True
                 else:
@@ -86,8 +86,8 @@ class RoseParser():
             if (token[0] == self.EOL):
                 # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                 self.OPS.append([scan.line_num, 'LOADI'])
-                scan.line_num += 1
-                scan.char_idx = -1
+                # scan.line_num += 1
+                # scan.char_idx = -1
                 scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                 return True
             else:
@@ -136,8 +136,8 @@ class RoseParser():
             if (token[0] == self.EOL):
                 # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                 self.OPS.append([scan.line_num, 'ARITHOP'])
-                scan.line_num += 1
-                scan.char_idx = -1
+                # scan.line_num += 1
+                # scan.char_idx = -1
                 scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                 return True
             else:
@@ -160,8 +160,8 @@ class RoseParser():
         if (token[0] == self.EOL):
             # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
             self.OPS.append([scan.line_num, 'OUTPUT'])
-            scan.line_num += 1
-            scan.char_idx = -1
+            # scan.line_num += 1
+            # scan.char_idx = -1
             scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
             return True
         else:   # NOTE: i think that i should add a case to see if its a scanner error so then i woudlnt print it out, and if its soemthing else, then print out the char
@@ -178,7 +178,7 @@ class RoseParser():
         else:
             # print("[PARSER] Valid NOP sentence")
             self.OPS.append([scan.line_num, 'NOP'])
-            scan.line_num += 1
-            scan.char_idx = -1
+            # scan.line_num += 1
+            # scan.char_idx = -1
             scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
             return True
