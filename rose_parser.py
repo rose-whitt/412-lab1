@@ -108,9 +108,7 @@ class RoseParser():
             
     def finish_arithop(self, scan):
         token = scan.get_token() 
-        # if (token[0] != self.BLANK):
-        #     sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing BLANK after ARITHOP opcode; token: ' + str(token[0]) +  ' - [PARSER]\n')
-        #     return False
+
         while (token[0] == self.BLANK):
             token = scan.get_token()
         if (token[0] != self.REGISTER):

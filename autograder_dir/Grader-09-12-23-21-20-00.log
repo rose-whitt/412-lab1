@@ -50,13 +50,13 @@ Testing Conformance	(If we got this far, the tar file worked.)
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.06812 seconds
-	T16k.i:  	0.066745 seconds
-	T32k.i:  	0.068189 seconds
-	T64k.i:  	0.066566 seconds
-	T128k.i:  	0.06781699999999999 seconds
+	T8k.i:  	0.071226 seconds
+	T16k.i:  	0.070596 seconds
+	T32k.i:  	0.07034900000000001 seconds
+	T64k.i:  	0.046964 seconds
+	T128k.i:  	0.072878 seconds
 
-	The code may not work; 3 codes showed minimal growth
+	The code may not work; 2 codes showed minimal growth
 	This effect may also be timer variability.
 	Run the auto-timer to see more accurate results.
 
