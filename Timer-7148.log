@@ -1,0 +1,29 @@
+Autotimer: using Scalability SLOCs blocks
+=======================================================================
+Testing submission: lab1.tar
+NetId: rew9, Name: Rose Whitt
+	Date From Files: 2023-09-13
+
+--- built front end and should be ready to run ---
+
+
+Testing Scalability:
+	(Each elapsed time is the minimum of five runs.)
+
+	T1k.i:  	0.0517 seconds
+	T2k.i:  	0.0734 seconds
+	T4k.i:  	0.1166 seconds
+	T8k.i:  	0.2036 seconds
+	T16k.i:  	0.3780 seconds
+	T32k.i:  	0.7427 seconds
+	T64k.i:  	1.4366 seconds
+	T128k.i:  	2.8555 seconds
+ 
+Scaling score is 100
+Efficiency score is 71.48153333333333	( python )
+
+finished timing run on submission lab1.tar
+=======================================================================
+
+Timing run complete.
+

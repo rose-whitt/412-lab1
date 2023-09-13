@@ -335,8 +335,15 @@ def main():
       print("Must specify a file name after the flag.")
     else:
       __file__ = sys.argv[2]
+
+      # open file
+      try:
+          f = open(__file__, 'r')
+      except FileNotFoundError:  # FileNotFoundError in Python 3
+          print(f"ERROR input file not found", file=sys.stderr)
+          sys.exit()
       # Reading a file
-      f = open(__file__, 'r')
+      # f = open(__file__, 'r')
       demand_parse_start(f, '-r')
       f.close()
   elif (sys.argv[1] == '-p'):
@@ -345,8 +352,17 @@ def main():
       print("Must specify a file name after the flag.")
     else:
       __file__ = sys.argv[2]
+
+      # open file
+      try:
+          f = open(__file__, 'r')
+      except FileNotFoundError:  # FileNotFoundError in Python 3
+          print(f"ERROR input file not found", file=sys.stderr)
+          sys.exit()
+
+      # __file__ = sys.argv[2]
       # Reading a file
-      f = open(__file__, 'r')
+      # f = open(__file__, 'r')
       # start(f, '-p')
       demand_parse_start(f, '-p')
       f.close()
@@ -355,25 +371,39 @@ def main():
     if (len(sys.argv) <= 2):
       print("Must specify a file name after the flag.")
     else:
+
       __file__ = sys.argv[2]
-      # Reading a file
-      poo = 0
-      f = open(__file__, 'r')
+
+      # open file
+      try:
+          f = open(__file__, 'r')
+      except FileNotFoundError:  # FileNotFoundError in Python 3
+          print(f"ERROR input file not found", file=sys.stderr)
+          sys.exit()
+      # __file__ = sys.argv[2]
+      # # Reading a file
+      # poo = 0
+      # f = open(__file__, 'r')
       demand_parse_start(f, '-s')
       # while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
       #   scan_func(f)
       #   poo += 1
       f.close()
-  else: # p is default
-    if (len(sys.argv) <= 2):
-      print("Must specify a file name after the flag.")
-    else:
-      __file__ = sys.argv[2]
-      # Reading a file
-      f = open(__file__, 'r')
-      # start(f, '-p')
-      demand_parse_start(f, '-p')
-      f.close()
+  else: # p is default if no flag
+    __file__ = sys.argv[1]  # no flag, so second arg should be a filename
+
+    # open file
+    try:
+        f = open(__file__, 'r')
+    except FileNotFoundError:  # FileNotFoundError in Python 3
+        print(f"ERROR input file not found", file=sys.stderr)
+        sys.exit()
+    # __file__ = sys.argv[2]
+    # Reading a file
+    # f = open(__file__, 'r')
+    # start(f, '-p')
+    demand_parse_start(f, '-p')
+    f.close()
   # s = StringIO()
   # sortby = 'cumulative'
   # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)

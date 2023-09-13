@@ -48,11 +48,11 @@ Testing Conformance	(If we got this far, the tar file worked.)
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.005779 seconds
-	T16k.i:  	0.007521 seconds
-	T32k.i:  	0.011379 seconds
-	T64k.i:  	0.019644 seconds
-	T128k.i:  	0.035474 seconds
+	T8k.i:  	0.005487 seconds
+	T16k.i:  	0.007016 seconds
+	T32k.i:  	0.011512 seconds
+	T64k.i:  	0.020375 seconds
+	T128k.i:  	0.036274 seconds
 
 	Scaling appears to be linear.
 
@@ -107,11 +107,11 @@ Testing Conformance	(If we got this far, the tar file worked.)
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.030712 seconds
-	T16k.i:  	0.031800999999999996 seconds
-	T32k.i:  	0.031462 seconds
-	T64k.i:  	0.029202000000000002 seconds
-	T128k.i:  	0.02904 seconds
+	T8k.i:  	0.031509 seconds
+	T16k.i:  	0.032743 seconds
+	T32k.i:  	0.02945 seconds
+	T64k.i:  	0.029991 seconds
+	T128k.i:  	0.027887000000000002 seconds
 
 	The code may not work; 3 codes showed minimal growth
 	This effect may also be timer variability.
