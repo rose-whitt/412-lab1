@@ -78,13 +78,6 @@ class Scanner:
         self.BLANK = 11     # not an opcode, but used to signal blank space or tab
         self.SCANNER_ERROR = 12 # not an opcode, used to signify error in scanner (lexical/spelling error)
 
-        
-    def tokenize_func(cat, lex):
-        """tokens should be a string like < cat, "lex" >"""
-        pre = "< "
-        mid = '", "'
-        post = '" >'
-        return pre + cat + mid + lex + post
 
     
 

@@ -3,6 +3,8 @@
 import scanner
 import rose_parser
 import sys
+import cProfile, pstats
+from io import StringIO
 
 COMMENT = "// ILOC Front End \n"
 
@@ -276,10 +278,10 @@ def demand_parse_start(input_file, flag):
     if ((parse.num_parser_errors + scan.num_scanner_errors) == 0):
       print("Parse succeeded, finding " + str(parse.num_iloc_ops) + " ILOC operations.")
     else:
-      print("Found " + str(parse.num_parser_errors + scan.num_scanner_errors) + " errors on x lines")
+      sys.stderr.write("Found " + str(parse.num_parser_errors + scan.num_scanner_errors) + " errors on x lines")
     # print(str(parse.num_iloc_ops) + " valid ILOC operations")
-    print(str(parse.num_parser_errors) + " parser errors.")
-  print(str(scan.num_scanner_errors) + " scanner errors.")
+  #   print(str(parse.num_parser_errors) + " parser errors.")
+  # print(str(scan.num_scanner_errors) + " scanner errors.")
   
     
 
@@ -294,6 +296,8 @@ def demand_parse_start(input_file, flag):
 
 
 def main():
+  pr = cProfile.Profile()
+  pr.enable()
   # call scan function  
   #   make scanner object by calling class with input fileand then my start scanning func in scanner.py
   #   while not the end of the license
@@ -305,6 +309,7 @@ def main():
   #read()
   # text = f.read(10)
   i = 1
+  print("POO POOO POO")
 
   if (sys.argv[1] == '-h'):
     print("\n")
@@ -358,25 +363,21 @@ def main():
       #   scan_func(f)
       #   poo += 1
       f.close()
-
-
-
-
-
-  # input_file = sys.argv[1]
-
-  # myline = f.readline() #returns empty string when at end of file
-  # while myline:
-  #   print(str(i) + ": " + myline)
-  #   print(scanner.main_scanner(myline))
-  #   i = 0
-  #   while (i < len(myline)):
-  #     add_char_to_buf(myline[i])
-
-  #   myline = f.readline()
-  #   i+=1
-
-  # print(str(Buffer)[1:-1])
+  else: # p is default
+    if (len(sys.argv) <= 2):
+      print("Must specify a file name after the flag.")
+    else:
+      __file__ = sys.argv[2]
+      # Reading a file
+      f = open(__file__, 'r')
+      # start(f, '-p')
+      demand_parse_start(f, '-p')
+      f.close()
+  s = StringIO()
+  sortby = 'cumulative'
+  ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+  ps.print_stats()
+  sys.stdout.write(s.getvalue())
 
 
 
