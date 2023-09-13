@@ -154,7 +154,8 @@ class Scanner:
         # c = -1
         if (self.END_OF_FILE != True):
             # print("not end of file")
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             # return self.main_scanner(c)
         else:
             # print("end of file")
@@ -165,19 +166,23 @@ class Scanner:
         if (c == ord('s')):
             # next char
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             if (c == ord('t')):    # store (MEMOP)
                 # next char
                 i += 1
-                c = self.next_ascii_char()
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]
                 if (c == ord('o')):
                     # next char
                     i += 1
-                    c = self.next_ascii_char()
+                    self.char_idx += 1
+                    c = self.cur_line[self.char_idx]
                     if (c == ord('r')):
                         # next char
                         i += 1
-                        c = self.next_ascii_char()
+                        self.char_idx += 1
+                        c = self.cur_line[self.char_idx]
                         if (c == ord('e')):
                             if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.MEMOP]) + ', "' + "store" + '" >')
                             opcode = self.opcodes.index("store")
@@ -201,7 +206,8 @@ class Scanner:
             elif (c == ord('u')):    # sub (ARITHOP)
                 # next char
                 i += 1
-                c = self.next_ascii_char()
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]
                 if (c == ord('b')):
                     if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "sub" + '" >')
                     opcode = self.opcodes.index("sub")
@@ -221,20 +227,25 @@ class Scanner:
         elif (c == ord('l')):
             # next char
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             if (c == ord('s')):
                 # print("possible lshift")
                 i += 1
-                c = self.next_ascii_char()
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]
                 if (c == ord('h')):
                     i += 1
-                    c = self.next_ascii_char()
+                    self.char_idx += 1
+                    c = self.cur_line[self.char_idx]
                     if (c == ord('i')):
                         i += 1
-                        c = self.next_ascii_char()
+                        self.char_idx += 1
+                        c = self.cur_line[self.char_idx]
                         if (c == ord('f')):
                             i += 1
-                            c = self.next_ascii_char()
+                            self.char_idx += 1
+                            c = self.cur_line[self.char_idx]
                             if (c == ord('t')):
                                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "lshift" + '" >')
                                 opcode = self.opcodes.index("lshift")
@@ -263,7 +274,8 @@ class Scanner:
             elif (c == ord('o')):
                 # next char
                 i += 1
-                c = self.next_ascii_char()
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]
                 if (c == ord('a')):
                     # next char
                     i += 1
