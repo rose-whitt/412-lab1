@@ -1,10 +1,10 @@
 #!/usr/bin/python -u
 
 import scanner
-import rose_parser
+# import rose_parser
 import sys
-import cProfile, pstats
-from io import StringIO
+# import cProfile, pstats
+# from io import StringIO
 
 COMMENT = "// ILOC Front End \n"
 
@@ -16,7 +16,7 @@ EOF_FLAG = False
 def demand_parse_start(input_file, flag):
   # print("PUSSY")
   scan = scanner.Scanner(input_file)
-  parse = rose_parser.RoseParser(scan)
+  # parse = rose_parser.RoseParser(scan)
 
   scan.mode_flag = flag
   # global linenum = 0
@@ -49,44 +49,44 @@ def demand_parse_start(input_file, flag):
       if (token[0] == scan.MEMOP):
         MEM_OP_FLAG = False
         token = scan.get_token()
-        while (token[0] == parse.BLANK):
+        while (token[0] == scan.BLANK):
             token = scan.get_token()
-        if (token[0] != parse.REGISTER):
+        if (token[0] != scan.REGISTER):
             sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing first REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
-            parse.num_parser_errors += 1
+            scan.num_parser_errors += 1
             MEM_OP_FLAG = False
         else:
             token = scan.get_token()
-            while (token[0] == parse.BLANK):
+            while (token[0] == scan.BLANK):
                 token = scan.get_token()
-            if (token[0] != parse.INTO):
+            if (token[0] != scan.INTO):
                 sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing INTO in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
-                parse.num_parser_errors += 1
+                scan.num_parser_errors += 1
                 MEM_OP_FLAG = False
             token = scan.get_token()
-            while (token[0] == parse.BLANK):
+            while (token[0] == scan.BLANK):
                 token = scan.get_token()
-            if (token[0] != parse.REGISTER):
+            if (token[0] != scan.REGISTER):
                 sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing target (second) REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
-                parse.num_parser_errors += 1
+                scan.num_parser_errors += 1
                 MEM_OP_FLAG = False
             else:
                 token = scan.get_token()
-                while (token[0] == parse.BLANK):
+                while (token[0] == scan.BLANK):
                     token = scan.get_token()
-                if (token[0] == parse.EOL):
+                if (token[0] == scan.EOL):
                     # print("[PARSER] Valid " + token_list[memop_idx][1] + " sentence")
                     # TODO: build IR for this OP, add IR to list of OPS
-                    parse.num_iloc_ops += 1
+                    scan.num_iloc_ops += 1
                     # scan.line_num += 1
                     # scan.char_idx = -1
                     scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                     MEM_OP_FLAG = True
-                elif (token[0] == parse.SCANNER_ERROR):
+                elif (token[0] == scan.SCANNER_ERROR):
                     return False
                 else:
                     sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
-                    parse.num_parser_errors += 1
+                    scan.num_parser_errors += 1
                     MEM_OP_FLAG =  False
 
         if (MEM_OP_FLAG == False):
@@ -100,43 +100,43 @@ def demand_parse_start(input_file, flag):
       elif (token[0] == scan.LOADI):
         LOADI_FLAG = False
         token = scan.get_token()
-        while (token[0] == parse.BLANK):
+        while (token[0] == scan.BLANK):
             token = scan.get_token()
-        if (token[0] != parse.CONSTANT):
+        if (token[0] != scan.CONSTANT):
             sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing CONSTANT in LOADI; token: ' + str(token[0]) +  ' - [PARSER]\n')
-            parse.num_parser_errors += 1
+            scan.num_parser_errors += 1
             LOADI_FLAG = False
         else:
             token = scan.get_token()
-            while (token[0] == parse.BLANK):
+            while (token[0] == scan.BLANK):
                 token = scan.get_token()
-            if (token[0] != parse.INTO):
+            if (token[0] != scan.INTO):
                 sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing INTO in LOADI; token: ' + str(token[0]) +  ' - [PARSER]\n')
-                parse.num_parser_errors += 1
+                scan.num_parser_errors += 1
                 LOADI_FLAG = False
             else:
                 token = scan.get_token()
-                while (token[0] == parse.BLANK):
+                while (token[0] == scan.BLANK):
                     token = scan.get_token()
-                if (token[0] != parse.REGISTER):
+                if (token[0] != scan.REGISTER):
                     sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing REGISTER in LOADI; token: ' + str(token[0]) +  ' - [PARSER]\n')
-                    parse.num_parser_errors += 1
+                    scan.num_parser_errors += 1
                     LOADI_FLAG = False
                 else:
                   token = scan.get_token()
-                  while (token[0] == parse.BLANK):
+                  while (token[0] == scan.BLANK):
                       token = scan.get_token()
-                  if (token[0] == parse.EOL):
-                      parse.num_iloc_ops += 1
+                  if (token[0] == scan.EOL):
+                      scan.num_iloc_ops += 1
                       # scan.line_num += 1
                       # scan.char_idx = -1
                       scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                       LOADI_FLAG = True
-                  elif (token[0] == parse.SCANNER_ERROR):
+                  elif (token[0] == scan.SCANNER_ERROR):
                       LOADI_FLAG = True
                   else:
                       sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in LOADI; token: ' + str(token[0]) +  ' - [PARSER]\n')
-                      parse.num_parser_errors += 1
+                      scan.num_parser_errors += 1
                       LOADI_FLAG = False
         if (LOADI_FLAG == False):
           # scan.line_num += 1
@@ -149,60 +149,60 @@ def demand_parse_start(input_file, flag):
         ARITHOP_FLAG = False
         token = scan.get_token() 
 
-        while (token[0] == parse.BLANK):
+        while (token[0] == scan.BLANK):
             token = scan.get_token()
-        if (token[0] != parse.REGISTER):
+        if (token[0] != scan.REGISTER):
             sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing first REGISTER in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
-            parse.num_parser_errors += 1
+            scan.num_parser_errors += 1
             ARITHOP_FLAG = False
         else:
             token = scan.get_token()
-            while (token[0] == parse.BLANK):
+            while (token[0] == scan.BLANK):
                 token = scan.get_token()
-            if (token[0] != parse.COMMA):
+            if (token[0] != scan.COMMA):
               sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing COMMA in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
-              parse.num_parser_errors += 1
+              scan.num_parser_errors += 1
               ARITHOP_FLAG = False
             else:
               token = scan.get_token()
-              while (token[0] == parse.BLANK):
+              while (token[0] == scan.BLANK):
                   token = scan.get_token()
               # ARITHOP REG COMMA 
-              if (token[0] != parse.REGISTER):
+              if (token[0] != scan.REGISTER):
                   sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing second REGISTER in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
-                  parse.num_parser_errors += 1
+                  scan.num_parser_errors += 1
                   ARITHOP_FLAG = False
               else:
                 token = scan.get_token()
-                while (token[0] == parse.BLANK):
+                while (token[0] == scan.BLANK):
                     token = scan.get_token()
-                if (token[0] != parse.INTO):
+                if (token[0] != scan.INTO):
                     sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing INTO in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
-                    parse.num_parser_errors += 1
+                    scan.num_parser_errors += 1
                     ARITHOP_FLAG = False
                 else:
                   token = scan.get_token()
-                  while (token[0] == parse.BLANK):
+                  while (token[0] == scan.BLANK):
                       token = scan.get_token()
-                  if (token[0] != parse.REGISTER):
+                  if (token[0] != scan.REGISTER):
                       sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing target (third) REGISTER in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
-                      parse.num_parser_errors += 1
+                      scan.num_parser_errors += 1
                       ARITHOP_FLAG = False
                   else:
                     token = scan.get_token()
-                    while (token[0] == parse.BLANK):
+                    while (token[0] == scan.BLANK):
                         token = scan.get_token()
-                    if (token[0] == parse.EOL):
-                        parse.num_iloc_ops += 1
+                    if (token[0] == scan.EOL):
+                        scan.num_iloc_ops += 1
                         # scan.line_num += 1
                         # scan.char_idx = -1
                         scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
                         ARITHOP_FLAG = True
-                    elif (token[0] == parse.SCANNER_ERROR):
+                    elif (token[0] == scan.SCANNER_ERROR):
                         ARITHOP_FLAG = False
                     else:
                         sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in ARITHOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
-                        parse.num_parser_errors += 1
+                        scan.num_parser_errors += 1
                         ARITHOP_FLAG = False
        
         if (ARITHOP_FLAG == False):
@@ -215,27 +215,27 @@ def demand_parse_start(input_file, flag):
       elif (token[0] == scan.OUTPUT):
         OUTPUT_FLAG = False
         token = scan.get_token()
-        while (token[0] == parse.BLANK):
+        while (token[0] == scan.BLANK):
             token = scan.get_token()
-        if (token[0] != parse.CONSTANT):
+        if (token[0] != scan.CONSTANT):
             sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing CONSTANT in OUTPUT; token: ' + str(token[0]) +  ' - [PARSER]\n')
-            parse.num_parser_errors += 1
+            scan.num_parser_errors += 1
             OUTPUT_FLAG = False
         else:
           token = scan.get_token()
-          while (token[0] == parse.BLANK):
+          while (token[0] == scan.BLANK):
               token = scan.get_token()
-          if (token[0] == parse.EOL):
-              parse.num_iloc_ops += 1
+          if (token[0] == scan.EOL):
+              scan.num_iloc_ops += 1
               # scan.line_num += 1
               # scan.char_idx = -1
               scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
               OUTPUT_FLAG = True
-          elif (token[0] == parse.SCANNER_ERROR):
+          elif (token[0] == scan.SCANNER_ERROR):
               OUTPUT_FLAG = False
           else:   # NOTE: i think that i should add a case to see if its a scanner error so then i woudlnt print it out, and if its soemthing else, then print out the char
               sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in OUTPUT; token: ' + str(token[0]) +  ' - [PARSER]\n')
-              parse.num_parser_errors += 1
+              scan.num_parser_errors += 1
               OUTPUT_FLAG = False
         if (OUTPUT_FLAG == False):
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
@@ -243,16 +243,16 @@ def demand_parse_start(input_file, flag):
       elif (token[0] == scan.NOP):
         NOP_FLAG = False
         token = scan.get_token()
-        while (token[0] == parse.BLANK):
+        while (token[0] == scan.BLANK):
             token = scan.get_token()
-        if (token[0] == parse.SCANNER_ERROR):
+        if (token[0] == scan.SCANNER_ERROR):
             NOP_FLAG = False
-        elif (token[0] != parse.EOL and token[0] != parse.EOF):
+        elif (token[0] != scan.EOL and token[0] != scan.EOF):
             sys.stderr.write("ERROR " + str(scan.line_num) + ':               wrong thing after NOP; token: ' + str(token[0]) +  ' - [PARSER]\n')
-            parse.num_parser_errors += 1
+            scan.num_parser_errors += 1
             NOP_FLAG = False
         else:
-            parse.num_iloc_ops += 1
+            scan.num_iloc_ops += 1
             # scan.line_num += 1
             # scan.char_idx = -1
             scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
@@ -274,13 +274,13 @@ def demand_parse_start(input_file, flag):
         scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
       token = scan.get_token()
     
-    # print(str(len(parse.OPS)) + " valid ILOC operations: " + str(parse.OPS))
-    if ((parse.num_parser_errors + scan.num_scanner_errors) == 0):
-      print("Parse succeeded, finding " + str(parse.num_iloc_ops) + " ILOC operations.")
+    # print(str(len(scan.OPS)) + " valid ILOC operations: " + str(scan.OPS))
+    if ((scan.num_parser_errors + scan.num_scanner_errors) == 0):
+      print("Parse succeeded, finding " + str(scan.num_iloc_ops) + " ILOC operations.")
     else:
-      sys.stderr.write("Found " + str(parse.num_parser_errors + scan.num_scanner_errors) + " errors on x lines")
-    # print(str(parse.num_iloc_ops) + " valid ILOC operations")
-  #   print(str(parse.num_parser_errors) + " parser errors.")
+      sys.stderr.write("Found " + str(scan.num_parser_errors + scan.num_scanner_errors) + " errors on x lines\n")
+    # print(str(scan.num_iloc_ops) + " valid ILOC operations")
+  #   print(str(scan.num_parser_errors) + " parser errors.")
   # print(str(scan.num_scanner_errors) + " scanner errors.")
   
     
@@ -296,8 +296,8 @@ def demand_parse_start(input_file, flag):
 
 
 def main():
-  pr = cProfile.Profile()
-  pr.enable()
+  # pr = cProfile.Profile()
+  # pr.enable()
   # call scan function  
   #   make scanner object by calling class with input fileand then my start scanning func in scanner.py
   #   while not the end of the license
@@ -309,7 +309,7 @@ def main():
   #read()
   # text = f.read(10)
   i = 1
-  print("POO POOO POO")
+  # print("POO POOO POO")
 
   if (sys.argv[1] == '-h'):
     print("\n")
@@ -373,11 +373,11 @@ def main():
       # start(f, '-p')
       demand_parse_start(f, '-p')
       f.close()
-  s = StringIO()
-  sortby = 'cumulative'
-  ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-  ps.print_stats()
-  sys.stdout.write(s.getvalue())
+  # s = StringIO()
+  # sortby = 'cumulative'
+  # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+  # ps.print_stats()
+  # sys.stdout.write(s.getvalue())
 
 
 

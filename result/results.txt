@@ -1,0 +1,2 @@
+NetId	Name	T1k	T2k	T4k	T8k	T16k	T32k	T64k	T128k	Lang.	Scaling Pts	Eff Pts %
+lab1	lab1	0.1147	0.1921	0.3145	0.2138	0.3849	0.8132	2.3593	3.7267	python 	 unusual (?)	0	42.44236666666666	*

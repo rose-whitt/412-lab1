@@ -1,9 +1,8 @@
 Autotimer: using Scalability SLOCs blocks
 =======================================================================
 Testing submission: lab1.tar
-No README file found.
-NetId: No README, Name: unknown
-	Date From Files: 2023-09-12
+NetId: lab1, Name: lab1
+	Date From Files: 2023-09-13
 
 --- built front end and should be ready to run ---
 
@@ -11,19 +10,17 @@ NetId: No README, Name: unknown
 Testing Scalability:
 	(Each elapsed time is the minimum of five runs.)
 
-	T1k.i:  	0.1360 seconds
-	T2k.i:  	0.2026 seconds
-	T4k.i:  	0.3330 seconds
-	T8k.i:  	0.5675 seconds
-	T16k.i:  	0.5581 seconds
-	T32k.i:  	1.4349 seconds
-	T64k.i:  	2.1338 seconds
-	T128k.i:  	4.1247 seconds
+	T1k.i:  	0.1317 seconds
+	T2k.i:  	0.1904 seconds
+	T4k.i:  	0.2743 seconds
+	T8k.i:  	0.5372 seconds
+	T16k.i:  	0.9360 seconds
+	T32k.i:  	1.5056 seconds
+	T64k.i:  	2.4497 seconds
+	T128k.i:  	3.8418 seconds
  
-Scaling score is 0
-Efficiency score is 29.176366666666652	( python )
-
-	Anomalous behavior: 2 inputs showed no growth
+Scaling score is 100
+Efficiency score is 38.603699999999996	( python )
 
 finished timing run on submission lab1.tar
 =======================================================================
