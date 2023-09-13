@@ -115,11 +115,11 @@ def demand_parse_start(input_file, flag):
       token = scan.get_token()
     
     # print(str(len(parse.OPS)) + " valid ILOC operations: " + str(parse.OPS))
-  #   if (parse.num_parser_errors == 0):
-  #     print("Parse succeeded, finding " + str(parse.num_iloc_ops) + " ILOC operations.")
-  #   # print(str(parse.num_iloc_ops) + " valid ILOC operations")
-  #   print(str(parse.num_parser_errors) + " parser errors.")
-  # print(str(scan.num_scanner_errors) + " scanner errors.")
+    if (parse.num_parser_errors == 0):
+      print("Parse succeeded, finding " + str(parse.num_iloc_ops) + " ILOC operations.")
+    # print(str(parse.num_iloc_ops) + " valid ILOC operations")
+    print(str(parse.num_parser_errors) + " parser errors.")
+  print(str(scan.num_scanner_errors) + " scanner errors.")
   if (parse.num_parser_errors == 0):
     print("SUCCESS")
     
