@@ -53,12 +53,12 @@ class Scanner:
     def __init__(self, input_file):
         # init all variables like buffer and shit
         self.input_file = input_file
+        self.mode_flag = ''
         self.cur_line = cur_line
         self.char_idx = char_idx
         self.cur_line_len = 0
         self.line_num = 0
         self.num_scanner_errors = 0
-        self.num_iloc_ops = 0
         self.END_OF_FILE = False
 
         self.token_list = []
@@ -112,7 +112,7 @@ class Scanner:
                         i += 1
                         c = self.next_ascii_char()
                         if (c == ord('e')):
-                            print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.MEMOP]) + ', "' + "store" + '" >')
+                            if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.MEMOP]) + ', "' + "store" + '" >')
 
                             return [self.MEMOP, "store"]
                         else:
@@ -135,7 +135,7 @@ class Scanner:
                 i += 1
                 c = self.next_ascii_char()
                 if (c == ord('b')):
-                    print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "sub" + '" >')
+                    if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "sub" + '" >')
                     return [self.ARITHOP, "sub"]
 
                 else:
@@ -166,7 +166,7 @@ class Scanner:
                             i += 1
                             c = self.next_ascii_char()
                             if (c == ord('t')):
-                                print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "lshift" + '" >')
+                                if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "lshift" + '" >')
 
                                 return [self.ARITHOP, "lshift"]
                             else:
@@ -202,12 +202,12 @@ class Scanner:
                         i += 1
                         c = self.next_ascii_char()
                         if (c == ord('I')): # loadI (LOADI)
-                            print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.LOADI]) + ', "' + "loadI" + '" >')
+                            if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.LOADI]) + ', "' + "loadI" + '" >')
 
                             return [self.LOADI, "loadI"]
                         else:
                             self.rollback_ascii()
-                            print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.MEMOP]) + ', "' + "load" + '" >')
+                            if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.MEMOP]) + ', "' + "load" + '" >')
 
                             return [self.MEMOP, "load"]
                     else:
@@ -238,7 +238,7 @@ class Scanner:
                     reg_num = reg_num + chr(c)
                     c = self.next_ascii_char()  # TODO: this may cause adding a char we dont want
                 self.rollback_ascii()
-                print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.REGISTER]) + ', "' + str(reg_num) + '" >')
+                if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.REGISTER]) + ', "' + str(reg_num) + '" >')
 
                 return [self.REGISTER, reg_num] # no space after necessary bc not an opcode
             elif (c == ord('s')):
@@ -255,7 +255,7 @@ class Scanner:
                             i += 1
                             c = self.next_ascii_char()
                             if (c == ord('t')):
-                                print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "rshift" + '" >')
+                                if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "rshift" + '" >')
 
                                 return [self.ARITHOP, "rshift"]
                             else:
@@ -295,7 +295,7 @@ class Scanner:
                     i += 1
                     c = self.next_ascii_char()
                     if (c == ord('t')):
-                        print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "mult" + '" >')
+                        if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "mult" + '" >')
 
                         return [self.ARITHOP, "mult"]
                     else:
@@ -321,7 +321,7 @@ class Scanner:
                 i += 1
                 c = self.next_ascii_char()
                 if (c == ord('d')):
-                    print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "add" + '" >')
+                    if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "add" + '" >')
 
                     return [self.ARITHOP, "add"]
                 else:
@@ -342,7 +342,7 @@ class Scanner:
                 i += 1
                 c = self.next_ascii_char()
                 if (c == ord('p')):
-                    print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.NOP]) + ', "' + "nop" + '" >')
+                    if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.NOP]) + ', "' + "nop" + '" >')
 
                     return [self.NOP, "nop"]    # opcode, but doesnt need a space after it
                 else:
@@ -372,7 +372,7 @@ class Scanner:
                             i += 1
                             c = self.next_ascii_char()
                             if (c == ord('t')):
-                                print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.OUTPUT]) + ', "' + "output" + '" >')
+                                if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.OUTPUT]) + ', "' + "output" + '" >')
                                 return [self.OUTPUT, "output"]
                             else:
                                 sys.stderr.write("ERROR " + str(self.line_num) + ':               "outpu" is not a valid word - [SCANNER]\n')
@@ -405,7 +405,7 @@ class Scanner:
             c = self.next_ascii_char()
             # print("next char after equal: " + chr(c))
             if (c == ord('>')):
-                print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.INTO]) + ', "' + "=>" + '" >')
+                if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.INTO]) + ', "' + "=>" + '" >')
 
                 return [self.INTO, "=>"]
             else:
@@ -426,7 +426,7 @@ class Scanner:
                 # c = self.next_ascii_char()
                 self.char_idx = -1
                 # print("ITS A COMMENT CUNT")
-                print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
+                if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
 
                 return [self.EOL, "\\n"] # ignore comments, just treat EOL
             else:
@@ -436,13 +436,13 @@ class Scanner:
                 print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
                 return [self.SCANNER_ERROR, "/"]
         elif (c == ord(',')):    # COMMA
-            print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.COMMA]) + ', "' + "," + '" >')
+            if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.COMMA]) + ', "' + "," + '" >')
 
             return [self.COMMA, ","]
         elif (c == ord('\n') or c == 10):   # EOL, Line Feed (LF) is used as a new line character in linux, ascii value is 10
             # print("new line")
             self.char_idx = -1
-            print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
+            if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
 
             return [self.EOL, "\\n"]
         elif (c == ord('\r')):
@@ -451,7 +451,7 @@ class Scanner:
             if (c == ord('\n')):
                 # print("one of the weird new lines")
                 self.char_idx = -1
-                print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
+                if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
 
                 return [self.EOL, "\\r\\n"]
             else:
@@ -469,12 +469,12 @@ class Scanner:
                 constant = constant + chr(c)
                 c = self.next_ascii_char()  # TODO: this may cause adding a char we dont want
             self.rollback_ascii()
-            print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.CONSTANT]) + ', "' + str(constant) + '" >')
+            if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.CONSTANT]) + ', "' + str(constant) + '" >')
 
             return [self.CONSTANT, constant]
         elif (c == 0):  # 0 is value of empty string
             # TODO: is this always the last line of the file??
-            print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOF]) + ', "' + '' + '" >')
+            if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOF]) + ', "' + '' + '" >')
             
             return [self.EOF, ""]
         elif (c == ord(' ') or c == ord('\t')):

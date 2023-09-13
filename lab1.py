@@ -15,6 +15,8 @@ def demand_parse_start(input_file, flag):
   # print("PUSSY")
   scan = scanner.Scanner(input_file)
   parse = rose_parser.RoseParser(scan)
+
+  scan.mode_flag = flag
   # global linenum = 0
   # global line_idx = 0
   scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
@@ -31,6 +33,7 @@ def demand_parse_start(input_file, flag):
   # print(token)
 
   if (flag == '-s'):
+    
     while (token[0] != scan.EOF):
       while (token[0] != scan.EOL and token[0] != scan.SCANNER_ERROR):
         i += 1
@@ -49,7 +52,6 @@ def demand_parse_start(input_file, flag):
 
     while (token[0] != scan.EOF):
       i += 1
-      print("char idx: " + str(scan.char_idx))
       if (token[0] == scan.MEMOP):
         if (parse.finish_memop(scan) == False):
           # scan.line_num += 1
@@ -102,23 +104,24 @@ def demand_parse_start(input_file, flag):
         # scan.line_num += 1
         # scan.char_idx = -1
       elif (token[0] == scan.BLANK):
-        print("BLANK CUNT")
         token = scan.get_token()
         continue
       elif (token[0] == scan.SCANNER_ERROR):  # dont continue to parse if scanner error
         scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
       else:
-        print("ELSE: " + str(token[0]))
         sys.stderr.write("ERROR " + str(scan.line_num - 1) + ": no OPCODE - [PARSER]\n")
         # scan.line_num += 1
         # scan.char_idx = -1
         scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
       token = scan.get_token()
-      print(token)
     
     # print(str(len(parse.OPS)) + " valid ILOC operations: " + str(parse.OPS))
-    print(str(len(parse.OPS)) + " valid ILOC operations")
+    if (parse.num_parser_errors == 0):
+      print("Parse succeeded, finding " + str(parse.num_iloc_ops) + " ILOC operations.")
+    print(str(parse.num_iloc_ops) + " valid ILOC operations")
+    # print(str(parse.num_parser_errors) + " parser errors.")
   print(str(scan.num_scanner_errors) + " scanner errors.")
+
 
     
   
@@ -189,19 +192,6 @@ def main():
       poo = 0
       f = open(__file__, 'r')
       demand_parse_start(f, '-s')
-      # while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
-      #   scan_func(f)
-      #   poo += 1
-      f.close()
-  elif (sys.argv[1] == '-z'): # flag for me testing changing my impl
-    if (len(sys.argv) <= 2):
-      print("Must specify a file name after the flag.")
-    else:
-      __file__ = sys.argv[2]
-      # Reading a file
-      poo = 0
-      f = open(__file__, 'r')
-      demand_parse_start(f, '-z')
       # while (token != ["ENDFILE", ""]): # NOTE: should i read the line by line here?
       #   scan_func(f)
       #   poo += 1
