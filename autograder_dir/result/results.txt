@@ -1,2 +1,2 @@
 NetId	Name	T1k	T2k	T4k	T8k	T16k	T32k	T64k	T128k	Lang.	Scaling Pts	Eff Pts %
-No README	unknown	0.0753	0.1731	0.1698	0.3438	0.9507	0.9990	2.4461	4.0518	python 	 unusual (?)	0	31.603966666666665	*
+No README	unknown	0.1336	0.1950	0.2238	0.5508	0.5673	1.1119	1.5645	4.1429	python 	 unusual (?)	0	28.569066666666686	*

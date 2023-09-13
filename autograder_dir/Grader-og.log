@@ -48,11 +48,11 @@ Testing Conformance	(If we got this far, the tar file worked.)
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.012581 seconds
-	T16k.i:  	0.015944 seconds
-	T32k.i:  	0.026027 seconds
-	T64k.i:  	0.045939 seconds
-	T128k.i:  	0.085839 seconds
+	T8k.i:  	0.012067999999999999 seconds
+	T16k.i:  	0.016489 seconds
+	T32k.i:  	0.026455 seconds
+	T64k.i:  	0.046987 seconds
+	T128k.i:  	0.087818 seconds
 
 	Scaling appears to be linear.
 

@@ -11,19 +11,19 @@ NetId: No README, Name: unknown
 Testing Scalability:
 	(Each elapsed time is the minimum of five runs.)
 
-	T1k.i:  	0.0753 seconds
-	T2k.i:  	0.1731 seconds
-	T4k.i:  	0.1698 seconds
-	T8k.i:  	0.3438 seconds
-	T16k.i:  	0.9507 seconds
-	T32k.i:  	0.9990 seconds
-	T64k.i:  	2.4461 seconds
-	T128k.i:  	4.0518 seconds
+	T1k.i:  	0.1255 seconds
+	T2k.i:  	0.1374 seconds
+	T4k.i:  	0.3269 seconds
+	T8k.i:  	0.3315 seconds
+	T16k.i:  	0.9145 seconds
+	T32k.i:  	0.8060 seconds
+	T64k.i:  	1.5379 seconds
+	T128k.i:  	4.0288 seconds
  
 Scaling score is 0
-Efficiency score is 31.603966666666665	( python )
+Efficiency score is 32.3715	( python )
 
-	Anomalous behavior: 3 inputs showed no growth
+	Anomalous behavior: 4 inputs showed no growth
 
 finished timing run on submission lab1.tar
 =======================================================================
