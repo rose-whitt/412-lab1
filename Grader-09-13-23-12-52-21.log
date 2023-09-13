@@ -3,6 +3,68 @@ Auto-grader Configuration:
   normal deadline is:	 2023-09-11
  
 =======================================================================
+Testing submission: comp412.tar
+Name: Comp 412, NetId: comp412
+	Date From Files: 2023-03-23
+
+--- building executable ---
+rm -f 412fe *.o
+cp placeholder 412fe
+chmod 711 412fe
+--- built front end and should be ready to run ---
+
+Testing Correctness
+
+	Holmes.i
+	0 correct lines identified as errors
+			9 errors found, 9 expected
+	T8k.i	
+	0 correct lines identified as errors
+			0 errors found, 0 expected
+	parse.i
+	0 correct lines identified as errors
+			5 errors found, 5 expected
+	report1.i
+	0 correct lines identified as errors
+			0 errors found, 0 expected
+	report2.i
+	0 correct lines identified as errors
+			0 errors found, 0 expected
+	report3.i
+	0 correct lines identified as errors
+			0 errors found, 0 expected
+	scanner.i
+	0 correct lines identified as errors
+			2 errors found, 2 expected
+	-------------------------
+	0 correct lines identified as errors
+	0 lines with errors missed
+
+Testing Conformance	(If we got this far, the tar file worked.)
+
+	Produced 'ERROR' message on missing or bad file name
+	Help message check found all options
+
+Quick Scalability Test:
+	(For a more accurate test, run the auto-timer)
+
+	T8k.i:  	0.011798 seconds
+	T16k.i:  	0.017619 seconds
+	T32k.i:  	0.027372 seconds
+	T64k.i:  	0.048639 seconds
+	T128k.i:  	0.091887 seconds
+
+	Scaling appears to be linear.
+
+Scoring (on the provided test blocks):
+
+	Correctness:	100.0%
+	Conformance:	100.0%
+
+	Run the auto-timer to see Scalability results
+
+finished testing submission comp412.tar
+=======================================================================
 Testing submission: lab1.tar
 Name: lab1, NetId: lab1
 	Date From Files: 2023-09-13
@@ -45,11 +107,11 @@ Testing Conformance	(If we got this far, the tar file worked.)
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.06853400000000001 seconds
-	T16k.i:  	0.067503 seconds
-	T32k.i:  	0.066774 seconds
-	T64k.i:  	0.06679 seconds
-	T128k.i:  	0.06731100000000001 seconds
+	T8k.i:  	0.06832099999999999 seconds
+	T16k.i:  	0.069283 seconds
+	T32k.i:  	0.072522 seconds
+	T64k.i:  	0.06843600000000001 seconds
+	T128k.i:  	0.066375 seconds
 
 	The code may not work; 3 codes showed minimal growth
 	This effect may also be timer variability.

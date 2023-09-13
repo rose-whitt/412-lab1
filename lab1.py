@@ -3,8 +3,8 @@
 import scanner
 # import rose_parser
 import sys
-# import cProfile, pstats
-# from io import StringIO
+import cProfile, pstats
+from io import StringIO
 
 COMMENT = "// ILOC Front End \n"
 
@@ -32,6 +32,7 @@ def demand_parse_start(input_file, flag):
 
 
   token = scan.get_token()
+  print("type of token: " + str(type(token)))
   # print(token)
 
   if (flag == '-s'):
@@ -296,8 +297,8 @@ def demand_parse_start(input_file, flag):
 
 
 def main():
-  # pr = cProfile.Profile()
-  # pr.enable()
+  pr = cProfile.Profile()
+  pr.enable()
   # call scan function  
   #   make scanner object by calling class with input fileand then my start scanning func in scanner.py
   #   while not the end of the license
@@ -373,11 +374,11 @@ def main():
       # start(f, '-p')
       demand_parse_start(f, '-p')
       f.close()
-  # s = StringIO()
-  # sortby = 'cumulative'
-  # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-  # ps.print_stats()
-  # sys.stdout.write(s.getvalue())
+  s = StringIO()
+  sortby = 'cumulative'
+  ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+  ps.print_stats()
+  sys.stdout.write(s.getvalue())
 
 
 
