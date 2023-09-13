@@ -38,6 +38,14 @@ def demand_parse_start(input_file, flag):
       while (token[0] != scan.EOL and token[0] != scan.SCANNER_ERROR):
         i += 1
         token = scan.get_token()
+        # print(str(scan.line_num) + ": bitch")
+        # if (token[0] >= 0 and token[0] <= 10):
+        #   # print(str(token))
+        #   print(str(scan.line_num) + ": < " + str(scan.CATEGORIES[token[0]]) + ', "' + str(token[1]) + '" >')
+      # if (token[0] == scan.EOL):
+      #     print("its eol")
+      #     print(str(scan.line_num) + ": < " + str(scan.CATEGORIES[token[0]]) + ', "' + str(token[1]) + '" >')
+      # print("out")
       scan.cur_line = scan.convert_line_to_ascii_list(input_file.readline())
       token = scan.get_token()  
   else:
@@ -112,7 +120,8 @@ def demand_parse_start(input_file, flag):
     # print(str(parse.num_iloc_ops) + " valid ILOC operations")
     print(str(parse.num_parser_errors) + " parser errors.")
   print(str(scan.num_scanner_errors) + " scanner errors.")
-  
+  if (parse.num_parser_errors == 0):
+    print("SUCCESS")
     
 
 
