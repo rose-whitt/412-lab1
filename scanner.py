@@ -494,30 +494,12 @@ class Scanner:
         return self.cur_line[self.char_idx]
     
     def next_ascii_char(self):
-        # print("cur idx: " + str(self.char_idx))
-        # # print(self.cur_line)
-        # if (self.char_idx >= len(self.cur_line)):
-        #     self.cur_line = self.convert_line_to_ascii_list(self.input_file.readline())
-
-        #     return ord('\n')
-        # elif (len(self.cur_line) == 0):
-        #     return 0
-        # else:
         self.char_idx += 1
         return self.cur_line[self.char_idx]
     
 
     def convert_line_to_ascii_list(self, line):
         
-
-        # buf = []
-        # for char in line:
-        #     buf.append(ord(char))
-        # print("[CONVERSION] buf: " + str(buf))
-        # self.line_num += 1
-        # self.char_idx = -1
-        # return buf
-        # print("rose: " + str(self.line_num))
         buf = []
         newline_flag = False
         i = 0
