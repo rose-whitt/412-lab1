@@ -14,14 +14,14 @@ chmod 711 412fe
 Testing Scalability:
 	(Each elapsed time is the minimum of five runs.)
 
-	T1k.i:  	0.0067 seconds
-	T2k.i:  	0.0073 seconds
-	T4k.i:  	0.0087 seconds
-	T8k.i:  	0.0115 seconds
-	T16k.i:  	0.0169 seconds
-	T32k.i:  	0.0279 seconds
-	T64k.i:  	0.0496 seconds
-	T128k.i:  	0.0931 seconds
+	T1k.i:  	0.0029 seconds
+	T2k.i:  	0.0030 seconds
+	T4k.i:  	0.0036 seconds
+	T8k.i:  	0.0046 seconds
+	T16k.i:  	0.0068 seconds
+	T32k.i:  	0.0106 seconds
+	T64k.i:  	0.0197 seconds
+	T128k.i:  	0.0361 seconds
  
 Scaling score is 100
 Efficiency score is 100	( unknown )
@@ -29,7 +29,7 @@ Efficiency score is 100	( unknown )
 finished timing run on submission comp412.tar
 =======================================================================
 Testing submission: lab1.tar
-NetId: lab1, Name: lab1
+NetId: rew9, Name: Rose Whitt
 	Date From Files: 2023-09-13
 
 --- built front end and should be ready to run ---
@@ -38,19 +38,17 @@ NetId: lab1, Name: lab1
 Testing Scalability:
 	(Each elapsed time is the minimum of five runs.)
 
-	T1k.i:  	0.1257 seconds
-	T2k.i:  	0.1299 seconds
-	T4k.i:  	0.1637 seconds
-	T8k.i:  	0.2951 seconds
-	T16k.i:  	0.3818 seconds
-	T32k.i:  	0.7649 seconds
-	T64k.i:  	1.4424 seconds
-	T128k.i:  	3.7075 seconds
+	T1k.i:  	0.0520 seconds
+	T2k.i:  	0.0740 seconds
+	T4k.i:  	0.1164 seconds
+	T8k.i:  	0.2049 seconds
+	T16k.i:  	0.3871 seconds
+	T32k.i:  	0.7293 seconds
+	T64k.i:  	1.4458 seconds
+	T128k.i:  	2.8941 seconds
  
 Scaling score is 100
-Efficiency score is 43.082300000000004	( python )
-
-	Anomalous behavior: 1 inputs showed no growth
+Efficiency score is 70.19413333333334	( python )
 
 finished timing run on submission lab1.tar
 =======================================================================

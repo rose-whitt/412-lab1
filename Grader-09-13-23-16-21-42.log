@@ -48,11 +48,11 @@ Testing Conformance	(If we got this far, the tar file worked.)
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.011798 seconds
-	T16k.i:  	0.017619 seconds
-	T32k.i:  	0.027372 seconds
-	T64k.i:  	0.048639 seconds
-	T128k.i:  	0.091887 seconds
+	T8k.i:  	0.005779 seconds
+	T16k.i:  	0.007521 seconds
+	T32k.i:  	0.011379 seconds
+	T64k.i:  	0.019644 seconds
+	T128k.i:  	0.035474 seconds
 
 	Scaling appears to be linear.
 
@@ -66,7 +66,7 @@ Scoring (on the provided test blocks):
 finished testing submission comp412.tar
 =======================================================================
 Testing submission: lab1.tar
-Name: lab1, NetId: lab1
+Name: Rose Whitt, NetId: rew9
 	Date From Files: 2023-09-13
 
 --- built front end and should be ready to run ---
@@ -107,11 +107,11 @@ Testing Conformance	(If we got this far, the tar file worked.)
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.06832099999999999 seconds
-	T16k.i:  	0.069283 seconds
-	T32k.i:  	0.072522 seconds
-	T64k.i:  	0.06843600000000001 seconds
-	T128k.i:  	0.066375 seconds
+	T8k.i:  	0.030712 seconds
+	T16k.i:  	0.031800999999999996 seconds
+	T32k.i:  	0.031462 seconds
+	T64k.i:  	0.029202000000000002 seconds
+	T128k.i:  	0.02904 seconds
 
 	The code may not work; 3 codes showed minimal growth
 	This effect may also be timer variability.
