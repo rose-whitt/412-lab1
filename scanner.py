@@ -91,10 +91,6 @@ class Scanner:
         self.char_idx -= 1
         return self.cur_line[self.char_idx]
     
-    def next_ascii_char(self):
-        self.char_idx += 1
-        return self.cur_line[self.char_idx]
-    
 
     def convert_line_to_ascii_list(self, line):
         
@@ -279,11 +275,13 @@ class Scanner:
                 if (c == ord('a')):
                     # next char
                     i += 1
-                    c = self.next_ascii_char()
+                    self.char_idx += 1
+                    c = self.cur_line[self.char_idx]
                     if (c == ord('d')):
                         # next char
                         i += 1
-                        c = self.next_ascii_char()
+                        self.char_idx += 1
+                        c = self.cur_line[self.char_idx]
                         if (c == ord('I')): # loadI (LOADI)
                             if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.LOADI]) + ', "' + "loadI" + '" >')
                             opcode = self.opcodes.index("loadI")
@@ -313,7 +311,8 @@ class Scanner:
         elif (c == ord('r')):    # rshift (ARITHOP) or register
             # next char
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             # print(type(c))
             if (c >= ord('0') and c <= ord('9')):
                 # print("possible register")
@@ -322,11 +321,13 @@ class Scanner:
                 reg_num = reg_num * 10 + c - ord('0')
                 
                 # print("first regnum: " + str(reg_num))
-                c = self.next_ascii_char()
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]
                 while (c >= ord('0') and c <= ord('9')):  # get to end of number
                     reg_num = reg_num * 10 + c - ord('0')
                     # print("regnum: " + str(reg_num))
-                    c = self.next_ascii_char()  # TODO: this may cause adding a char we dont want
+                    self.char_idx += 1
+                    c = self.cur_line[self.char_idx]  # TODO: this may cause adding a char we dont want
                 self.rollback_ascii()
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.REGISTER]) + ', "r' + str(int(reg_num)) + '" >')
 
@@ -334,16 +335,20 @@ class Scanner:
             elif (c == ord('s')):
                 # print("possible rshift")
                 i += 1
-                c = self.next_ascii_char()
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]
                 if (c == ord('h')):
                     i += 1
-                    c = self.next_ascii_char()
+                    self.char_idx += 1
+                    c = self.cur_line[self.char_idx]
                     if (c == ord('i')):
                         i += 1
-                        c = self.next_ascii_char()
+                        self.char_idx += 1
+                        c = self.cur_line[self.char_idx]
                         if (c == ord('f')):
                             i += 1
-                            c = self.next_ascii_char()
+                            self.char_idx += 1
+                            c = self.cur_line[self.char_idx]
                             if (c == ord('t')):
                                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "rshift" + '" >')
                                 opcode = self.opcodes.index("rshift")
@@ -378,13 +383,16 @@ class Scanner:
         elif (c == ord('m')):    # mult (ARITHOP)
             # print("possible mult")
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             if (c == ord('u')):
                 i += 1
-                c = self.next_ascii_char()
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]
                 if (c == ord('l')):
                     i += 1
-                    c = self.next_ascii_char()
+                    self.char_idx += 1
+                    c = self.cur_line[self.char_idx]
                     if (c == ord('t')):
                         if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "mult" + '" >')
                         opcode = self.opcodes.index("mult")
@@ -408,10 +416,12 @@ class Scanner:
         elif (c == ord('a')):    # add (ARITHOP)
             # print("possible add")
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             if (c == ord('d')):
                 i += 1
-                c = self.next_ascii_char()
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]
                 if (c == ord('d')):
                     if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.ARITHOP]) + ', "' + "add" + '" >')
                     opcode = self.opcodes.index("add")
@@ -430,10 +440,12 @@ class Scanner:
         elif (c == ord('n')):    # nop (NOP)
             # print("possible nop")
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             if (c == ord('o')):
                 i += 1
-                c = self.next_ascii_char()
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]
                 if (c == ord('p')):
                     if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.NOP]) + ', "' + "nop" + '" >')
                     opcode = self.opcodes.index("nop")
@@ -452,19 +464,24 @@ class Scanner:
         elif (c == ord('o')):    # output (OUTPUT)
             # print("possible output")
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             if (c == ord('u')):
                 i += 1
-                c = self.next_ascii_char()
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]
                 if (c == ord('t')):
                     i += 1
-                    c = self.next_ascii_char()
+                    self.char_idx += 1
+                    c = self.cur_line[self.char_idx]
                     if (c == ord('p')):
                         i += 1
-                        c = self.next_ascii_char()
+                        self.char_idx += 1
+                        c = self.cur_line[self.char_idx]
                         if (c == ord('u')):
                             i += 1
-                            c = self.next_ascii_char()
+                            self.char_idx += 1
+                            c = self.cur_line[self.char_idx]
                             if (c == ord('t')):
                                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.OUTPUT]) + ', "' + "output" + '" >')
                                 opcode = self.opcodes.index("output")
@@ -498,7 +515,8 @@ class Scanner:
         elif (c == ord('=')):    # => (INTO)
             # print("possible =>")
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             # print("next char after equal: " + chr(c))
             if (c == ord('>')):
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.INTO]) + ', "' + "=>" + '" >')
@@ -514,13 +532,11 @@ class Scanner:
             # print("possible comment")
             # next char
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             # print("c: " + chr(c))
 
             if (c == ord('/')):
-                # next char
-                # i += 1
-                # c = self.next_ascii_char()
                 self.char_idx = -1
                 # print("ITS A COMMENT CUNT")
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
@@ -544,7 +560,8 @@ class Scanner:
             return self.EOL, -1   # not an opcode but a valid category
         elif (c == ord('\r')):
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             if (c == ord('\n')):
                 # print("one of the weird new lines")
                 self.char_idx = -1
@@ -564,12 +581,14 @@ class Scanner:
             constant = constant * 10 + c - ord('0')
             # print("first constant: " + str(constant))
             i += 1
-            c = self.next_ascii_char()
+            self.char_idx += 1
+            c = self.cur_line[self.char_idx]
             while (c >= ord('0') and c <= ord('9')):  # get to end of number
                 # print("possible constant: " + chr(c) + ", " + str(c))
                 constant = constant * 10 + c - ord('0')
                 # print("constant: " + str(constant))
-                c = self.next_ascii_char()  # TODO: this may cause adding a char we dont want
+                self.char_idx += 1
+                c = self.cur_line[self.char_idx]  # TODO: this may cause adding a char we dont want
             self.rollback_ascii()
             if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.CONSTANT]) + ', "' + str(int(constant)) + '" >')
 
