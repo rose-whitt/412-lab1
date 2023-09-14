@@ -28,7 +28,7 @@ base_name = "/storage-home/r/rew9/comp412/412-lab1/"
 
 # The on-time due date for the assignment
 
-normal_deadline = date(2023,9,11)        # set annually
+normal_deadline = date(2023,9,14)        # set annually
 
 #
 # Stuff after this point should be set on an annual basis to conform

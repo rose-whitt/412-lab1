@@ -10,17 +10,17 @@ NetId: rew9, Name: Rose Whitt
 Testing Scalability:
 	(Each elapsed time is the minimum of five runs.)
 
-	T1k.i:  	0.0523 seconds
-	T2k.i:  	0.0743 seconds
-	T4k.i:  	0.1185 seconds
-	T8k.i:  	0.2032 seconds
-	T16k.i:  	0.3779 seconds
-	T32k.i:  	0.7312 seconds
-	T64k.i:  	1.4315 seconds
-	T128k.i:  	2.8071 seconds
+	T1k.i:  	0.0486 seconds
+	T2k.i:  	0.0687 seconds
+	T4k.i:  	0.1085 seconds
+	T8k.i:  	0.1905 seconds
+	T16k.i:  	0.3511 seconds
+	T32k.i:  	0.6741 seconds
+	T64k.i:  	1.3131 seconds
+	T128k.i:  	2.6296 seconds
  
 Scaling score is 100
-Efficiency score is 73.0963	( python )
+Efficiency score is 79.01213333333334	( python )
 
 finished timing run on submission lab1.tar
 =======================================================================

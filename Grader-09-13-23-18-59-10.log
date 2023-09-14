@@ -1,6 +1,6 @@
 Auto-grader Configuration:
   blocks found in :	 auto_grade/blocks/
-  normal deadline is:	 2023-09-11
+  normal deadline is:	 2023-09-14
  
 =======================================================================
 Testing submission: lab1.tar
@@ -44,11 +44,11 @@ Testing Conformance	(If we got this far, the tar file worked.)
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.212429 seconds
-	T16k.i:  	0.413558 seconds
-	T32k.i:  	0.806086 seconds
-	T64k.i:  	1.4912359999999998 seconds
-	T128k.i:  	2.8808730000000002 seconds
+	T8k.i:  	0.224789 seconds
+	T16k.i:  	0.406548 seconds
+	T32k.i:  	0.6789149999999999 seconds
+	T64k.i:  	1.345875 seconds
+	T128k.i:  	2.6618959999999996 seconds
 
 	Scaling appears to be linear.
 
