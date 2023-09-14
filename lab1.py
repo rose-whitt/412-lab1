@@ -3,8 +3,8 @@
 import scanner
 # import rose_parser
 import sys
-# import cProfile, pstats
-# from io import StringIO
+import cProfile, pstats
+from io import StringIO
 
 COMMENT = "// ILOC Front End \n"
 
@@ -297,8 +297,8 @@ def demand_parse_start(input_file, flag):
 
 
 def main():
-  # pr = cProfile.Profile()
-  # pr.enable()
+  pr = cProfile.Profile()
+  pr.enable()
   # call scan function  
   #   make scanner object by calling class with input fileand then my start scanning func in scanner.py
   #   while not the end of the license
@@ -311,6 +311,8 @@ def main():
   # text = f.read(10)
   i = 1
   # print("POO POOO POO")
+
+  arg_len = len(sys.argv)
 
   if (sys.argv[1] == '-h'):
     print("\n")
@@ -331,7 +333,7 @@ def main():
     
   elif (sys.argv[1] == '-r'):
     # print("TODO: read the file, parse it, build the intermediate representation (IR), and print out the information in the intermediate representaiton (in an appropriately human readable format)")
-    if (len(sys.argv) <= 2):
+    if (arg_len <= 2):
       print("Must specify a file name after the flag.")
     else:
       __file__ = sys.argv[2]
@@ -348,7 +350,7 @@ def main():
       f.close()
   elif (sys.argv[1] == '-p'):
     # print("TODO: read the file, scan it and parse it, build the intermediate representation (IR) and report either success or report all the errors that it finds in the input file.")
-    if (len(sys.argv) <= 2):
+    if (arg_len <= 2):
       print("Must specify a file name after the flag.")
     else:
       __file__ = sys.argv[2]
@@ -368,7 +370,7 @@ def main():
       f.close()
   elif (sys.argv[1] == '-s'):
     # print("TODO: read file and print to stdout a list of tokens that the scanner found. for each, print line number, tokens type (or syntactic category) and its spelling (or lexeme)")
-    if (len(sys.argv) <= 2):
+    if (arg_len <= 2):
       print("Must specify a file name after the flag.")
     else:
 
@@ -404,11 +406,11 @@ def main():
     # start(f, '-p')
     demand_parse_start(f, '-p')
     f.close()
-  # s = StringIO()
-  # sortby = 'cumulative'
-  # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-  # ps.print_stats()
-  # sys.stdout.write(s.getvalue())
+  s = StringIO()
+  sortby = 'cumulative'
+  ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+  ps.print_stats()
+  sys.stdout.write(s.getvalue())
 
 
 

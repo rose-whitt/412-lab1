@@ -100,7 +100,10 @@ class Scanner:
         self.line_num += 1
         self.char_idx = -1
 
-        self.cur_line_len = len(buf)
+
+        self.cur_line_len = i
+
+
         if (self.cur_line_len == 0 and newline_flag != True):
             self.END_OF_FILE = True
             buf.append("")
