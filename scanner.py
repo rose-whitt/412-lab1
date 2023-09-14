@@ -64,10 +64,11 @@ class Scanner:
         self.num_iloc_ops = 0
         self.num_parser_errors = 0
 
+        self.num_error_lines = 0
+
       
         self.CATEGORIES = CATEGORIES
         self.opcodes = ["load", "store", "loadI", "add", "sub", "mult", "lshift", "rshift", "output", "nop"]
-        self.opcodes_to_categories = {"load": 0, "store": 0, "loadI": 1, "add": 2, "sub": 2, "mult": 2, "lshift": 2, "rshift": 2, "output": 3, "nop": 4, ",": 7, "=>": 8}
         self.MEMOP = 0   # load, store
         self.LOADI = 1   # loadI
         self.ARITHOP = 2 # add, sub, mult, lshift, rshift
