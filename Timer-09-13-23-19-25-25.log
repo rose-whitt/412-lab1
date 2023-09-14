@@ -1,7 +1,7 @@
 Autotimer: using Scalability SLOCs blocks
 =======================================================================
 Testing submission: lab1.tar
-NetId: rew9, Name: Rose Whitt
+NetId: lab1, Name: lab1
 	Date From Files: 2023-09-13
 
 --- built front end and should be ready to run ---
@@ -10,17 +10,17 @@ NetId: rew9, Name: Rose Whitt
 Testing Scalability:
 	(Each elapsed time is the minimum of five runs.)
 
-	T1k.i:  	0.0494 seconds
-	T2k.i:  	0.0694 seconds
-	T4k.i:  	0.1115 seconds
-	T8k.i:  	0.1857 seconds
-	T16k.i:  	0.3513 seconds
-	T32k.i:  	0.6770 seconds
-	T64k.i:  	1.3018 seconds
-	T128k.i:  	2.7050 seconds
+	T1k.i:  	0.0486 seconds
+	T2k.i:  	0.0692 seconds
+	T4k.i:  	0.1066 seconds
+	T8k.i:  	0.1823 seconds
+	T16k.i:  	0.3349 seconds
+	T32k.i:  	0.6482 seconds
+	T64k.i:  	1.2787 seconds
+	T128k.i:  	2.4869 seconds
  
 Scaling score is 100
-Efficiency score is 76.49876666666665	( python )
+Efficiency score is 83.7684	( python )
 
 finished timing run on submission lab1.tar
 =======================================================================

@@ -82,14 +82,6 @@ class Scanner:
         self.BLANK = 11     # not an opcode, but used to signal blank space or tab
         self.SCANNER_ERROR = 12 # not an opcode, used to signify error in scanner (lexical/spelling error)
 
-
-    
-
-    
-
-    def rollback_ascii(self):
-        self.char_idx -= 1
-        return self.cur_line[self.char_idx]
     
 
     def convert_line_to_ascii_list(self, line):
@@ -105,10 +97,8 @@ class Scanner:
                 break
             i += 1
         
-        # print("i: " + str(i) + ", len: " + str(len(buf)))
         self.line_num += 1
         self.char_idx = -1
-        # print("new line flag: " + str(newline_flag))
 
         self.cur_line_len = len(buf)
         if (self.cur_line_len == 0 and newline_flag != True):
@@ -288,7 +278,7 @@ class Scanner:
 
                             return self.LOADI, opcode
                         else:
-                            self.rollback_ascii()
+                            self.char_idx -= 1  # rollback
                             if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.MEMOP]) + ', "' + "load" + '" >')
                             opcode = self.opcodes.index("load")
 
@@ -325,10 +315,9 @@ class Scanner:
                 c = self.cur_line[self.char_idx]
                 while (c >= ord('0') and c <= ord('9')):  # get to end of number
                     reg_num = reg_num * 10 + c - ord('0')
-                    # print("regnum: " + str(reg_num))
                     self.char_idx += 1
-                    c = self.cur_line[self.char_idx]  # TODO: this may cause adding a char we dont want
-                self.rollback_ascii()
+                    c = self.cur_line[self.char_idx]
+                self.char_idx -= 1  # rollback
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.REGISTER]) + ', "r' + str(int(reg_num)) + '" >')
 
                 return self.REGISTER, reg_num # not an opcode
@@ -543,7 +532,7 @@ class Scanner:
                 # not an opcode but a valid category
                 return self.EOL, -1 # ignore comments, just treat EOL
             else:
-                self.rollback_ascii()
+                self.char_idx -= 1
                 sys.stderr.write("ERROR " + str(self.line_num) + ':               "/" is not a valid word - [SCANNER]\n')
                 self.num_scanner_errors += 1
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
@@ -589,7 +578,7 @@ class Scanner:
                 # print("constant: " + str(constant))
                 self.char_idx += 1
                 c = self.cur_line[self.char_idx]  # TODO: this may cause adding a char we dont want
-            self.rollback_ascii()
+            self.char_idx -= 1
             if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.CONSTANT]) + ', "' + str(int(constant)) + '" >')
 
             return self.CONSTANT, constant  # not an opcode
