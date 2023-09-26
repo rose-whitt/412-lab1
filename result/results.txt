@@ -1,2 +1,0 @@
-Name	NetId	Conform	Correct	Scales	Points	Date	Late Days
-no README	no README	87.5	100.0	100	96.25	2023-09-11	-1

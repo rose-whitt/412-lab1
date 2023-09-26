@@ -1,2 +1,23 @@
 //NAME: Rose Whitt
 //NETID: rew9
+
+-------Directions for building and invoking program------
+
+Run this command in the terminal:
+        ./412fe [flags] filename
+
+Required arguments: 
+        filename  is the pathname (absolute or relative) to the input file
+
+
+-------Command line options--------
+
+
+Optional flags:
+        -h       prints help message
+
+At most one of the following three flags:
+        -s       prints tokens in token stream
+        -p       invokes parser and reports on success or failure
+        -r       prints human readable version of parser's IR
+If none is specified, the default action is '-p'.
