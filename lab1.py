@@ -3,8 +3,8 @@
 import scanner
 from IR_List import *
 import sys
-# import cProfile, pstats
-# from io import StringIO
+import cProfile, pstats
+from io import StringIO
 
 COMMENT = "// ILOC Front End \n"
 
@@ -45,11 +45,6 @@ def add_ir_block(scan, line_num, parsed_line):
   
   # ARITHOP category
   elif (category == scan.ARITHOP):
-    # print("ARITHOP")
-
-    # print("parsed line: " + str(parsed_line))
-    # print("[add_ir_block] opcode: " + str(opcode));
-    # print("[add_ir_block] category: " + str(category));
 
     node.value[2][0] = parsed_line[1][1]
     node.value[3][0] = parsed_line[3][1]
@@ -143,8 +138,11 @@ def demand_parse_start(input_file, flag):
                   if (token[0] == scan.EOL):
                       # build IR
                       # TODO: should i only build it with the -r flag or only print it with the -r flag
-                      add_ir_block(scan, scan.line_num, temp_line)
-
+                      # add_ir_block(scan, scan.line_num, temp_line)
+                      memop_node = Node()
+                      memop_node.value[2][0] = temp_line[1][1]  # first register
+                      memop_node.value[4][0] = temp_line[3][1]  # second register
+                      ir_list.append(memop_node)
 
                       scan.num_iloc_ops += 1
                       scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
@@ -198,7 +196,13 @@ def demand_parse_start(input_file, flag):
                       token = scan.get_token()
                   if (token[0] == scan.EOL):
                       # build ir
-                      add_ir_block(scan, scan.line_num, temp_line)
+                      # add_ir_block(scan, scan.line_num, temp_line)
+                      loadi_node = Node()
+                      loadi_node.value[2][0] = temp_line[1][1]  # first register
+                      loadi_node.value[4][0] = temp_line[3][1]  # second register
+                      ir_list.append(loadi_node)
+
+
                       scan.num_iloc_ops += 1
                       # scan.line_num += 1
                       # scan.char_idx = -1
@@ -273,7 +277,15 @@ def demand_parse_start(input_file, flag):
                     while (token[0] == scan.BLANK):
                         token = scan.get_token()
                     if (token[0] == scan.EOL):
-                        add_ir_block(scan, scan.line_num, temp_line)
+                        # add_ir_block(scan, scan.line_num, temp_line)
+                        ari_node = Node()
+                        ari_node.value[0] = scan.line_num
+                        ari_node.value[1] = temp_line[0][1]
+                        ari_node.value[2][0] = temp_line[1][1]
+                        ari_node.value[3][0] = temp_line[3][1]
+                        ari_node.value[4][0] = temp_line[5][1]
+                        ir_list.append(ari_node)
+
                         scan.num_iloc_ops += 1
                         # scan.line_num += 1
                         # scan.char_idx = -1
@@ -311,7 +323,14 @@ def demand_parse_start(input_file, flag):
           while (token[0] == scan.BLANK):
               token = scan.get_token()
           if (token[0] == scan.EOL):
-              add_ir_block(scan, scan.line_num, temp_line)
+              # add_ir_block(scan, scan.line_num, temp_line)
+              output_node = Node()
+
+              output_node.value[0] = scan.line_num
+              output_node.value[1] = temp_line[0][1]
+              output_node.value[2][0] = temp_line[1][1]
+              ir_list.append(output_node)
+
               scan.num_iloc_ops += 1
               # scan.line_num += 1
               # scan.char_idx = -1
@@ -385,8 +404,8 @@ def demand_parse_start(input_file, flag):
 
 
 def main():
-  # pr = cProfile.Profile()
-  # pr.enable()
+  pr = cProfile.Profile()
+  pr.enable()
   # call scan function  
   #   make scanner object by calling class with input fileand then my start scanning func in scanner.py
   #   while not the end of the license
@@ -434,6 +453,7 @@ def main():
           sys.exit()
       # Reading a file
       # f = open(__file__, 'r')
+
       demand_parse_start(f, '-r')
       ir_list.print_list()
       f.close()
@@ -495,11 +515,13 @@ def main():
     # start(f, '-p')
     demand_parse_start(f, '-p')
     f.close()
-  # s = StringIO()
-  # sortby = 'cumulative'
-  # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-  # ps.print_stats()
-  # sys.stdout.write(s.getvalue())
+
+  pr.disable()
+  s = StringIO()
+  sortby = 'cumulative'
+  ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+  ps.print_stats()
+  sys.stdout.write(s.getvalue())
 
 
 

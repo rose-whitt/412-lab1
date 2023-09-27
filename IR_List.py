@@ -53,7 +53,31 @@ class LinkedList:
     def print_list(self):
         start = self.head
         while (start != None):
-            self.human_readable(start.value)
+            # self.human_readable(start.value)
+            l0 = start.value[2][SR]   # SR slot in first record list
+            opcode = start.value[1]  # value[1] = (category, opcode)- we want the opcode
+            if (opcode == 0 or opcode == 1 or (opcode >= 3 and opcode <= 7)):
+                l0 = "sr" + str(l0)
+            elif (opcode == 2 or opcode == 8):
+                l0 = "val " + str(l0)
+            else:
+                l0 = ""
+            
+            # List 1- fourth elem in record list
+            l1 = start.value[3][SR]
+            if (opcode >= 3 and opcode <= 7):
+                l1 = "sr" + str(l1)
+            else:
+                l1 = ""
+            
+            # List 2- fifth element in record list
+            l2 = start.value[4][SR]
+            if (opcode >= 0 and opcode <= 7):
+                l2 = "sr" + str(l2)
+            else:
+                l2 = ""
+            
+            print(f"{self.opcodes[opcode] : <6}  [ {l0} ], [ {l1} ], [ {l2} ]")
             start = start.next
     
     def human_readable(self, value):
