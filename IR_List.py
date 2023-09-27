@@ -27,9 +27,16 @@ class Node:
         - prev: previous record pointer
         """
         # line num, opcode, [sr, vr, pr, nu], [sr, vr, pr, nu], [sr, vr, pr, nu]
+        # TODO: possibly not do a nested list structure and do class for operand for speed
         self.value = [None, None, [None, None, None, None], [None, None, None, None], [None, None, None, None]]
         self.next = None
         self.prev = None
+    
+
+    # to str
+    #     st jskfgldksfg;dgsjlfn value\n
+    #     return str
+
 
 class LinkedList:
     """
@@ -52,33 +59,11 @@ class LinkedList:
     
     def print_list(self):
         start = self.head
+        temp_string = ""
         while (start != None):
-            # self.human_readable(start.value)
-            l0 = start.value[2][SR]   # SR slot in first record list
-            opcode = start.value[1]  # value[1] = (category, opcode)- we want the opcode
-            if (opcode == 0 or opcode == 1 or (opcode >= 3 and opcode <= 7)):
-                l0 = "sr" + str(l0)
-            elif (opcode == 2 or opcode == 8):
-                l0 = "val " + str(l0)
-            else:
-                l0 = ""
-            
-            # List 1- fourth elem in record list
-            l1 = start.value[3][SR]
-            if (opcode >= 3 and opcode <= 7):
-                l1 = "sr" + str(l1)
-            else:
-                l1 = ""
-            
-            # List 2- fifth element in record list
-            l2 = start.value[4][SR]
-            if (opcode >= 0 and opcode <= 7):
-                l2 = "sr" + str(l2)
-            else:
-                l2 = ""
-            
-            print(f"{self.opcodes[opcode] : <6}  [ {l0} ], [ {l1} ], [ {l2} ]")
+            temp_string += self.human_readable(start.value)
             start = start.next
+        print(temp_string)
     
     def human_readable(self, value):
         """
@@ -109,5 +94,8 @@ class LinkedList:
         else:
             l2 = ""
         
-        print(f"{self.opcodes[opcode] : <6}  [ {l0} ], [ {l1} ], [ {l2} ]")
+        temp_str = str(value[0]) + " : " +  self.opcodes[opcode] + " : [ "  + l0 + " ] , [ " + l1 + " ], [ " + l2 + " ]\n"
+
+        return temp_str
+        # print(f"{self.opcodes[opcode] : <6}  [ {l0} ], [ {l1} ], [ {l2} ]")
         

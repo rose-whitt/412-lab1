@@ -5,7 +5,7 @@ Auto-grader Configuration:
 =======================================================================
 Testing submission: lab1.tar
 Name: lab1, NetId: lab1
-	Date From Files: 2023-09-26
+	Date From Files: 2023-09-27
 
 --- built front end and should be ready to run ---
 
@@ -44,11 +44,11 @@ Testing Conformance	(If we got this far, the tar file worked.)
 Quick Scalability Test:
 	(For a more accurate test, run the auto-timer)
 
-	T8k.i:  	0.45742200000000005 seconds
-	T16k.i:  	0.748567 seconds
-	T32k.i:  	1.344443 seconds
-	T64k.i:  	2.341544 seconds
-	T128k.i:  	3.748074 seconds
+	T8k.i:  	0.466752 seconds
+	T16k.i:  	0.7890130000000001 seconds
+	T32k.i:  	1.326829 seconds
+	T64k.i:  	2.068111 seconds
+	T128k.i:  	4.433134 seconds
 
 	Scaling appears to be linear.
 

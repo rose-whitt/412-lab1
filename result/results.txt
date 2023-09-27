@@ -1,2 +1,2 @@
-Name	NetId	Conform	Correct	Scales	Points	Date	Late Days
-lab1	lab1	100.0	100.0	100	100.0	2023-09-26	-2
+NetId	Name	T1k	T2k	T4k	T8k	T16k	T32k	T64k	T128k	Lang.	Scaling Pts	Eff Pts %
+lab1	lab1	0.1228	0.1692	0.2651	0.2774	0.7691	0.7097	2.1897	3.7843	python 	 unusual (?)	0	40.5207	*
