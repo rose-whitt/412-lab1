@@ -316,7 +316,6 @@ def main():
 
   arg_len = len(sys.argv)
 
-
   if (sys.argv[1] == '-h'):
     print("\n")
     print("Command Syntax:")
