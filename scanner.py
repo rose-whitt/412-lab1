@@ -135,23 +135,14 @@ class Scanner:
 
         Output: token: category index (int), opcode index (int)
         """
-        
-        #this is like the shit in main_scanner
-        # ret_token = '< ENDFILE, "" >'   # this is so we dont get infinite loop cuz scan_func expects this EOF token
-        # line_num += 1
-        # print("in get token")
+
         i = 0
 
-        # c = -1
         if (self.END_OF_FILE != True):
-            # print("not end of file")
             self.char_idx += 1
             c = self.cur_line[self.char_idx]
-            # return self.main_scanner(c)
         else:
-            # print("end of file")
             c = 0
-            # return self.main_scanner(c)
         
 
         if (c == 115):
@@ -221,7 +212,6 @@ class Scanner:
             self.char_idx += 1
             c = self.cur_line[self.char_idx]
             if (c == 115):
-                # print("possible lshift")
                 i += 1
                 self.char_idx += 1
                 c = self.cur_line[self.char_idx]
@@ -375,7 +365,6 @@ class Scanner:
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
                 return self.SCANNER_ERROR, -1
         elif (c == 109):    # mult (ARITHOP)
-            # print("possible mult")
             i += 1
             self.char_idx += 1
             c = self.cur_line[self.char_idx]
@@ -432,7 +421,6 @@ class Scanner:
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
                 return self.SCANNER_ERROR, -1
         elif (c == 110):    # nop (NOP)
-            # print("possible nop")
             i += 1
             self.char_idx += 1
             c = self.cur_line[self.char_idx]
@@ -456,7 +444,6 @@ class Scanner:
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
                 return self.SCANNER_ERROR, -1
         elif (c == 111):    # o ; output (OUTPUT)
-            # print("possible output")
             i += 1
             self.char_idx += 1
             c = self.cur_line[self.char_idx]
@@ -507,11 +494,9 @@ class Scanner:
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
                 return self.SCANNER_ERROR, -1
         elif (c == 61):    # => (INTO)
-            # print("possible =>")
             i += 1
             self.char_idx += 1
             c = self.cur_line[self.char_idx]
-            # print("next char after equal: " + chr(c))
             if (c == 62):
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.INTO]) + ', "' + "=>" + '" >')
                 
@@ -528,11 +513,9 @@ class Scanner:
             i += 1
             self.char_idx += 1
             c = self.cur_line[self.char_idx]
-            # print("c: " + chr(c))
 
             if (c == 47): # /
                 self.char_idx = -1
-                # print("ITS A COMMENT CUNT")
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
                 # not an opcode but a valid category
                 return self.EOL, -1 # ignore comments, just treat EOL
@@ -547,7 +530,6 @@ class Scanner:
 
             return self.COMMA, -1   # not an opcode but a valid category
         elif (c == 10):   # EOL, Line Feed (LF) is used as a new line character in linux, ascii value is 10
-            # print("new line")
             self.char_idx = -1
             if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
 
@@ -557,7 +539,6 @@ class Scanner:
             self.char_idx += 1
             c = self.cur_line[self.char_idx]
             if (c == 10):
-                # print("one of the weird new lines")
                 self.char_idx = -1
                 if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOL]) + ', "' + "\\n" + '" >')
 
@@ -571,16 +552,12 @@ class Scanner:
 
             # we get it as an ascii value (integer)
             constant = 0
-            # print("possible constant: " + chr(c) + ", " + str(c))
             constant = constant * 10 + c - 48
-            # print("first constant: " + str(constant))
             i += 1
             self.char_idx += 1
             c = self.cur_line[self.char_idx]
             while (c >= 48 and c <= 57):  # get to end of number
-                # print("possible constant: " + chr(c) + ", " + str(c))
                 constant = constant * 10 + c - 48
-                # print("constant: " + str(constant))
                 self.char_idx += 1
                 c = self.cur_line[self.char_idx]  # TODO: this may cause adding a char we dont want
             self.char_idx -= 1
@@ -588,7 +565,6 @@ class Scanner:
 
             return self.CONSTANT, constant  # not an opcode
         elif (c == 0):  # 0 is value of empty string
-            # TODO: is this always the last line of the file??
             if (self.mode_flag == '-s'): print(str(self.line_num) + ": < " + str(self.CATEGORIES[self.EOF]) + ', "' + '' + '" >')
             
             return self.EOF, -1 # not an opcode

@@ -15,6 +15,16 @@ SR = 0
 VR = 1
 PR = 2
 NU = 3
+opcodes_list = ["load", "store", "loadI", "add", "sub", "mult", "lshift", "rshift", "output", "nop"]
+
+
+class Operand:
+    def __init__(self):
+        self.sr = None
+        self.vr = None
+        self.pr = None
+        self.nu = None
+
 
 class Node:
     """
@@ -28,9 +38,44 @@ class Node:
         """
         # line num, opcode, [sr, vr, pr, nu], [sr, vr, pr, nu], [sr, vr, pr, nu]
         # TODO: possibly not do a nested list structure and do class for operand for speed
-        self.value = [None, None, [None, None, None, None], [None, None, None, None], [None, None, None, None]]
+        # self.value = [None, None, Operand(), Operand(), Operand()]
+        self.line = None
+        self.opcode = None
+        self.arg1 = Operand()
+        self.arg2 = Operand()
+        self.arg3 = Operand()
+
         self.next = None
         self.prev = None
+    
+    def __str__(self):
+        l0 = self.arg1.sr   # SR slot in first record list
+        opcode = self.opcode  # value[1] = (category, opcode)- we want the opcode
+        if (opcode == 0 or opcode == 1 or (opcode >= 3 and opcode <= 7)):
+            l0 = "sr" + str(l0)
+        elif (opcode == 2 or opcode == 8):
+            l0 = "val " + str(l0)
+        else:
+            l0 = ""
+        
+        # List 1- fourth elem in record list
+        l1 = self.arg2.sr
+        if (opcode >= 3 and opcode <= 7):
+            l1 = "sr" + str(l1)
+        else:
+            l1 = ""
+        
+        # List 2- fifth element in record list
+        l2 = self.arg3.sr
+        if (opcode >= 0 and opcode <= 7):
+            l2 = "sr" + str(l2)
+        else:
+            l2 = ""
+        
+        temp_str = str(self.line) + " : " +  opcodes_list[opcode] + " : [ "  + l0 + " ] , [ " + l1 + " ], [ " + l2 + " ]\n"
+        return temp_str
+        
+
     
 
     # to str
@@ -61,7 +106,8 @@ class LinkedList:
         start = self.head
         temp_string = ""
         while (start != None):
-            temp_string += self.human_readable(start.value)
+            # print(start)
+            temp_string += str(start)
             start = start.next
         print(temp_string)
     
