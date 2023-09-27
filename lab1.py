@@ -1,7 +1,7 @@
 #!/usr/bin/python -u
 
 import scanner
-# import rose_parser
+from IR_List import *
 import sys
 # import cProfile, pstats
 # from io import StringIO
@@ -11,10 +11,67 @@ COMMENT = "// ILOC Front End \n"
 EOF_FLAG = False
 
 
+ir_list = LinkedList()
+
+
+
+
+def add_ir_block(scan, line_num, parsed_line):
+  """
+  Builds a node to be added to IR block
+
+  Input:
+    - scan: scanner object
+    - line_num: line number of the parsed line
+    - parsed_line: list of tokens in the parsed line, each element in form (category, opcode)
+
+  Result:
+    Appends node to IR list
+  """
+  # ex: store => r5     [(0, 1), (8, -1), (6, 5)]
+  node = Node()
+  opcode = parsed_line[0][1]
+  category = parsed_line[0][0]
+
+  node.value[0] = line_num
+  node.value[1] = opcode
+  
+
+  # MEMOP or LOADI categories
+  if (category == scan.MEMOP or category == scan.LOADI):
+    # print("MEMOP OR LOADI")
+    node.value[2][0] = parsed_line[1][1]  # first register
+    node.value[4][0] = parsed_line[3][1]  # second register
+  
+  # ARITHOP category
+  elif (category == scan.ARITHOP):
+    # print("ARITHOP")
+
+    # print("parsed line: " + str(parsed_line))
+    # print("[add_ir_block] opcode: " + str(opcode));
+    # print("[add_ir_block] category: " + str(category));
+
+    node.value[2][0] = parsed_line[1][1]
+    node.value[3][0] = parsed_line[3][1]
+    node.value[4][0] = parsed_line[5][1]
+    # print("line " + str(line_num) + ": " + str(node.value))
+
+
+  # OUTPUT category
+  elif (category == scan.OUTPUT):
+    node.value[2][0] = parsed_line[1][1]
+
+  ir_list.append(node)
+  return
+  
+  
+
+
+
 
 
 def demand_parse_start(input_file, flag):
-
+  
 
   # print("PUSSY")
   scan = scanner.Scanner(input_file)
@@ -49,6 +106,9 @@ def demand_parse_start(input_file, flag):
     while (token[0] != scan.EOF):
       i += 1
       if (token[0] == scan.MEMOP):
+        temp_line = []
+        temp_line.append(token) # append MEMOP, building line for IR to process
+
         MEM_OP_FLAG = False
         token = scan.get_token()
         while (token[0] == scan.BLANK):
@@ -58,6 +118,7 @@ def demand_parse_start(input_file, flag):
             scan.num_parser_errors += 1
             MEM_OP_FLAG = False
         else:
+            temp_line.append(token) # append register
             token = scan.get_token()
             while (token[0] == scan.BLANK):
                 token = scan.get_token()
@@ -66,21 +127,29 @@ def demand_parse_start(input_file, flag):
                 scan.num_parser_errors += 1
                 MEM_OP_FLAG = False
             else:
+              temp_line.append(token) # append into
               token = scan.get_token()
               while (token[0] == scan.BLANK):
                   token = scan.get_token()
-              if (token[0] != scan.REGISTER):
+              if (token[0] != scan.REGISTER): # register in scanner returns self.REGISTER, reg_num
                   sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing target (second) REGISTER in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
                   scan.num_parser_errors += 1
                   MEM_OP_FLAG = False
               else:
+                  temp_line.append(token) # append register
                   token = scan.get_token()
                   while (token[0] == scan.BLANK):
                       token = scan.get_token()
                   if (token[0] == scan.EOL):
-                      # TODO: build IR for this OP, add IR to list of OPS
+                      # build IR
+                      # TODO: should i only build it with the -r flag or only print it with the -r flag
+                      add_ir_block(scan, scan.line_num, temp_line)
+
+
                       scan.num_iloc_ops += 1
                       scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
+                      
+                      
                       MEM_OP_FLAG = True
                   elif (token[0] == scan.SCANNER_ERROR):
                       return False
@@ -88,14 +157,14 @@ def demand_parse_start(input_file, flag):
                       sys.stderr.write("ERROR " + str(scan.line_num) + ':               Missing EOL in MEMOP (load or store); token: ' + str(token[0]) +  ' - [PARSER]\n')
                       scan.num_parser_errors += 1
                       MEM_OP_FLAG =  False
-
         if (MEM_OP_FLAG == False):  # error on line
           scan.num_error_lines += 1
           scan.cur_line = scan.convert_line_to_ascii_list(scan.input_file.readline())
 
-            
         scan.char_idx = -1
       elif (token[0] == scan.LOADI):
+        temp_line = []
+        temp_line.append(token)
         LOADI_FLAG = False
         token = scan.get_token()
         while (token[0] == scan.BLANK):
@@ -105,6 +174,7 @@ def demand_parse_start(input_file, flag):
             scan.num_parser_errors += 1
             LOADI_FLAG = False
         else:
+            temp_line.append(token)
             token = scan.get_token()
             while (token[0] == scan.BLANK):
                 token = scan.get_token()
@@ -113,6 +183,7 @@ def demand_parse_start(input_file, flag):
                 scan.num_parser_errors += 1
                 LOADI_FLAG = False
             else:
+                temp_line.append(token)
                 token = scan.get_token()
                 while (token[0] == scan.BLANK):
                     token = scan.get_token()
@@ -121,10 +192,13 @@ def demand_parse_start(input_file, flag):
                     scan.num_parser_errors += 1
                     LOADI_FLAG = False
                 else:
+                  temp_line.append(token)
                   token = scan.get_token()
                   while (token[0] == scan.BLANK):
                       token = scan.get_token()
                   if (token[0] == scan.EOL):
+                      # build ir
+                      add_ir_block(scan, scan.line_num, temp_line)
                       scan.num_iloc_ops += 1
                       # scan.line_num += 1
                       # scan.char_idx = -1
@@ -145,6 +219,8 @@ def demand_parse_start(input_file, flag):
         #   print("[PARSE] " + str(scan.line_num - 1) + ": LOADI")
         scan.char_idx = -1
       elif (token[0] == scan.ARITHOP):
+        temp_line = []
+        temp_line.append(token)
         ARITHOP_FLAG = False
         token = scan.get_token() 
 
@@ -155,6 +231,7 @@ def demand_parse_start(input_file, flag):
             scan.num_parser_errors += 1
             ARITHOP_FLAG = False
         else:
+            temp_line.append(token)
             token = scan.get_token()
             while (token[0] == scan.BLANK):
                 token = scan.get_token()
@@ -163,6 +240,7 @@ def demand_parse_start(input_file, flag):
               scan.num_parser_errors += 1
               ARITHOP_FLAG = False
             else:
+              temp_line.append(token)
               token = scan.get_token()
               while (token[0] == scan.BLANK):
                   token = scan.get_token()
@@ -172,6 +250,7 @@ def demand_parse_start(input_file, flag):
                   scan.num_parser_errors += 1
                   ARITHOP_FLAG = False
               else:
+                temp_line.append(token)
                 token = scan.get_token()
                 while (token[0] == scan.BLANK):
                     token = scan.get_token()
@@ -180,6 +259,7 @@ def demand_parse_start(input_file, flag):
                     scan.num_parser_errors += 1
                     ARITHOP_FLAG = False
                 else:
+                  temp_line.append(token)
                   token = scan.get_token()
                   while (token[0] == scan.BLANK):
                       token = scan.get_token()
@@ -188,10 +268,12 @@ def demand_parse_start(input_file, flag):
                       scan.num_parser_errors += 1
                       ARITHOP_FLAG = False
                   else:
+                    temp_line.append(token)
                     token = scan.get_token()
                     while (token[0] == scan.BLANK):
                         token = scan.get_token()
                     if (token[0] == scan.EOL):
+                        add_ir_block(scan, scan.line_num, temp_line)
                         scan.num_iloc_ops += 1
                         # scan.line_num += 1
                         # scan.char_idx = -1
@@ -213,6 +295,8 @@ def demand_parse_start(input_file, flag):
         #   print("[PARSE] " + str(scan.line_num - 1) + ": ARITHOP")
         scan.char_idx = -1
       elif (token[0] == scan.OUTPUT):
+        temp_line = []
+        temp_line.append(token)
         OUTPUT_FLAG = False
         token = scan.get_token()
         while (token[0] == scan.BLANK):
@@ -222,10 +306,12 @@ def demand_parse_start(input_file, flag):
             scan.num_parser_errors += 1
             OUTPUT_FLAG = False
         else:
+          temp_line.append(token)
           token = scan.get_token()
           while (token[0] == scan.BLANK):
               token = scan.get_token()
           if (token[0] == scan.EOL):
+              add_ir_block(scan, scan.line_num, temp_line)
               scan.num_iloc_ops += 1
               # scan.line_num += 1
               # scan.char_idx = -1
@@ -349,6 +435,7 @@ def main():
       # Reading a file
       # f = open(__file__, 'r')
       demand_parse_start(f, '-r')
+      ir_list.print_list()
       f.close()
   elif (sys.argv[1] == '-p'):
     # print("TODO: read the file, scan it and parse it, build the intermediate representation (IR) and report either success or report all the errors that it finds in the input file.")

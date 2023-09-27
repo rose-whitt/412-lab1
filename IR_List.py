@@ -61,28 +61,29 @@ class LinkedList:
         Convert values to human readable strings and print them in IR format
         """
         # List 0- third elem in record list
+        # print("line: " + str(value[0]))
         l0 = value[2][SR]   # SR slot in first record list
-        opcode = value[1]
-        if (opcode == MEMOP or opcode == LOADI or (opcode >= OUTPUT and opcode <= COMMA)):
+        opcode = value[1]  # value[1] = (category, opcode)- we want the opcode
+        if (opcode == 0 or opcode == 1 or (opcode >= 3 and opcode <= 7)):
             l0 = "sr" + str(l0)
-        elif (opcode == ARITHOP or opcode == INTO):
+        elif (opcode == 2 or opcode == 8):
             l0 = "val " + str(l0)
         else:
             l0 = ""
         
         # List 1- fourth elem in record list
         l1 = value[3][SR]
-        if (opcode >= OUTPUT and opcode <= COMMA):
+        if (opcode >= 3 and opcode <= 7):
             l1 = "sr" + str(l1)
         else:
             l1 = ""
         
         # List 2- fifth element in record list
         l2 = value[4][SR]
-        if (opcode >= MEMOP and opcode <= COMMA):
+        if (opcode >= 0 and opcode <= 7):
             l2 = "sr" + str(l2)
         else:
             l2 = ""
         
-        print(f"{self.opcodes[value[1]] : <6}  [ {l0} ], [ {l1} ], [ {l2} ]")
+        print(f"{self.opcodes[opcode] : <6}  [ {l0} ], [ {l1} ], [ {l2} ]")
         
